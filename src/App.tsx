@@ -7,10 +7,10 @@ import {
 } from "react-router-dom";
 import MainLayout from "./templates/MainLayout/MainLayout";
 import Dashboard from "./screens/Dashboard/Dashboard";
+import Orders from "./screens/Orders/Orders";
+import Products from "./screens/Products/Products";
+import Customers from "./screens/Customers/Customers";
 
-const Orders = () => <div>Orders Page</div>;
-const Products = () => <div>Products Page</div>;
-const Customers = () => <div>Customers Page</div>;
 const Analytics = () => <div>Analytics Page</div>;
 const Settings = () => <div>Settings Page</div>;
 

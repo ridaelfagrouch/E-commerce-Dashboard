@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Chart from "chart.js/auto";
 import TabGroup from "../TabGroup/TabGroup";
 
@@ -11,6 +11,7 @@ interface ChartCardProps {
   chartConfig: any;
   chartHeight?: number;
   footer?: React.ReactNode;
+  aspectRatio?: number;
 }
 
 const ChartCard: React.FC<ChartCardProps> = ({
@@ -22,12 +23,38 @@ const ChartCard: React.FC<ChartCardProps> = ({
   chartConfig,
   chartHeight = 250,
   footer,
+  aspectRatio = 2,
 }) => {
   const chartRef = useRef<HTMLCanvasElement | null>(null);
   const chartInstance = useRef<Chart | null>(null);
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const [containerWidth, setContainerWidth] = useState(0);
 
+  // Function to update chart dimensions
+  const updateChartDimensions = () => {
+    if (containerRef.current) {
+      setContainerWidth(containerRef.current.offsetWidth);
+    }
+  };
+
+  // Initial setup and resize listener
   useEffect(() => {
-    if (chartRef.current) {
+    updateChartDimensions();
+
+    const handleResize = () => {
+      updateChartDimensions();
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  // Chart creation/update effect
+  useEffect(() => {
+    if (chartRef.current && containerWidth > 0) {
       // Destroy existing chart instance if it exists
       if (chartInstance.current) {
         chartInstance.current.destroy();
@@ -35,8 +62,18 @@ const ChartCard: React.FC<ChartCardProps> = ({
 
       const ctx = chartRef.current.getContext("2d");
       if (ctx) {
-        // Create new chart instance
-        chartInstance.current = new Chart(ctx, chartConfig);
+        // Create new chart with responsive options
+        const updatedConfig = {
+          ...chartConfig,
+          options: {
+            ...chartConfig.options,
+            maintainAspectRatio: true,
+            responsive: true,
+            aspectRatio: aspectRatio,
+          },
+        };
+
+        chartInstance.current = new Chart(ctx, updatedConfig);
       }
     }
 
@@ -46,26 +83,37 @@ const ChartCard: React.FC<ChartCardProps> = ({
         chartInstance.current.destroy();
       }
     };
-  }, [chartConfig]);
+  }, [chartConfig, containerWidth, aspectRatio]);
 
   return (
     <div className="bg-white rounded-lg shadow overflow-hidden">
-      <div className="p-4 border-b flex justify-between items-center">
+      <div className="p-4 border-b flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
         <div className="flex items-center">
           {icon && <span className="text-gray-500 mr-2">{icon}</span>}
           <h2 className="text-lg font-semibold text-gray-800">{title}</h2>
         </div>
         {tabs && activeTab && onTabChange && (
-          <TabGroup
-            tabs={tabs}
-            activeTab={activeTab}
-            onTabChange={onTabChange}
-            size="sm"
-          />
+          <div className="w-full sm:w-auto">
+            <TabGroup
+              tabs={tabs}
+              activeTab={activeTab}
+              onTabChange={onTabChange}
+              size="sm"
+            />
+          </div>
         )}
       </div>
-      <div className="p-4">
-        <div style={{ height: `${chartHeight}px` }}>
+      <div className="p-4" ref={containerRef}>
+        <div
+          className="relative"
+          style={{
+            height:
+              chartConfig.type === "pie" || chartConfig.type === "doughnut"
+                ? "auto"
+                : `${chartHeight}px`,
+            maxHeight: "400px",
+          }}
+        >
           <canvas ref={chartRef}></canvas>
         </div>
       </div>

@@ -13,8 +13,8 @@ const SearchInput: React.FC<SearchInputProps> = ({
   onChange,
 }) => {
   return (
-    <div className="relative">
-      <Search size={16} className="absolute left-3 top-2.5 text-gray-400" />
+    <div className="relative flex items-center justify-center"> 
+      <Search size={16} className="absolute left-3 text-gray-400" />
       <input
         type="text"
         placeholder={placeholder}

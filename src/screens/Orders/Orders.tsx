@@ -4,13 +4,14 @@ import {
   Package,
   Calendar,
   DollarSign,
-  Search,
   Filter,
   Download,
   Plus,
   ChevronDown,
   Eye,
 } from "lucide-react";
+import Pagination from "../../components/molecules/Pagination/Pagination";
+import SearchInput from "../../components/atoms/SearchInput/SearchInput";
 
 // Types
 type Order = {
@@ -23,6 +24,11 @@ type Order = {
 };
 
 export const Orders: React.FC = () => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const [searchTerm, setSearchTerm] = useState("");
+  const totalOrders = 1286;
+  const OrdersPerPage = 8;
+
   const [orders, setOrders] = useState<Order[]>([
     {
       id: "#ORD-5289",
@@ -92,12 +98,19 @@ export const Orders: React.FC = () => {
 
   const [filter, setFilter] = useState<string>("all");
 
-  const filteredOrders =
-    filter === "all"
-      ? orders
-      : orders.filter(
-          (order) => order.status.toLowerCase() === filter.toLowerCase()
-        );
+  // Filter Orders based on status and search term
+  const filteredOrders = orders
+    .filter((order) => {
+      const searchLower = searchTerm.toLowerCase();
+      return (
+        order.customer.toLowerCase().includes(searchLower) ||
+        order.id.toLowerCase().includes(searchLower)
+      );
+    })
+    .filter((order) => {
+      if (filter === "all") return true;
+      return order.status.toLowerCase() === filter.toLowerCase();
+    });
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -114,6 +127,11 @@ export const Orders: React.FC = () => {
       default:
         return "bg-gray-100 text-gray-800";
     }
+  };
+
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
+    setCurrentPage(1); // Reset to first page when searching
   };
 
   return (
@@ -136,20 +154,32 @@ export const Orders: React.FC = () => {
         <StatCard
           title="Total Orders"
           value="256"
-          change={+12.5}
           icon={<Package className="text-indigo-600" size={24} />}
+          trend={{
+            value: 12.5,
+            isPositive: true,
+            text: "vs last month",
+          }}
         />
         <StatCard
           title="Today's Orders"
           value="24"
-          change={+4.7}
           icon={<Calendar className="text-green-600" size={24} />}
+          trend={{
+            value: 5.2,
+            isPositive: true,
+            text: "vs yesterday",
+          }}
         />
         <StatCard
           title="Average Order Value"
           value="$85.40"
-          change={+2.3}
           icon={<DollarSign className="text-blue-600" size={24} />}
+          trend={{
+            value: 3.8,
+            isPositive: true,
+            text: "vs last month",
+          }}
         />
       </div>
 
@@ -157,20 +187,14 @@ export const Orders: React.FC = () => {
         <div className="p-4 border-b flex justify-between items-center">
           <h2 className="text-lg font-medium">Order Filters</h2>
           <div className="flex gap-2">
-            <div className="relative">
-              <Search
-                size={16}
-                className="absolute left-3 top-2.5 text-gray-400"
-              />
-              <input
-                type="text"
-                placeholder="Search orders..."
-                className="pl-9 pr-4 py-2 border rounded-md"
-              />
-            </div>
+            <SearchInput
+              placeholder="Search customers..."
+              value={searchTerm}
+              onChange={handleSearch}
+            />
             <button className="bg-gray-100 px-3 py-2 rounded-md flex items-center gap-1">
               <Filter size={16} />
-              Advanced
+              Filters
               <ChevronDown size={14} />
             </button>
           </div>
@@ -296,55 +320,12 @@ export const Orders: React.FC = () => {
             ))}
           </tbody>
         </table>
-        <div className="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
-          <div className="flex-1 flex justify-between sm:hidden">
-            <button className="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
-              Previous
-            </button>
-            <button className="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
-              Next
-            </button>
-          </div>
-          <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
-            <div>
-              <p className="text-sm text-gray-700">
-                Showing <span className="font-medium">1</span> to{" "}
-                <span className="font-medium">8</span> of{" "}
-                <span className="font-medium">256</span> results
-              </p>
-            </div>
-            <div>
-              <nav
-                className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px"
-                aria-label="Pagination"
-              >
-                <button className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-                  <span className="sr-only">Previous</span>
-                  Previous
-                </button>
-                <button className="bg-indigo-50 border-indigo-500 text-indigo-600 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
-                  1
-                </button>
-                <button className="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
-                  2
-                </button>
-                <button className="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
-                  3
-                </button>
-                <span className="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700">
-                  ...
-                </span>
-                <button className="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
-                  8
-                </button>
-                <button className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-                  <span className="sr-only">Next</span>
-                  Next
-                </button>
-              </nav>
-            </div>
-          </div>
-        </div>
+        <Pagination
+          currentPage={currentPage}
+          totalItems={totalOrders}
+          itemsPerPage={OrdersPerPage}
+          onPageChange={setCurrentPage}
+        />
       </div>
     </div>
   );

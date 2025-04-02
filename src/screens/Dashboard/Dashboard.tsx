@@ -15,6 +15,7 @@ import Button from "../../components/atoms/Button/Button";
 import DataTable from "../../components/organisms/DataTable/DataTable";
 import ChartCard from "../../components/molecules/ChartCard/ChartCard";
 import TabGroup from "../../components/molecules/TabGroup/TabGroup";
+import CalendarComponent from "../../components/molecules/CalendarComponent/CalendarComponent";
 
 // Types
 interface Order {
@@ -51,6 +52,28 @@ const Dashboard: React.FC = () => {
   const [chartPeriod, setChartPeriod] = useState<"week" | "month" | "year">(
     "week"
   );
+  // State for calendar period selection
+  const [calendarPeriod, setCalendarPeriod] = useState<
+    "day" | "week" | "month"
+  >("week");
+  // State for responsive layout
+  const [isMobile, setIsMobile] = useState<boolean>(false);
+
+  // Check for mobile view on mount and resize
+  useEffect(() => {
+    const checkIfMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    // Check initially
+    checkIfMobile();
+
+    // Add event listener
+    window.addEventListener("resize", checkIfMobile);
+
+    // Cleanup
+    return () => window.removeEventListener("resize", checkIfMobile);
+  }, []);
 
   // Sample data for demonstration
   const recentOrders: Order[] = [
@@ -196,6 +219,8 @@ const Dashboard: React.FC = () => {
     {
       header: "Customer",
       accessor: "customer",
+      // Hide on smaller screens
+      className: isMobile ? "hidden" : "",
     },
     {
       header: "Date",
@@ -223,6 +248,8 @@ const Dashboard: React.FC = () => {
     {
       header: "Sales",
       accessor: "sales",
+      // Hide on smaller screens
+      className: isMobile ? "hidden" : "",
     },
     {
       header: "Revenue",
@@ -278,6 +305,13 @@ const Dashboard: React.FC = () => {
     { id: "week", label: "This Week" },
     { id: "month", label: "This Month" },
     { id: "year", label: "This Year" },
+  ];
+
+  // Calendar period options
+  const calendarPeriodOptions = [
+    { id: "day", label: "Today" },
+    { id: "week", label: "This Week" },
+    { id: "month", label: "This Month" },
   ];
 
   // Helper function to determine badge variant
@@ -370,6 +404,12 @@ const Dashboard: React.FC = () => {
     },
   };
 
+  // Function to handle date selection in calendar
+  const handleCalendarDateSelect = (date: Date) => {
+    console.log("Selected date:", date);
+    // Here you would typically fetch orders for the selected date
+  };
+
   return (
     <div className="space-y-6">
       <div className="mb-6">
@@ -417,7 +457,7 @@ const Dashboard: React.FC = () => {
             title="Sales by Category"
             icon={<PieChart className="w-5 h-5" />}
             chartConfig={categoryChartConfig}
-            chartHeight={300}
+            chartHeight={500}
             footer={
               <div className="pt-2 text-sm text-gray-500 flex items-center justify-center">
                 <span>Total Products: 247</span>
@@ -433,7 +473,9 @@ const Dashboard: React.FC = () => {
         <DataTable
           title="Recent Orders"
           data={recentOrders}
-          columns={orderColumns}
+          columns={orderColumns.filter(
+            (col) => !col.className || col.className !== "hidden"
+          )}
           actionButton={
             <Button
               variant="ghost"
@@ -449,7 +491,9 @@ const Dashboard: React.FC = () => {
         <DataTable
           title="Top Selling Products"
           data={topProducts}
-          columns={productColumns}
+          columns={productColumns.filter(
+            (col) => !col.className || col.className !== "hidden"
+          )}
           actionButton={
             <Button
               variant="ghost"
@@ -464,7 +508,7 @@ const Dashboard: React.FC = () => {
 
       {/* Order Activity Calendar */}
       <div className="bg-white rounded-lg shadow overflow-hidden">
-        <div className="p-4 border-b flex justify-between items-center">
+        <div className="p-4 border-b flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-2 sm:space-y-0">
           <div className="flex items-center">
             <Calendar className="w-5 h-5 text-gray-500 mr-2" />
             <h2 className="text-lg font-semibold text-gray-800">
@@ -472,20 +516,19 @@ const Dashboard: React.FC = () => {
             </h2>
           </div>
           <TabGroup
-            tabs={[
-              { id: "day", label: "Today" },
-              { id: "week", label: "This Week" },
-              { id: "month", label: "This Month" },
-            ]}
-            activeTab="week"
-            onTabChange={() => {}}
+            tabs={calendarPeriodOptions}
+            activeTab={calendarPeriod}
+            onTabChange={(tab) =>
+              setCalendarPeriod(tab as "day" | "week" | "month")
+            }
             size="sm"
           />
         </div>
         <div className="p-4">
-          <div className="flex items-center justify-center h-64 text-gray-500">
-            Calendar component will go here
-          </div>
+          <CalendarComponent
+            period={calendarPeriod}
+            onDateSelect={handleCalendarDateSelect}
+          />
         </div>
       </div>
     </div>

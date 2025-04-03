@@ -4,7 +4,6 @@ import {
   CheckCircle,
   Users,
   Package,
-  Calendar,
   BarChart2,
   PieChart,
 } from "lucide-react";
@@ -13,8 +12,7 @@ import Badge from "../../components/atoms/Badge/Badge";
 import Button from "../../components/atoms/Button/Button";
 import DataTable from "../../components/organisms/DataTable/DataTable";
 import ChartCard from "../../components/molecules/ChartCard/ChartCard";
-import TabGroup from "../../components/molecules/TabGroup/TabGroup";
-import CalendarComponent from "../../components/molecules/CalendarComponent/CalendarComponent";
+import OrderActivity from "../../components/organisms/OrderActivity/OrderActivity";
 
 // Types
 interface Order {
@@ -27,7 +25,6 @@ interface Order {
 }
 
 type OrderStatus = "completed" | "processing" | "pending";
-type BadgeVariant = "success" | "warning" | "info" | "error" | "default";
 
 interface Product {
   name: string;
@@ -479,13 +476,6 @@ const Dashboard: React.FC = () => {
     { id: "year", label: "This Year" },
   ];
 
-  // Calendar period options
-  const calendarPeriodOptions = [
-    { id: "day", label: "Today" },
-    { id: "week", label: "This Week" },
-    { id: "month", label: "This Month" },
-  ];
-
   // Chart configurations
   const salesChartConfig = {
     type: "bar",
@@ -681,97 +671,11 @@ const Dashboard: React.FC = () => {
         />
       </div>
 
-      {/* Order Activity Calendar */}
-      <div className="bg-white rounded-lg shadow overflow-hidden">
-        <div className="p-4 border-b flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-2 sm:space-y-0">
-          <div className="flex items-center">
-            <Calendar className="w-5 h-5 text-gray-500 mr-2" />
-            <h2 className="text-lg font-semibold text-gray-800">
-              Order Activity
-            </h2>
-          </div>
-          <TabGroup
-            tabs={calendarPeriodOptions}
-            activeTab={calendarPeriod}
-            onTabChange={(tab) =>
-              setCalendarPeriod(tab as "day" | "week" | "month")
-            }
-            size="sm"
-          />
-        </div>
-        <div className="grid grid-cols-1 lg:grid-cols-3 divide-y lg:divide-y-0 lg:divide-x divide-gray-200">
-          <div className="lg:col-span-2 p-4">
-            <CalendarComponent
-              period={calendarPeriod}
-              onDateSelect={handleCalendarDateSelect}
-              selectedDate={selectedDate}
-            />
-          </div>
-          <div className="p-4 space-y-4">
-            {orderStats ? (
-              <>
-                <div className="text-sm text-gray-500">
-                  {new Date(orderStats.date).toLocaleDateString("en-US", {
-                    weekday: "long",
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                  })}
-                </div>
-                <div className="space-y-4">
-                  <div className="bg-gray-50 rounded-lg p-4">
-                    <div className="text-sm font-medium text-gray-500">
-                      Total Orders
-                    </div>
-                    <div className="mt-1 text-2xl font-semibold text-gray-900">
-                      {orderStats.totalOrders}
-                    </div>
-                    <div className="mt-1 text-sm text-gray-500">
-                      Revenue: ${orderStats.totalRevenue.toLocaleString()}
-                    </div>
-                  </div>
-                  <div className="space-y-2">
-                    <div className="text-sm font-medium text-gray-500">
-                      Order Status
-                    </div>
-                    <div className="grid grid-cols-1 gap-2">
-                      <div className="flex items-center justify-between p-2 bg-green-50 rounded">
-                        <span className="text-sm text-green-700">
-                          Completed
-                        </span>
-                        <Badge variant="success">
-                          {orderStats.ordersByStatus.completed}
-                        </Badge>
-                      </div>
-                      <div className="flex items-center justify-between p-2 bg-blue-50 rounded">
-                        <span className="text-sm text-blue-700">
-                          Processing
-                        </span>
-                        <Badge variant="info">
-                          {orderStats.ordersByStatus.processing}
-                        </Badge>
-                      </div>
-                      <div className="flex items-center justify-between p-2 bg-yellow-50 rounded">
-                        <span className="text-sm text-yellow-700">Pending</span>
-                        <Badge variant="warning">
-                          {orderStats.ordersByStatus.pending}
-                        </Badge>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </>
-            ) : (
-              <div className="flex flex-col items-center justify-center h-full text-gray-500">
-                <Calendar className="w-12 h-12 mb-2 text-gray-400" />
-                <p className="text-sm text-center">
-                  Select a date to view order statistics
-                </p>
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
+      <OrderActivity
+        period={calendarPeriod}
+        onDateSelect={handleCalendarDateSelect}
+        selectedDate={selectedDate}
+      />
     </div>
   );
 };

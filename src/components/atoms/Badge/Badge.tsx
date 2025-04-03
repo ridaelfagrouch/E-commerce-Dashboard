@@ -3,30 +3,31 @@ import React from "react";
 type BadgeVariant = "success" | "warning" | "error" | "info" | "default";
 
 interface BadgeProps {
+  text: string;
   variant?: BadgeVariant;
-  children: React.ReactNode;
   className?: string;
 }
 
 const Badge: React.FC<BadgeProps> = ({
+  text,
   variant = "default",
-  children,
   className = "",
 }) => {
-  const baseClasses =
-    "px-2 py-1 text-xs font-semibold rounded-full inline-flex items-center justify-center";
-
-  const variantClasses = {
-    success: "bg-green-500 text-white",
-    warning: "bg-yellow-500 text-white",
-    error: "bg-red-500 text-white",
-    info: "bg-blue-500 text-white",
-    default: "bg-gray-200 text-gray-800",
+  const variantStyles = {
+    success: "bg-green-100 text-green-800",
+    warning: "bg-yellow-100 text-yellow-800",
+    error: "bg-red-100 text-red-800",
+    info: "bg-blue-100 text-blue-800",
+    default: "bg-gray-100 text-gray-800",
   };
 
-  const classes = `${baseClasses} ${variantClasses[variant]} ${className}`;
-
-  return <span className={classes}>{children}</span>;
+  return (
+    <span
+      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium capitalize ${variantStyles[variant]} ${className}`}
+    >
+      {text}
+    </span>
+  );
 };
 
 export default Badge;

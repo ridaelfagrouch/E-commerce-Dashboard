@@ -1,6 +1,7 @@
 import React from "react";
-import { Edit, Eye, Image as ImageIcon } from "lucide-react";
+import { Edit, Eye } from "lucide-react";
 import Button from "../../atoms/Button/Button";
+import Badge from "../../atoms/Badge/Badge";
 
 export interface Product {
   id: string;
@@ -10,6 +11,7 @@ export interface Product {
   stock: number;
   sales: number;
   status: "Active" | "Low Stock" | "Out of Stock";
+  imageUrl?: string;
 }
 
 interface ProductsTableProps {
@@ -27,17 +29,38 @@ const ProductsTable: React.FC<ProductsTableProps> = ({
   sortDirection,
   className = "",
 }) => {
-  const getStatusColor = (status: string) => {
+  const getStatusVariant = (status: Product["status"]) => {
     switch (status) {
       case "Active":
-        return "bg-green-100 text-green-800";
+        return "success";
       case "Low Stock":
-        return "bg-yellow-100 text-yellow-800";
+        return "warning";
       case "Out of Stock":
-        return "bg-red-100 text-red-800";
+        return "error";
       default:
-        return "bg-gray-100 text-gray-800";
+        return "default";
     }
+  };
+
+  const getDefaultImageUrl = (category: string): string => {
+    // Default images based on product category
+    const categoryImages: Record<string, string> = {
+      Electronics:
+        "https://images.unsplash.com/photo-1498049794561-7780e7231661?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+      Fitness:
+        "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+      "Food & Beverage":
+        "https://images.unsplash.com/photo-1542838132-92c53300491e?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+      Accessories:
+        "https://images.unsplash.com/photo-1611652022419-a9419f74343d?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+      Lifestyle:
+        "https://images.unsplash.com/photo-1523275335684-37898b6baf30?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+    };
+
+    return (
+      categoryImages[category] ||
+      "https://images.unsplash.com/photo-1563013544-824ae1b704d3?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
+    );
   };
 
   const SortHeader: React.FC<{ field: string; label: string }> = ({
@@ -65,8 +88,14 @@ const ProductsTable: React.FC<ProductsTableProps> = ({
           {products.map((product) => (
             <div key={product.id} className="p-4 space-y-3">
               <div className="flex items-start gap-3">
-                <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                  <ImageIcon size={20} className="text-gray-400" />
+                <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden">
+                  <img
+                    src={
+                      product.imageUrl || getDefaultImageUrl(product.category)
+                    }
+                    alt={product.name}
+                    className="w-full h-full object-cover"
+                  />
                 </div>
                 <div className="flex-grow">
                   <div className="flex justify-between items-start">
@@ -83,25 +112,25 @@ const ProductsTable: React.FC<ProductsTableProps> = ({
                         variant="ghost"
                         size="sm"
                         leftIcon={<Edit size={16} />}
-                      />
+                      >
+                        Edit
+                      </Button>
                       <Button
                         variant="ghost"
                         size="sm"
                         leftIcon={<Eye size={16} />}
-                      />
+                      >
+                        View
+                      </Button>
                     </div>
                   </div>
                   <div className="mt-2 flex justify-between items-center">
                     <span className="text-sm font-medium">
                       ${product.price.toFixed(2)}
                     </span>
-                    <span
-                      className={`px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(
-                        product.status
-                      )}`}
-                    >
+                    <Badge variant={getStatusVariant(product.status)}>
                       {product.status}
-                    </span>
+                    </Badge>
                   </div>
                   <div className="mt-1 flex justify-between text-sm text-gray-500">
                     <span>{product.stock} in stock</span>
@@ -129,8 +158,12 @@ const ProductsTable: React.FC<ProductsTableProps> = ({
               key={product.id}
               className="bg-white border rounded-lg overflow-hidden hover:shadow-md transition-shadow"
             >
-              <div className="h-40 bg-gray-100 flex items-center justify-center">
-                <ImageIcon size={48} className="text-gray-400" />
+              <div className="h-40 bg-gray-100 flex items-center justify-center overflow-hidden">
+                <img
+                  src={product.imageUrl || getDefaultImageUrl(product.category)}
+                  alt={product.name}
+                  className="w-full h-full object-cover"
+                />
               </div>
               <div className="p-4">
                 <div className="flex justify-between items-start">
@@ -142,13 +175,9 @@ const ProductsTable: React.FC<ProductsTableProps> = ({
                       {product.category}
                     </div>
                   </div>
-                  <span
-                    className={`px-2 py-1 text-xs text-center font-semibold rounded-full ${getStatusColor(
-                      product.status
-                    )}`}
-                  >
+                  <Badge variant={getStatusVariant(product.status)}>
                     {product.status}
-                  </span>
+                  </Badge>
                 </div>
                 <div className="mt-3 flex justify-between items-center">
                   <span className="text-lg font-bold text-indigo-600">

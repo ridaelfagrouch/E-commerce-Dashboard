@@ -250,7 +250,7 @@ export const Customers: React.FC = () => {
             </Button>
           </div>
         </div>
-        <div className="p-4 overflow-x-auto">
+        <div className="p-4 overflow-x-auto flex gap-2">
           {filterOptions.map((option) => (
             <FilterButton
               key={option.id}

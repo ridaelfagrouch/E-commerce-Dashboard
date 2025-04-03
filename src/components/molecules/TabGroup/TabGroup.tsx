@@ -7,11 +7,11 @@ interface TabProps {
   size?: "sm" | "md" | "lg";
 }
 
-const TabGroup: React.FC<TabProps> = ({ 
-  tabs, 
-  activeTab, 
+const TabGroup: React.FC<TabProps> = ({
+  tabs,
+  activeTab,
   onTabChange,
-  size = "md" 
+  size = "md",
 }) => {
   const getSizeClasses = () => {
     switch (size) {

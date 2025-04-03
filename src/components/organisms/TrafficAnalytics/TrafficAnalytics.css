@@ -1,0 +1,21 @@
+.map-container {
+  height: 300px;
+  width: 100%;
+  border-radius: 0.5rem;
+}
+
+.custom-marker {
+  background: transparent;
+  border: none;
+}
+
+.leaflet-popup-content-wrapper {
+  background: #1f2937;
+  color: white;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+}
+
+.leaflet-popup-tip {
+  background: #1f2937;
+}

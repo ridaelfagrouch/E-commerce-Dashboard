@@ -21,20 +21,21 @@ const OrdersTable: React.FC<OrdersTableProps> = ({
   className = "",
 }) => {
   const getStatusColor = (status: string) => {
-    switch (status) {
-      case "Completed":
-        return "bg-green-100 text-green-800";
-      case "Processing":
-        return "bg-blue-100 text-blue-800";
-      case "Shipped":
-        return "bg-blue-100 text-blue-800";
-      case "Pending":
-        return "bg-yellow-100 text-yellow-800";
-      case "Cancelled":
-        return "bg-red-100 text-red-800";
-      default:
-        return "bg-gray-100 text-gray-800";
-    }
+    const statusColors = {
+      completed: { bg: "bg-green-100", text: "text-green-700" },
+      processing: { bg: "bg-blue-100", text: "text-blue-700" },
+      pending: { bg: "bg-yellow-100", text: "text-yellow-700" },
+      shipped: { bg: "bg-purple-100", text: "text-purple-700" },
+      cancelled: { bg: "bg-red-100", text: "text-red-700" },
+    };
+
+    const normalizedStatus = status.toLowerCase();
+    return (
+      statusColors[normalizedStatus as keyof typeof statusColors] || {
+        bg: "bg-gray-100",
+        text: "text-gray-700",
+      }
+    );
   };
 
   return (
@@ -68,9 +69,9 @@ const OrdersTable: React.FC<OrdersTableProps> = ({
               </div>
               <div className="flex justify-between items-center">
                 <span
-                  className={`px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(
-                    order.status
-                  )}`}
+                  className={`px-2 py-1 text-xs font-semibold rounded-full ${
+                    getStatusColor(order.status).bg
+                  } ${getStatusColor(order.status).text}`}
                 >
                   {order.status}
                 </span>
@@ -125,9 +126,9 @@ const OrdersTable: React.FC<OrdersTableProps> = ({
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm">
                   <span
-                    className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusColor(
-                      order.status
-                    )}`}
+                    className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                      getStatusColor(order.status).bg
+                    } ${getStatusColor(order.status).text}`}
                   >
                     {order.status}
                   </span>

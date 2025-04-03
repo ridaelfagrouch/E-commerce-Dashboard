@@ -1,7 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
 import { Image as ImageIcon } from "lucide-react";
 
 interface Column {
+  id: string;
   header: string;
   accessor: string;
   cellStyle?: string;
@@ -34,9 +36,9 @@ const DataTable: React.FC<DataTableProps> = ({
         </div>
         <div className="p-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-            {data.map((row, rowIndex) => (
+            {data.map((row) => (
               <div
-                key={rowIndex}
+                key={row.id}
                 className="flex items-center gap-4 p-4 border rounded-lg hover:shadow-md transition-shadow bg-white"
               >
                 <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0">
@@ -61,10 +63,10 @@ const DataTable: React.FC<DataTableProps> = ({
                     </div>
                     <div className="flex items-center justify-between mt-1">
                       <span className="text-sm text-gray-500">Stock</span>
-                      {columns.map((column, colIndex) => {
+                      {columns.map((column) => {
                         if (column.header === "Stock" && column.Cell) {
                           return (
-                            <div key={colIndex}>
+                            <div key={column.id}>
                               <column.Cell
                                 value={row[column.accessor]}
                                 row={row}
@@ -95,15 +97,15 @@ const DataTable: React.FC<DataTableProps> = ({
       {/* Mobile View */}
       <div className="block md:hidden">
         <div className="divide-y divide-gray-200">
-          {data.map((row, rowIndex) => (
-            <div key={rowIndex} className="p-4">
+          {data.map((row) => (
+            <div key={row.id} className="p-4">
               <div className="space-y-3">
                 <div className="flex justify-between items-center">
                   <span className="text-indigo-600 font-medium">{row.id}</span>
-                  {columns.map((column, colIndex) => {
+                  {columns.map((column) => {
                     if (column.header === "Status" && column.Cell) {
                       return (
-                        <div key={colIndex}>
+                        <div key={column.id}>
                           <column.Cell value={row[column.accessor]} row={row} />
                         </div>
                       );
@@ -129,9 +131,9 @@ const DataTable: React.FC<DataTableProps> = ({
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
-              {columns.map((column, index) => (
+              {columns.map((column) => (
                 <th
-                  key={index}
+                  key={column.id}
                   className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                 >
                   {column.header}
@@ -140,13 +142,13 @@ const DataTable: React.FC<DataTableProps> = ({
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {data.map((row, rowIndex) => (
-              <tr key={rowIndex} className="hover:bg-gray-50">
-                {columns.map((column, colIndex) => (
+            {data.map((row) => (
+              <tr key={row.id} className="hover:bg-gray-50">
+                {columns.map((column) => (
                   <td
-                    key={colIndex}
+                    key={column.id}
                     className={`px-6 py-4 whitespace-nowrap text-sm ${
-                      column.cellStyle || "text-gray-500"
+                      column.cellStyle ?? "text-gray-500"
                     }`}
                   >
                     {column.Cell ? (

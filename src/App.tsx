@@ -10,8 +10,8 @@ import Dashboard from "./screens/Dashboard/Dashboard";
 import Orders from "./screens/Orders/Orders";
 import Products from "./screens/Products/Products";
 import Customers from "./screens/Customers/Customers";
+import Analytics from "./screens/Analytics/Analytics";
 
-const Analytics = () => <div>Analytics Page</div>;
 const Settings = () => <div>Settings Page</div>;
 
 const App: React.FC = () => {

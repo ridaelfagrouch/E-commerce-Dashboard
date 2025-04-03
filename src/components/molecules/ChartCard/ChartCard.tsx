@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useRef, useState } from "react";
 import Chart from "chart.js/auto";
 import TabGroup from "../TabGroup/TabGroup";
@@ -57,6 +58,7 @@ const ChartCard: React.FC<ChartCardProps> = ({
     return () => {
       window.removeEventListener("resize", handleResize);
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Chart creation/update effect

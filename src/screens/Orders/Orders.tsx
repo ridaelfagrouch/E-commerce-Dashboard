@@ -26,80 +26,133 @@ const filterOptions = [
   { id: "cancelled", label: "Cancelled" },
 ];
 
+const actionButtons = [
+  {
+    label: "Export",
+    variant: "secondary" as const,
+    icon: <Download size={16} />,
+  },
+  {
+    label: "New Order",
+    variant: "primary" as const,
+    icon: <Plus size={16} />,
+  },
+];
+
+const statsCards = [
+  {
+    title: "Total Orders",
+    value: "256",
+    icon: <Package size={24} />,
+    trend: {
+      value: 12.5,
+      isPositive: true,
+      text: "vs last month",
+    },
+    iconBgColor: "bg-indigo-100",
+    iconColor: "text-indigo-600",
+  },
+  {
+    title: "Today's Orders",
+    value: "24",
+    icon: <Calendar size={24} />,
+    trend: {
+      value: 5.2,
+      isPositive: true,
+      text: "vs yesterday",
+    },
+    iconBgColor: "bg-green-100",
+    iconColor: "text-green-600",
+  },
+  {
+    title: "Average Order Value",
+    value: "$85.40",
+    icon: <DollarSign size={24} />,
+    trend: {
+      value: 3.8,
+      isPositive: true,
+      text: "vs last month",
+    },
+    iconBgColor: "bg-purple-100",
+    iconColor: "text-purple-600",
+  },
+];
+
+const initialOrders: Order[] = [
+  {
+    id: "#ORD-5289",
+    customer: "Sarah Johnson",
+    date: "Apr 1, 2025",
+    status: "Completed",
+    amount: 128.5,
+    items: 2,
+  },
+  {
+    id: "#ORD-5288",
+    customer: "Michael Chen",
+    date: "Apr 1, 2025",
+    status: "Processing",
+    amount: 74.99,
+    items: 1,
+  },
+  {
+    id: "#ORD-5287",
+    customer: "Emma Rodriguez",
+    date: "Mar 31, 2025",
+    status: "Shipped",
+    amount: 219.0,
+    items: 3,
+  },
+  {
+    id: "#ORD-5286",
+    customer: "Daniel Kim",
+    date: "Mar 31, 2025",
+    status: "Pending",
+    amount: 65.25,
+    items: 1,
+  },
+  {
+    id: "#ORD-5285",
+    customer: "Lisa Wong",
+    date: "Mar 30, 2025",
+    status: "Completed",
+    amount: 95.75,
+    items: 2,
+  },
+  {
+    id: "#ORD-5284",
+    customer: "Jacob Miller",
+    date: "Mar 30, 2025",
+    status: "Cancelled",
+    amount: 42.99,
+    items: 1,
+  },
+  {
+    id: "#ORD-5283",
+    customer: "Olivia Taylor",
+    date: "Mar 29, 2025",
+    status: "Completed",
+    amount: 156.8,
+    items: 4,
+  },
+  {
+    id: "#ORD-5282",
+    customer: "Noah Brown",
+    date: "Mar 29, 2025",
+    status: "Shipped",
+    amount: 87.5,
+    items: 2,
+  },
+];
+
 export const Orders: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
+  const [orders] = useState<Order[]>(initialOrders);
+  const [filter, setFilter] = useState<string>("all");
+
   const totalOrders = 1286;
   const ordersPerPage = 8;
-
-  const [orders, setOrders] = useState<Order[]>([
-    {
-      id: "#ORD-5289",
-      customer: "Sarah Johnson",
-      date: "Apr 1, 2025",
-      status: "Completed",
-      amount: 128.5,
-      items: 2,
-    },
-    {
-      id: "#ORD-5288",
-      customer: "Michael Chen",
-      date: "Apr 1, 2025",
-      status: "Processing",
-      amount: 74.99,
-      items: 1,
-    },
-    {
-      id: "#ORD-5287",
-      customer: "Emma Rodriguez",
-      date: "Mar 31, 2025",
-      status: "Shipped",
-      amount: 219.0,
-      items: 3,
-    },
-    {
-      id: "#ORD-5286",
-      customer: "Daniel Kim",
-      date: "Mar 31, 2025",
-      status: "Pending",
-      amount: 65.25,
-      items: 1,
-    },
-    {
-      id: "#ORD-5285",
-      customer: "Lisa Wong",
-      date: "Mar 30, 2025",
-      status: "Completed",
-      amount: 95.75,
-      items: 2,
-    },
-    {
-      id: "#ORD-5284",
-      customer: "Jacob Miller",
-      date: "Mar 30, 2025",
-      status: "Cancelled",
-      amount: 42.99,
-      items: 1,
-    },
-    {
-      id: "#ORD-5283",
-      customer: "Olivia Taylor",
-      date: "Mar 29, 2025",
-      status: "Completed",
-      amount: 156.8,
-      items: 4,
-    },
-    {
-      id: "#ORD-5282",
-      customer: "Noah Brown",
-      date: "Mar 29, 2025",
-      status: "Shipped",
-      amount: 87.5,
-      items: 2,
-    },
-  ]);
-
-  const [filter, setFilter] = useState<string>("all");
 
   // Filter Orders based on status and search term
   const filteredOrders = orders
@@ -125,46 +178,26 @@ export const Orders: React.FC = () => {
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <h1 className="text-2xl font-bold">Orders</h1>
         <div className="flex flex-wrap gap-3">
-          <Button variant="secondary" leftIcon={<Download size={16} />}>
-            Export
-          </Button>
-          <Button variant="primary" leftIcon={<Plus size={16} />}>
-            New Order
-          </Button>
+          {actionButtons.map((button, index) => (
+            <Button key={index} variant={button.variant} leftIcon={button.icon}>
+              {button.label}
+            </Button>
+          ))}
         </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-        <StatCard
-          title="Total Orders"
-          value="256"
-          icon={<Package className="text-indigo-600" size={24} />}
-          trend={{
-            value: 12.5,
-            isPositive: true,
-            text: "vs last month",
-          }}
-        />
-        <StatCard
-          title="Today's Orders"
-          value="24"
-          icon={<Calendar className="text-green-600" size={24} />}
-          trend={{
-            value: 5.2,
-            isPositive: true,
-            text: "vs yesterday",
-          }}
-        />
-        <StatCard
-          title="Average Order Value"
-          value="$85.40"
-          icon={<DollarSign className="text-blue-600" size={24} />}
-          trend={{
-            value: 3.8,
-            isPositive: true,
-            text: "vs last month",
-          }}
-        />
+        {statsCards.map((card, index) => (
+          <StatCard
+            key={index}
+            title={card.title}
+            value={card.value}
+            icon={card.icon}
+            trend={card.trend}
+            iconBgColor={card.iconBgColor}
+            iconColor={card.iconColor}
+          />
+        ))}
       </div>
 
       <div className="bg-white rounded-lg shadow overflow-hidden">

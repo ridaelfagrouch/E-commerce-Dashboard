@@ -6,6 +6,8 @@ import {
   Package,
   BarChart2,
   PieChart,
+  Edit,
+  Eye,
 } from "lucide-react";
 import StatCard from "../../components/molecules/StatCard/StatCard";
 import Badge from "../../components/atoms/Badge/Badge";
@@ -26,17 +28,6 @@ interface Order {
 
 type OrderStatus = "completed" | "processing" | "pending";
 
-interface Product {
-  name: string;
-  sales: string;
-  revenue: string;
-  revenueValue: number;
-  inventory: ProductInventoryStatus;
-  stock: number;
-}
-
-type ProductInventoryStatus = "in_stock" | "low_stock" | "out_of_stock";
-
 interface SalesByPeriod {
   day: string;
   sales: number;
@@ -51,10 +42,10 @@ interface SalesByCategory {
 
 interface ColumnCell<T, K extends keyof T> {
   value: T[K];
-  row?: T;
 }
 
 interface BaseColumn<T> {
+  id: string;
   header: string;
   accessor: keyof T;
   cellStyle?: string;
@@ -71,33 +62,13 @@ interface ColumnWithoutCell<T> extends BaseColumn<T> {
 
 type Column<T> = ColumnWithCell<T, keyof T> | ColumnWithoutCell<T>;
 
-// Add new interfaces for order activity
-interface DailyOrderStats {
-  date: string;
-  totalOrders: number;
-  totalRevenue: number;
-  ordersByStatus: {
-    completed: number;
-    processing: number;
-    pending: number;
-  };
-}
-
 const Dashboard: React.FC = () => {
   // State for chart period selection
   const [chartPeriod, setChartPeriod] = useState<"week" | "month" | "year">(
     "week"
   );
-  // State for calendar period selection
-  const [calendarPeriod, setCalendarPeriod] = useState<
-    "day" | "week" | "month"
-  >("week");
   // State for responsive layout
   const [isMobile, setIsMobile] = useState<boolean>(false);
-
-  // Add state for order activity
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-  const [orderStats, setOrderStats] = useState<DailyOrderStats | null>(null);
 
   // Check for mobile view on mount and resize
   useEffect(() => {
@@ -121,56 +92,56 @@ const Dashboard: React.FC = () => {
       id: "#ORD-5289",
       customer: "John Smith",
       date: "2024-03-15",
-      status: "completed",
+      status: "completed" as OrderStatus,
       amount: "$128.50",
     },
     {
       id: "#ORD-5288",
       customer: "Emma Wilson",
       date: "2024-03-15",
-      status: "processing",
+      status: "processing" as OrderStatus,
       amount: "$74.99",
     },
     {
       id: "#ORD-5287",
       customer: "Michael Brown",
       date: "2024-03-14",
-      status: "processing",
+      status: "processing" as OrderStatus,
       amount: "$219.00",
     },
     {
       id: "#ORD-5286",
       customer: "Sarah Davis",
       date: "2024-03-14",
-      status: "pending",
+      status: "pending" as OrderStatus,
       amount: "$65.25",
     },
     {
       id: "#ORD-5285",
       customer: "James Johnson",
       date: "2024-03-14",
-      status: "completed",
+      status: "completed" as OrderStatus,
       amount: "$189.99",
     },
     {
       id: "#ORD-5284",
       customer: "Lisa Anderson",
       date: "2024-03-13",
-      status: "processing",
+      status: "processing" as OrderStatus,
       amount: "$95.50",
     },
     {
       id: "#ORD-5283",
       customer: "Robert Miller",
       date: "2024-03-13",
-      status: "completed",
+      status: "completed" as OrderStatus,
       amount: "$157.75",
     },
     {
       id: "#ORD-5282",
       customer: "Emily Taylor",
       date: "2024-03-13",
-      status: "pending",
+      status: "pending" as OrderStatus,
       amount: "$42.99",
     },
   ];
@@ -183,6 +154,9 @@ const Dashboard: React.FC = () => {
       revenueValue: 24680,
       inventory: "in_stock",
       stock: 156,
+      imageUrl:
+        "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+      category: "Electronics",
     },
     {
       name: "Ultra HD Smart Watch",
@@ -191,6 +165,9 @@ const Dashboard: React.FC = () => {
       revenueValue: 29610,
       inventory: "low_stock",
       stock: 23,
+      imageUrl:
+        "https://images.unsplash.com/photo-1546868871-7041f2a55e12?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+      category: "Electronics",
     },
     {
       name: "Premium Yoga Mat",
@@ -199,6 +176,9 @@ const Dashboard: React.FC = () => {
       revenueValue: 17300,
       inventory: "in_stock",
       stock: 89,
+      imageUrl:
+        "https://images.unsplash.com/photo-1592432678016-e910b452f9a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+      category: "Fitness",
     },
     {
       name: "Organic Coffee Beans",
@@ -207,6 +187,9 @@ const Dashboard: React.FC = () => {
       revenueValue: 15080,
       inventory: "in_stock",
       stock: 245,
+      imageUrl:
+        "https://images.unsplash.com/photo-1559056199-641a0ac8b55e?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+      category: "Food & Beverage",
     },
     {
       name: "Smart Home Security Camera",
@@ -215,6 +198,9 @@ const Dashboard: React.FC = () => {
       revenueValue: 34900,
       inventory: "in_stock",
       stock: 112,
+      imageUrl:
+        "https://images.unsplash.com/photo-1557324232-b8917d3c3dcb?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+      category: "Electronics",
     },
     {
       name: "Fitness Tracking Band",
@@ -223,6 +209,9 @@ const Dashboard: React.FC = () => {
       revenueValue: 12900,
       inventory: "low_stock",
       stock: 18,
+      imageUrl:
+        "https://images.unsplash.com/photo-1575311373937-040b8e1fd5b6?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+      category: "Electronics",
     },
     {
       name: "Portable Power Bank",
@@ -231,46 +220,20 @@ const Dashboard: React.FC = () => {
       revenueValue: 8835,
       inventory: "out_of_stock",
       stock: 0,
+      imageUrl:
+        "https://images.unsplash.com/photo-1618410320928-25228d811631?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+      category: "Electronics",
     },
     {
-      name: "Noise-Canceling Headphones",
+      name: "Premium Bluetooth Headphones",
       sales: "534",
       revenue: "$32,040",
       revenueValue: 32040,
       inventory: "in_stock",
       stock: 67,
-    },
-    {
-      name: "Ergonomic Office Chair",
-      sales: "478",
-      revenue: "$47,800",
-      revenueValue: 47800,
-      inventory: "in_stock",
-      stock: 34,
-    },
-    {
-      name: "Air Purifier Plus",
-      sales: "456",
-      revenue: "$36,480",
-      revenueValue: 36480,
-      inventory: "low_stock",
-      stock: 15,
-    },
-    {
-      name: "Smart LED Light Bulbs",
-      sales: "423",
-      revenue: "$6,345",
-      revenueValue: 6345,
-      inventory: "in_stock",
-      stock: 289,
-    },
-    {
-      name: "Wireless Charging Pad",
-      sales: "398",
-      revenue: "$5,970",
-      revenueValue: 5970,
-      inventory: "in_stock",
-      stock: 178,
+      imageUrl:
+        "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+      category: "Electronics",
     },
   ];
 
@@ -341,95 +304,55 @@ const Dashboard: React.FC = () => {
     generateCategoryData();
   }, [chartPeriod]);
 
-  // Sample order activity data (in real app, this would come from an API)
-  const generateOrderStats = (date: Date): DailyOrderStats => {
-    return {
-      date: date.toISOString().split("T")[0],
-      totalOrders: Math.floor(Math.random() * 50) + 10,
-      totalRevenue: Math.floor(Math.random() * 5000) + 1000,
-      ordersByStatus: {
-        completed: Math.floor(Math.random() * 20) + 5,
-        processing: Math.floor(Math.random() * 15) + 3,
-        pending: Math.floor(Math.random() * 10) + 2,
-      },
-    };
-  };
-
   // Table definitions
   const orderColumns: Column<Order>[] = [
     {
+      id: "1",
       header: "Order ID",
       accessor: "id",
       cellStyle: "text-indigo-600 font-medium",
     },
     {
+      id: "2",
       header: "Customer",
       accessor: "customer",
     },
     {
+      id: "3",
       header: "Date",
       accessor: "date",
     },
     {
+      id: "4",
       header: "Status",
       accessor: "status",
-      Cell: ({ value }: { value: OrderStatus }) => (
-        <Badge
-          variant={
-            value === "completed"
-              ? "success"
-              : value === "processing"
-              ? "info"
-              : "warning"
-          }
-        >
-          {(value as string).charAt(0).toUpperCase() + value.slice(1)}
-        </Badge>
-      ),
+      Cell: (props: ColumnCell<Order, keyof Order>) => {
+        const value = props.value as OrderStatus;
+        const statusColors = {
+          completed: { bg: "bg-green-100", text: "text-green-700" },
+          processing: { bg: "bg-blue-100", text: "text-blue-700" },
+          pending: { bg: "bg-yellow-100", text: "text-yellow-700" },
+        };
+
+        const colors = statusColors[value] || {
+          bg: "bg-gray-100",
+          text: "text-gray-700",
+        };
+
+        return (
+          <span
+            className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${colors.bg} ${colors.text}`}
+          >
+            {value.charAt(0).toUpperCase() + value.slice(1)}
+          </span>
+        );
+      },
     },
     {
+      id: "5",
       header: "Amount",
       accessor: "amount",
       cellStyle: "text-gray-900 font-medium",
-    },
-  ];
-
-  const productColumns: Column<Product>[] = [
-    {
-      header: "Product",
-      accessor: "name",
-      cellStyle: "text-gray-900 font-medium",
-    },
-    {
-      header: "Sales",
-      accessor: "sales",
-      cellStyle: "text-indigo-600 font-medium",
-    },
-    {
-      header: "Revenue",
-      accessor: "revenue",
-      cellStyle: "text-green-600 font-medium",
-    },
-    {
-      header: "Stock",
-      accessor: "inventory",
-      Cell: ({ value }: { value: ProductInventoryStatus }) => (
-        <Badge
-          variant={
-            value === "in_stock"
-              ? "success"
-              : value === "low_stock"
-              ? "warning"
-              : "error"
-          }
-        >
-          {value === "in_stock"
-            ? "In Stock"
-            : value === "low_stock"
-            ? "Low Stock"
-            : "Out of Stock"}
-        </Badge>
-      ),
     },
   ];
 
@@ -578,12 +501,6 @@ const Dashboard: React.FC = () => {
     },
   };
 
-  // Function to handle date selection in calendar
-  const handleCalendarDateSelect = (date: Date) => {
-    setSelectedDate(date);
-    setOrderStats(generateOrderStats(date));
-  };
-
   return (
     <div className="space-y-6">
       <div className="mb-6">
@@ -658,24 +575,92 @@ const Dashboard: React.FC = () => {
         />
 
         {/* Top Products */}
-        <DataTable
-          title="Top Products"
-          data={topProducts}
-          columns={productColumns}
-          variant="product"
-          actionButton={
+        <div className="bg-white rounded-lg shadow overflow-hidden">
+          <div className="p-4 border-b flex justify-between items-center">
+            <h2 className="text-lg font-medium">Top Products</h2>
             <Button variant="ghost" className="text-sm">
               View all
             </Button>
-          }
-        />
+          </div>
+          <div className="p-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+              {topProducts.map((product) => (
+                <div
+                  key={product.name}
+                  className="bg-white border rounded-lg overflow-hidden hover:shadow-md transition-shadow"
+                >
+                  <div className="h-40 bg-gray-100 flex items-center justify-center overflow-hidden">
+                    <img
+                      src={product.imageUrl}
+                      alt={product.name}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <div className="p-4">
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <div className="text-sm font-medium text-gray-900">
+                          {product.name}
+                        </div>
+                        <div className="text-sm text-gray-500">
+                          {product.category}
+                        </div>
+                      </div>
+                      <Badge
+                        variant={
+                          product.inventory === "in_stock"
+                            ? "success"
+                            : product.inventory === "low_stock"
+                            ? "warning"
+                            : "error"
+                        }
+                      >
+                        {product.inventory === "in_stock"
+                          ? "In Stock"
+                          : product.inventory === "low_stock"
+                          ? "Low Stock"
+                          : "Out of Stock"}
+                      </Badge>
+                    </div>
+                    <div className="mt-3 flex justify-between items-center">
+                      <span className="text-lg font-bold text-indigo-600">
+                        {product.revenue}
+                      </span>
+                      <span className="text-sm text-gray-500">
+                        {product.stock} in stock
+                      </span>
+                    </div>
+                    <div className="mt-4 flex justify-between text-sm text-gray-500">
+                      <span>{product.sales} sales</span>
+                      <span>#{product.name.slice(0, 8)}</span>
+                    </div>
+                    <div className="mt-4 flex gap-2">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="flex-1"
+                        leftIcon={<Edit size={16} />}
+                      >
+                        Edit
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="flex-1"
+                        leftIcon={<Eye size={16} />}
+                      >
+                        View
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
 
-      <OrderActivity
-        period={calendarPeriod}
-        onDateSelect={handleCalendarDateSelect}
-        selectedDate={selectedDate}
-      />
+      <OrderActivity />
     </div>
   );
 };

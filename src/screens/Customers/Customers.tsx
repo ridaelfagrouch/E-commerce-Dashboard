@@ -13,6 +13,7 @@ import {
   Filter,
   ChevronDown,
 } from "lucide-react";
+import Button from "../../components/atoms/Button/Button";
 
 // Types
 export type Customer = {
@@ -230,22 +231,26 @@ export const Customers: React.FC = () => {
       </div>
 
       <div className="bg-white rounded-lg shadow mb-8">
-        <div className="p-4 border-b flex justify-between items-center">
+        <div className="p-4 border-b flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <h2 className="text-lg font-medium">Customer Filters</h2>
-          <div className="flex gap-2">
-            <SearchInput
-              placeholder="Search customers..."
-              value={searchTerm}
-              onChange={handleSearch}
-            />
-            <button className="bg-gray-100 px-3 py-2 rounded-md flex items-center gap-1">
-              <Filter size={16} />
+          <div className="flex flex-wrap gap-2 w-full sm:w-auto">
+            <div className="w-full sm:w-64">
+              <SearchInput
+                placeholder="Search customers..."
+                value={searchTerm}
+                onChange={handleSearch}
+              />
+            </div>
+            <Button
+              variant="secondary"
+              leftIcon={<Filter size={16} />}
+              rightIcon={<ChevronDown size={14} />}
+            >
               Filters
-              <ChevronDown size={14} />
-            </button>
+            </Button>
           </div>
         </div>
-        <div className="p-4 flex space-x-2">
+        <div className="p-4 overflow-x-auto">
           {filterOptions.map((option) => (
             <FilterButton
               key={option.id}

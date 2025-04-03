@@ -8,26 +8,29 @@ import {
   Download,
   Plus,
   ChevronDown,
-  Eye,
 } from "lucide-react";
 import Pagination from "../../components/molecules/Pagination/Pagination";
 import SearchInput from "../../components/atoms/SearchInput/SearchInput";
+import Button from "../../components/atoms/Button/Button";
+import FilterButtonGroup from "../../components/molecules/FilterButtonGroup/FilterButtonGroup";
+import OrdersTable, {
+  Order,
+} from "../../components/organisms/OrdersTable/OrdersTable";
 
-// Types
-type Order = {
-  id: string;
-  customer: string;
-  date: string;
-  status: "Completed" | "Processing" | "Shipped" | "Pending" | "Cancelled";
-  amount: number;
-  items: number;
-};
+const filterOptions = [
+  { id: "all", label: "All" },
+  { id: "completed", label: "Completed" },
+  { id: "processing", label: "Processing" },
+  { id: "shipped", label: "Shipped" },
+  { id: "pending", label: "Pending" },
+  { id: "cancelled", label: "Cancelled" },
+];
 
 export const Orders: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
   const totalOrders = 1286;
-  const OrdersPerPage = 8;
+  const ordersPerPage = 8;
 
   const [orders, setOrders] = useState<Order[]>([
     {
@@ -112,45 +115,26 @@ export const Orders: React.FC = () => {
       return order.status.toLowerCase() === filter.toLowerCase();
     });
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "Completed":
-        return "bg-green-100 text-green-800";
-      case "Processing":
-        return "bg-blue-100 text-blue-800";
-      case "Shipped":
-        return "bg-blue-100 text-blue-800";
-      case "Pending":
-        return "bg-yellow-100 text-yellow-800";
-      case "Cancelled":
-        return "bg-red-100 text-red-800";
-      default:
-        return "bg-gray-100 text-gray-800";
-    }
-  };
-
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
     setCurrentPage(1); // Reset to first page when searching
   };
 
   return (
-    <div className="mb-6">
-      <div className="flex justify-between items-center mb-6">
+    <div className="space-y-6 pb-8">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <h1 className="text-2xl font-bold">Orders</h1>
-        <div className="flex gap-3">
-          <button className="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-md flex items-center gap-2">
-            <Download size={16} />
+        <div className="flex flex-wrap gap-3">
+          <Button variant="secondary" leftIcon={<Download size={16} />}>
             Export
-          </button>
-          <button className="bg-indigo-600 text-white px-4 py-2 rounded-md flex items-center gap-2">
-            <Plus size={16} />
+          </Button>
+          <Button variant="primary" leftIcon={<Plus size={16} />}>
             New Order
-          </button>
+          </Button>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
         <StatCard
           title="Total Orders"
           value="256"
@@ -183,149 +167,45 @@ export const Orders: React.FC = () => {
         />
       </div>
 
-      <div className="bg-white rounded-lg shadow mb-8">
-        <div className="p-4 border-b flex justify-between items-center">
+      <div className="bg-white rounded-lg shadow overflow-hidden">
+        <div className="p-4 border-b flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <h2 className="text-lg font-medium">Order Filters</h2>
-          <div className="flex gap-2">
-            <SearchInput
-              placeholder="Search customers..."
-              value={searchTerm}
-              onChange={handleSearch}
-            />
-            <button className="bg-gray-100 px-3 py-2 rounded-md flex items-center gap-1">
-              <Filter size={16} />
+          <div className="flex flex-wrap gap-2 w-full sm:w-auto">
+            <div className="w-full sm:w-64">
+              <SearchInput
+                placeholder="Search orders..."
+                value={searchTerm}
+                onChange={handleSearch}
+              />
+            </div>
+            <Button
+              variant="secondary"
+              leftIcon={<Filter size={16} />}
+              rightIcon={<ChevronDown size={14} />}
+            >
               Filters
-              <ChevronDown size={14} />
-            </button>
+            </Button>
           </div>
         </div>
-        <div className="p-4 flex flex-wrap gap-2">
-          <button
-            className={`px-4 py-2 rounded-md ${
-              filter === "all" ? "bg-indigo-100 text-indigo-800" : "bg-gray-100"
-            }`}
-            onClick={() => setFilter("all")}
-          >
-            All
-          </button>
-          <button
-            className={`px-4 py-2 rounded-md ${
-              filter === "completed"
-                ? "bg-green-100 text-green-800"
-                : "bg-gray-100"
-            }`}
-            onClick={() => setFilter("completed")}
-          >
-            Completed
-          </button>
-          <button
-            className={`px-4 py-2 rounded-md ${
-              filter === "processing"
-                ? "bg-blue-100 text-blue-800"
-                : "bg-gray-100"
-            }`}
-            onClick={() => setFilter("processing")}
-          >
-            Processing
-          </button>
-          <button
-            className={`px-4 py-2 rounded-md ${
-              filter === "shipped" ? "bg-blue-100 text-blue-800" : "bg-gray-100"
-            }`}
-            onClick={() => setFilter("shipped")}
-          >
-            Shipped
-          </button>
-          <button
-            className={`px-4 py-2 rounded-md ${
-              filter === "pending"
-                ? "bg-yellow-100 text-yellow-800"
-                : "bg-gray-100"
-            }`}
-            onClick={() => setFilter("pending")}
-          >
-            Pending
-          </button>
-          <button
-            className={`px-4 py-2 rounded-md ${
-              filter === "cancelled" ? "bg-red-100 text-red-800" : "bg-gray-100"
-            }`}
-            onClick={() => setFilter("cancelled")}
-          >
-            Cancelled
-          </button>
+        <div className="p-4">
+          <FilterButtonGroup
+            options={filterOptions}
+            activeFilter={filter}
+            onFilterChange={setFilter}
+          />
         </div>
       </div>
 
       <div className="bg-white rounded-lg shadow overflow-hidden">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
-            <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Order ID
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Customer
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Date
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Status
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Items
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Amount
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Actions
-              </th>
-            </tr>
-          </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
-            {filteredOrders.map((order) => (
-              <tr key={order.id} className="hover:bg-gray-50">
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-indigo-600">
-                  {order.id}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                  {order.customer}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {order.date}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <span
-                    className={`px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusColor(
-                      order.status
-                    )}`}
-                  >
-                    {order.status}
-                  </span>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {order.items}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                  ${order.amount.toFixed(2)}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  <button className="text-indigo-600 hover:text-indigo-900 flex items-center gap-1">
-                    <Eye size={16} /> View
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        <Pagination
-          currentPage={currentPage}
-          totalItems={totalOrders}
-          itemsPerPage={OrdersPerPage}
-          onPageChange={setCurrentPage}
-        />
+        <OrdersTable orders={filteredOrders} />
+        <div className="border-t">
+          <Pagination
+            currentPage={currentPage}
+            totalItems={totalOrders}
+            itemsPerPage={ordersPerPage}
+            onPageChange={setCurrentPage}
+          />
+        </div>
       </div>
     </div>
   );

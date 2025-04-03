@@ -7,7 +7,6 @@ import {
   Calendar,
   BarChart2,
   PieChart,
-  ArrowRight,
 } from "lucide-react";
 import StatCard from "../../components/molecules/StatCard/StatCard";
 import Badge from "../../components/atoms/Badge/Badge";
@@ -22,18 +21,24 @@ interface Order {
   id: string;
   customer: string;
   date: string;
-  status: "Completed" | "Processing" | "Shipped" | "Pending";
+  status: OrderStatus;
   amount: string;
-  amountValue: number; // For chart calculations
+  amountValue: number;
 }
+
+type OrderStatus = "completed" | "processing" | "pending";
+type BadgeVariant = "success" | "warning" | "info" | "error" | "default";
 
 interface Product {
   name: string;
-  sales: number;
+  sales: string;
   revenue: string;
-  revenueValue: number; // For chart calculations
-  inventory: number;
+  revenueValue: number;
+  inventory: ProductInventoryStatus;
+  stock: number;
 }
+
+type ProductInventoryStatus = "in_stock" | "low_stock" | "out_of_stock";
 
 interface SalesByPeriod {
   day: string;
@@ -47,6 +52,40 @@ interface SalesByCategory {
   color: string;
 }
 
+interface ColumnCell<T, K extends keyof T> {
+  value: T[K];
+  row?: T;
+}
+
+interface BaseColumn<T> {
+  header: string;
+  accessor: keyof T;
+  cellStyle?: string;
+}
+
+interface ColumnWithCell<T, K extends keyof T> extends BaseColumn<T> {
+  accessor: K;
+  Cell: (props: ColumnCell<T, K>) => React.ReactElement;
+}
+
+interface ColumnWithoutCell<T> extends BaseColumn<T> {
+  Cell?: never;
+}
+
+type Column<T> = ColumnWithCell<T, keyof T> | ColumnWithoutCell<T>;
+
+// Add new interfaces for order activity
+interface DailyOrderStats {
+  date: string;
+  totalOrders: number;
+  totalRevenue: number;
+  ordersByStatus: {
+    completed: number;
+    processing: number;
+    pending: number;
+  };
+}
+
 const Dashboard: React.FC = () => {
   // State for chart period selection
   const [chartPeriod, setChartPeriod] = useState<"week" | "month" | "year">(
@@ -58,6 +97,10 @@ const Dashboard: React.FC = () => {
   >("week");
   // State for responsive layout
   const [isMobile, setIsMobile] = useState<boolean>(false);
+
+  // Add state for order activity
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [orderStats, setOrderStats] = useState<DailyOrderStats | null>(null);
 
   // Check for mobile view on mount and resize
   useEffect(() => {
@@ -76,69 +119,161 @@ const Dashboard: React.FC = () => {
   }, []);
 
   // Sample data for demonstration
-  const recentOrders: Order[] = [
+  const recentOrders = [
     {
       id: "#ORD-5289",
-      customer: "Sarah Johnson",
-      date: "Apr 1, 2025",
-      status: "Completed",
+      customer: "John Smith",
+      date: "2024-03-15",
+      status: "completed",
       amount: "$128.50",
-      amountValue: 128.5,
     },
     {
       id: "#ORD-5288",
-      customer: "Michael Chen",
-      date: "Apr 1, 2025",
-      status: "Processing",
+      customer: "Emma Wilson",
+      date: "2024-03-15",
+      status: "processing",
       amount: "$74.99",
-      amountValue: 74.99,
     },
     {
       id: "#ORD-5287",
-      customer: "Emma Rodriguez",
-      date: "Mar 31, 2025",
-      status: "Shipped",
+      customer: "Michael Brown",
+      date: "2024-03-14",
+      status: "processing",
       amount: "$219.00",
-      amountValue: 219.0,
     },
     {
       id: "#ORD-5286",
-      customer: "Daniel Kim",
-      date: "Mar 31, 2025",
-      status: "Pending",
+      customer: "Sarah Davis",
+      date: "2024-03-14",
+      status: "pending",
       amount: "$65.25",
-      amountValue: 65.25,
+    },
+    {
+      id: "#ORD-5285",
+      customer: "James Johnson",
+      date: "2024-03-14",
+      status: "completed",
+      amount: "$189.99",
+    },
+    {
+      id: "#ORD-5284",
+      customer: "Lisa Anderson",
+      date: "2024-03-13",
+      status: "processing",
+      amount: "$95.50",
+    },
+    {
+      id: "#ORD-5283",
+      customer: "Robert Miller",
+      date: "2024-03-13",
+      status: "completed",
+      amount: "$157.75",
+    },
+    {
+      id: "#ORD-5282",
+      customer: "Emily Taylor",
+      date: "2024-03-13",
+      status: "pending",
+      amount: "$42.99",
     },
   ];
 
-  const topProducts: Product[] = [
+  const topProducts = [
     {
       name: "Wireless Earbuds Pro",
-      sales: 124,
-      revenue: "$12,400",
-      revenueValue: 12400,
-      inventory: 38,
+      sales: "1,234",
+      revenue: "$24,680",
+      revenueValue: 24680,
+      inventory: "in_stock",
+      stock: 156,
     },
     {
       name: "Ultra HD Smart Watch",
-      sales: 98,
-      revenue: "$19,600",
-      revenueValue: 19600,
-      inventory: 15,
+      sales: "987",
+      revenue: "$29,610",
+      revenueValue: 29610,
+      inventory: "low_stock",
+      stock: 23,
     },
     {
       name: "Premium Yoga Mat",
-      sales: 87,
-      revenue: "$4,350",
-      revenueValue: 4350,
-      inventory: 52,
+      sales: "865",
+      revenue: "$17,300",
+      revenueValue: 17300,
+      inventory: "in_stock",
+      stock: 89,
     },
     {
       name: "Organic Coffee Beans",
-      sales: 76,
-      revenue: "$1,900",
-      revenueValue: 1900,
-      inventory: 125,
+      sales: "754",
+      revenue: "$15,080",
+      revenueValue: 15080,
+      inventory: "in_stock",
+      stock: 245,
+    },
+    {
+      name: "Smart Home Security Camera",
+      sales: "698",
+      revenue: "$34,900",
+      revenueValue: 34900,
+      inventory: "in_stock",
+      stock: 112,
+    },
+    {
+      name: "Fitness Tracking Band",
+      sales: "645",
+      revenue: "$12,900",
+      revenueValue: 12900,
+      inventory: "low_stock",
+      stock: 18,
+    },
+    {
+      name: "Portable Power Bank",
+      sales: "589",
+      revenue: "$8,835",
+      revenueValue: 8835,
+      inventory: "out_of_stock",
+      stock: 0,
+    },
+    {
+      name: "Noise-Canceling Headphones",
+      sales: "534",
+      revenue: "$32,040",
+      revenueValue: 32040,
+      inventory: "in_stock",
+      stock: 67,
+    },
+    {
+      name: "Ergonomic Office Chair",
+      sales: "478",
+      revenue: "$47,800",
+      revenueValue: 47800,
+      inventory: "in_stock",
+      stock: 34,
+    },
+    {
+      name: "Air Purifier Plus",
+      sales: "456",
+      revenue: "$36,480",
+      revenueValue: 36480,
+      inventory: "low_stock",
+      stock: 15,
+    },
+    {
+      name: "Smart LED Light Bulbs",
+      sales: "423",
+      revenue: "$6,345",
+      revenueValue: 6345,
+      inventory: "in_stock",
+      stock: 289,
+    },
+    {
+      name: "Wireless Charging Pad",
+      sales: "398",
+      revenue: "$5,970",
+      revenueValue: 5970,
+      inventory: "in_stock",
+      stock: 178,
     },
   ];
 
@@ -209,8 +344,22 @@ const Dashboard: React.FC = () => {
     generateCategoryData();
   }, [chartPeriod]);
 
+  // Sample order activity data (in real app, this would come from an API)
+  const generateOrderStats = (date: Date): DailyOrderStats => {
+    return {
+      date: date.toISOString().split("T")[0],
+      totalOrders: Math.floor(Math.random() * 50) + 10,
+      totalRevenue: Math.floor(Math.random() * 5000) + 1000,
+      ordersByStatus: {
+        completed: Math.floor(Math.random() * 20) + 5,
+        processing: Math.floor(Math.random() * 15) + 3,
+        pending: Math.floor(Math.random() * 10) + 2,
+      },
+    };
+  };
+
   // Table definitions
-  const orderColumns = [
+  const orderColumns: Column<Order>[] = [
     {
       header: "Order ID",
       accessor: "id",
@@ -219,8 +368,6 @@ const Dashboard: React.FC = () => {
     {
       header: "Customer",
       accessor: "customer",
-      // Hide on smaller screens
-      className: isMobile ? "hidden" : "",
     },
     {
       header: "Date",
@@ -229,37 +376,62 @@ const Dashboard: React.FC = () => {
     {
       header: "Status",
       accessor: "status",
-      Cell: ({ value }: { value: string }) => (
-        <Badge variant={getStatusVariant(value)}>{value}</Badge>
+      Cell: ({ value }: { value: OrderStatus }) => (
+        <Badge
+          variant={
+            value === "completed"
+              ? "success"
+              : value === "processing"
+              ? "info"
+              : "warning"
+          }
+        >
+          {(value as string).charAt(0).toUpperCase() + value.slice(1)}
+        </Badge>
       ),
     },
     {
       header: "Amount",
       accessor: "amount",
+      cellStyle: "text-gray-900 font-medium",
     },
   ];
 
-  const productColumns = [
+  const productColumns: Column<Product>[] = [
     {
       header: "Product",
       accessor: "name",
-      cellStyle: "font-medium",
+      cellStyle: "text-gray-900 font-medium",
     },
     {
       header: "Sales",
       accessor: "sales",
-      // Hide on smaller screens
-      className: isMobile ? "hidden" : "",
+      cellStyle: "text-indigo-600 font-medium",
     },
     {
       header: "Revenue",
       accessor: "revenue",
+      cellStyle: "text-green-600 font-medium",
     },
     {
       header: "Stock",
       accessor: "inventory",
-      Cell: ({ value }: { value: number }) => (
-        <Badge variant={value < 20 ? "error" : "success"}>{value}</Badge>
+      Cell: ({ value }: { value: ProductInventoryStatus }) => (
+        <Badge
+          variant={
+            value === "in_stock"
+              ? "success"
+              : value === "low_stock"
+              ? "warning"
+              : "error"
+          }
+        >
+          {value === "in_stock"
+            ? "In Stock"
+            : value === "low_stock"
+            ? "Low Stock"
+            : "Out of Stock"}
+        </Badge>
       ),
     },
   ];
@@ -314,24 +486,6 @@ const Dashboard: React.FC = () => {
     { id: "month", label: "This Month" },
   ];
 
-  // Helper function to determine badge variant
-  const getStatusVariant = (
-    status: string
-  ): "success" | "warning" | "info" | "error" | "default" => {
-    switch (status) {
-      case "Completed":
-        return "success";
-      case "Processing":
-        return "info";
-      case "Shipped":
-        return "info";
-      case "Pending":
-        return "warning";
-      default:
-        return "default";
-    }
-  };
-
   // Chart configurations
   const salesChartConfig = {
     type: "bar",
@@ -358,6 +512,7 @@ const Dashboard: React.FC = () => {
     },
     options: {
       responsive: true,
+      maintainAspectRatio: true,
       scales: {
         y: {
           beginAtZero: true,
@@ -365,17 +520,35 @@ const Dashboard: React.FC = () => {
             display: true,
             text: "Revenue ($)",
           },
+          ticks: {
+            maxTicksLimit: isMobile ? 6 : 8,
+          },
         },
         orders: {
           position: "right",
           beginAtZero: true,
           title: {
-            display: true,
+            display: !isMobile,
             text: "Orders",
           },
           grid: {
             drawOnChartArea: false,
           },
+          ticks: {
+            maxTicksLimit: isMobile ? 6 : 8,
+          },
+        },
+        x: {
+          ticks: {
+            maxRotation: isMobile ? 45 : 0,
+            minRotation: isMobile ? 45 : 0,
+          },
+        },
+      },
+      plugins: {
+        legend: {
+          position: isMobile ? "bottom" : "top",
+          align: "center",
         },
       },
     },
@@ -395,19 +568,30 @@ const Dashboard: React.FC = () => {
     },
     options: {
       responsive: true,
+      maintainAspectRatio: true,
       plugins: {
         legend: {
           position: "bottom",
+          align: "center",
+          labels: {
+            padding: isMobile ? 10 : 20,
+            boxWidth: isMobile ? 12 : 15,
+          },
         },
       },
-      cutout: "70%",
+      layout: {
+        padding: {
+          top: 10,
+          bottom: isMobile ? 0 : 10,
+        },
+      },
     },
   };
 
   // Function to handle date selection in calendar
   const handleCalendarDateSelect = (date: Date) => {
-    console.log("Selected date:", date);
-    // Here you would typically fetch orders for the selected date
+    setSelectedDate(date);
+    setOrderStats(generateOrderStats(date));
   };
 
   return (
@@ -448,6 +632,7 @@ const Dashboard: React.FC = () => {
             }
             chartConfig={salesChartConfig}
             chartHeight={300}
+            aspectRatio={isMobile ? 1.2 : 2}
           />
         </div>
 
@@ -457,7 +642,8 @@ const Dashboard: React.FC = () => {
             title="Sales by Category"
             icon={<PieChart className="w-5 h-5" />}
             chartConfig={categoryChartConfig}
-            chartHeight={500}
+            chartHeight={300}
+            aspectRatio={1}
             footer={
               <div className="pt-2 text-sm text-gray-500 flex items-center justify-center">
                 <span>Total Products: 247</span>
@@ -468,20 +654,14 @@ const Dashboard: React.FC = () => {
       </div>
 
       {/* Recent Orders & Top Products */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="space-y-6">
         {/* Recent Orders */}
         <DataTable
           title="Recent Orders"
           data={recentOrders}
-          columns={orderColumns.filter(
-            (col) => !col.className || col.className !== "hidden"
-          )}
+          columns={orderColumns}
           actionButton={
-            <Button
-              variant="ghost"
-              size="sm"
-              rightIcon={<ArrowRight className="w-4 h-4" />}
-            >
+            <Button variant="ghost" className="text-sm">
               View all
             </Button>
           }
@@ -489,17 +669,12 @@ const Dashboard: React.FC = () => {
 
         {/* Top Products */}
         <DataTable
-          title="Top Selling Products"
+          title="Top Products"
           data={topProducts}
-          columns={productColumns.filter(
-            (col) => !col.className || col.className !== "hidden"
-          )}
+          columns={productColumns}
+          variant="product"
           actionButton={
-            <Button
-              variant="ghost"
-              size="sm"
-              rightIcon={<ArrowRight className="w-4 h-4" />}
-            >
+            <Button variant="ghost" className="text-sm">
               View all
             </Button>
           }
@@ -524,11 +699,77 @@ const Dashboard: React.FC = () => {
             size="sm"
           />
         </div>
-        <div className="p-4">
-          <CalendarComponent
-            period={calendarPeriod}
-            onDateSelect={handleCalendarDateSelect}
-          />
+        <div className="grid grid-cols-1 lg:grid-cols-3 divide-y lg:divide-y-0 lg:divide-x divide-gray-200">
+          <div className="lg:col-span-2 p-4">
+            <CalendarComponent
+              period={calendarPeriod}
+              onDateSelect={handleCalendarDateSelect}
+              selectedDate={selectedDate}
+            />
+          </div>
+          <div className="p-4 space-y-4">
+            {orderStats ? (
+              <>
+                <div className="text-sm text-gray-500">
+                  {new Date(orderStats.date).toLocaleDateString("en-US", {
+                    weekday: "long",
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })}
+                </div>
+                <div className="space-y-4">
+                  <div className="bg-gray-50 rounded-lg p-4">
+                    <div className="text-sm font-medium text-gray-500">
+                      Total Orders
+                    </div>
+                    <div className="mt-1 text-2xl font-semibold text-gray-900">
+                      {orderStats.totalOrders}
+                    </div>
+                    <div className="mt-1 text-sm text-gray-500">
+                      Revenue: ${orderStats.totalRevenue.toLocaleString()}
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <div className="text-sm font-medium text-gray-500">
+                      Order Status
+                    </div>
+                    <div className="grid grid-cols-1 gap-2">
+                      <div className="flex items-center justify-between p-2 bg-green-50 rounded">
+                        <span className="text-sm text-green-700">
+                          Completed
+                        </span>
+                        <Badge variant="success">
+                          {orderStats.ordersByStatus.completed}
+                        </Badge>
+                      </div>
+                      <div className="flex items-center justify-between p-2 bg-blue-50 rounded">
+                        <span className="text-sm text-blue-700">
+                          Processing
+                        </span>
+                        <Badge variant="info">
+                          {orderStats.ordersByStatus.processing}
+                        </Badge>
+                      </div>
+                      <div className="flex items-center justify-between p-2 bg-yellow-50 rounded">
+                        <span className="text-sm text-yellow-700">Pending</span>
+                        <Badge variant="warning">
+                          {orderStats.ordersByStatus.pending}
+                        </Badge>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </>
+            ) : (
+              <div className="flex flex-col items-center justify-center h-full text-gray-500">
+                <Calendar className="w-12 h-12 mb-2 text-gray-400" />
+                <p className="text-sm text-center">
+                  Select a date to view order statistics
+                </p>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>

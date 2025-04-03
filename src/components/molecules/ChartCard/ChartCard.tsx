@@ -29,11 +29,18 @@ const ChartCard: React.FC<ChartCardProps> = ({
   const chartInstance = useRef<Chart | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [containerWidth, setContainerWidth] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Function to check if mobile
+  const checkIfMobile = () => {
+    setIsMobile(window.innerWidth < 768);
+  };
 
   // Function to update chart dimensions
   const updateChartDimensions = () => {
     if (containerRef.current) {
       setContainerWidth(containerRef.current.offsetWidth);
+      checkIfMobile();
     }
   };
 
@@ -62,6 +69,10 @@ const ChartCard: React.FC<ChartCardProps> = ({
 
       const ctx = chartRef.current.getContext("2d");
       if (ctx) {
+        // Calculate dimensions based on chart type
+        const isPieOrDoughnut = ["pie", "doughnut"].includes(chartConfig.type);
+        const effectiveAspectRatio = isPieOrDoughnut ? 1 : aspectRatio;
+
         // Create new chart with responsive options
         const updatedConfig = {
           ...chartConfig,
@@ -69,7 +80,9 @@ const ChartCard: React.FC<ChartCardProps> = ({
             ...chartConfig.options,
             maintainAspectRatio: true,
             responsive: true,
-            aspectRatio: aspectRatio,
+            aspectRatio: isMobile
+              ? Math.min(effectiveAspectRatio, 1.2)
+              : effectiveAspectRatio,
           },
         };
 
@@ -83,10 +96,10 @@ const ChartCard: React.FC<ChartCardProps> = ({
         chartInstance.current.destroy();
       }
     };
-  }, [chartConfig, containerWidth, aspectRatio]);
+  }, [chartConfig, containerWidth, aspectRatio, isMobile]);
 
   return (
-    <div className="bg-white rounded-lg shadow overflow-hidden">
+    <div className="bg-white rounded-lg shadow overflow-hidden h-full flex flex-col">
       <div className="p-4 border-b flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
         <div className="flex items-center">
           {icon && <span className="text-gray-500 mr-2">{icon}</span>}
@@ -103,21 +116,18 @@ const ChartCard: React.FC<ChartCardProps> = ({
           </div>
         )}
       </div>
-      <div className="p-4" ref={containerRef}>
+      <div className="p-4 flex-grow" ref={containerRef}>
         <div
-          className="relative"
+          className="relative w-full h-full flex items-center justify-center"
           style={{
-            height:
-              chartConfig.type === "pie" || chartConfig.type === "doughnut"
-                ? "auto"
-                : `${chartHeight}px`,
-            maxHeight: "400px",
+            minHeight: `${chartHeight}px`,
+            maxHeight: `${chartHeight * 1.5}px`,
           }}
         >
-          <canvas ref={chartRef}></canvas>
+          <canvas ref={chartRef} />
         </div>
       </div>
-      {footer && <div className="px-4 py-3 border-t">{footer}</div>}
+      {footer && <div className="px-4 py-3 border-t mt-auto">{footer}</div>}
     </div>
   );
 };

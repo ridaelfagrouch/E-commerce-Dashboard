@@ -1,4 +1,5 @@
 import React from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 type PaginationProps = {
   currentPage: number;
@@ -64,62 +65,89 @@ const Pagination: React.FC<PaginationProps> = ({
   };
 
   return (
-    <div className="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
-      <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
-        <div>
-          <p className="text-sm text-gray-700">
-            Showing <span className="font-medium">{showingStart}</span> to{" "}
-            <span className="font-medium">{showingEnd}</span> of{" "}
-            <span className="font-medium">{totalItems}</span> customers
-          </p>
-        </div>
-        <div>
-          <nav
-            className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px"
-            aria-label="Pagination"
+    <div className="flex flex-col sm:flex-row items-center justify-between gap-4 px-4 py-3">
+      {/* Mobile Stats */}
+      <div className="w-full sm:w-auto text-sm text-gray-700 text-center sm:text-left">
+        <p className="space-x-1">
+          <span>{showingStart}</span>
+          <span>-</span>
+          <span>{showingEnd}</span>
+          <span>of</span>
+          <span className="font-medium">{totalItems}</span>
+        </p>
+      </div>
+
+      {/* Navigation */}
+      <div className="flex items-center justify-center w-full sm:w-auto">
+        {/* Mobile View */}
+        <div className="flex sm:hidden items-center gap-2">
+          <button
+            className="inline-flex items-center justify-center w-10 h-10 rounded-md border border-gray-300 bg-white text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+            onClick={() => onPageChange(Math.max(1, currentPage - 1))}
+            disabled={currentPage === 1}
           >
-            <button
-              className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
-              onClick={() => onPageChange(Math.max(1, currentPage - 1))}
-              disabled={currentPage === 1}
-            >
-              Previous
-            </button>
+            <ChevronLeft size={16} />
+          </button>
 
-            {renderPageNumbers().map((page, index) =>
-              typeof page === "number" ? (
-                <button
-                  key={index}
-                  className={`${
-                    page === currentPage
-                      ? "bg-indigo-50 border-indigo-500 text-indigo-600"
-                      : "bg-white border-gray-300 text-gray-500 hover:bg-gray-50"
-                  } relative inline-flex items-center px-4 py-2 border text-sm font-medium`}
-                  onClick={() => onPageChange(page)}
-                >
-                  {page}
-                </button>
-              ) : (
-                <span
-                  key={index}
-                  className="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700"
-                >
-                  {page}
-                </span>
-              )
-            )}
+          <span className="text-sm">
+            Page {currentPage} of {totalPages}
+          </span>
 
-            <button
-              className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
-              onClick={() =>
-                onPageChange(Math.min(totalPages, currentPage + 1))
-              }
-              disabled={currentPage === totalPages}
-            >
-              Next
-            </button>
-          </nav>
+          <button
+            className="inline-flex items-center justify-center w-10 h-10 rounded-md border border-gray-300 bg-white text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+            onClick={() => onPageChange(Math.min(totalPages, currentPage + 1))}
+            disabled={currentPage === totalPages}
+          >
+            <ChevronRight size={16} />
+          </button>
         </div>
+
+        {/* Desktop View */}
+        <nav
+          className="hidden sm:flex rounded-md shadow-sm -space-x-px"
+          aria-label="Pagination"
+        >
+          <button
+            className="relative inline-flex items-center px-3 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+            onClick={() => onPageChange(Math.max(1, currentPage - 1))}
+            disabled={currentPage === 1}
+          >
+            <ChevronLeft size={16} className="mr-1" />
+            Previous
+          </button>
+
+          {renderPageNumbers().map((page, index) =>
+            typeof page === "number" ? (
+              <button
+                key={index}
+                className={`${
+                  page === currentPage
+                    ? "z-10 bg-indigo-50 border-indigo-500 text-indigo-600"
+                    : "bg-white border-gray-300 text-gray-500 hover:bg-gray-50"
+                } relative inline-flex items-center px-4 py-2 border text-sm font-medium`}
+                onClick={() => onPageChange(page)}
+              >
+                {page}
+              </button>
+            ) : (
+              <span
+                key={index}
+                className="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700"
+              >
+                {page}
+              </span>
+            )
+          )}
+
+          <button
+            className="relative inline-flex items-center px-3 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+            onClick={() => onPageChange(Math.min(totalPages, currentPage + 1))}
+            disabled={currentPage === totalPages}
+          >
+            Next
+            <ChevronRight size={16} className="ml-1" />
+          </button>
+        </nav>
       </div>
     </div>
   );

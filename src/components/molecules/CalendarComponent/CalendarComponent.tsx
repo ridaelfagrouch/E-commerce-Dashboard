@@ -1,10 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  Calendar as CalendarIcon,
-  ChevronLeft,
-  ChevronRight,
-  Info,
-} from "lucide-react";
+import { ChevronLeft, ChevronRight, Info } from "lucide-react";
 import { Tooltip } from "react-tooltip";
 
 // Types
@@ -14,35 +9,205 @@ interface CalendarEvent {
   type: "low" | "medium" | "high";
 }
 
+interface ActivityColors {
+  low: {
+    bg: string;
+    bar: string;
+    dot: string;
+  };
+  medium: {
+    bg: string;
+    bar: string;
+    dot: string;
+  };
+  high: {
+    bg: string;
+    bar: string;
+    dot: string;
+  };
+}
+
+interface WeekActivityDay {
+  date: Date;
+  dayName: string;
+  day: number;
+  activityLevel: "low" | "medium" | "high";
+  orderCount: number;
+}
+
+interface HourlyActivity {
+  hour: number;
+  label: string;
+  activityLevel: "low" | "medium" | "high";
+  orderCount: number;
+}
+
 interface CalendarComponentProps {
   events?: CalendarEvent[];
-  onDateSelect?: (date: Date) => void;
+  onDateSelect: (date: Date) => void;
   period: "day" | "week" | "month";
   initialDate?: Date;
   showOrderCount?: boolean;
-  colorMapping?: {
-    low: string;
-    medium: string;
-    high: string;
-  };
+  selectedDate?: Date | null;
 }
+
+const activityColors: ActivityColors = {
+  low: {
+    bg: "bg-green-50",
+    bar: "bg-green-400",
+    dot: "bg-green-400",
+  },
+  medium: {
+    bg: "bg-yellow-50",
+    bar: "bg-yellow-400",
+    dot: "bg-yellow-400",
+  },
+  high: {
+    bg: "bg-red-50",
+    bar: "bg-red-400",
+    dot: "bg-red-400",
+  },
+};
+
+// Helper functions for activity colors
+const getActivityColor = (level: "low" | "medium" | "high" | null): string => {
+  if (!level) return "";
+  return activityColors[level].bg;
+};
+
+const getBarColor = (level: "low" | "medium" | "high" | null): string => {
+  if (!level) return "bg-gray-200";
+  return activityColors[level].bar;
+};
+
+// Add a shared card style component
+const ActivityCard = ({
+  label,
+  value,
+  activityLevel,
+  orderCount,
+  isSelected = false,
+  isToday = false,
+  onClick,
+  tooltipId,
+  tooltipContent,
+}: {
+  label: string;
+  value: string | number;
+  activityLevel: "low" | "medium" | "high" | null;
+  orderCount: number;
+  isSelected?: boolean;
+  isToday?: boolean;
+  onClick: () => void;
+  tooltipId: string;
+  tooltipContent: string;
+}) => (
+  <div
+    className={`
+      w-36 shrink-0 rounded-lg border p-3 text-center cursor-pointer
+      transition-all duration-200 ease-in-out
+      hover:shadow-md hover:scale-[1.02] active:scale-[0.98]
+      ${
+        isSelected
+          ? "border-indigo-400 ring-2 ring-indigo-400 shadow-md"
+          : "border-gray-200 hover:border-indigo-200"
+      }
+      ${getActivityColor(activityLevel)}
+    `}
+    onClick={onClick}
+    data-tooltip-id={tooltipId}
+    role="button"
+    tabIndex={0}
+    onKeyDown={(e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        onClick();
+      }
+    }}
+  >
+    <p className="text-xs text-gray-500 mb-1">{label}</p>
+    <p className={`font-medium text-lg ${isToday ? "text-indigo-600" : ""}`}>
+      {value}
+    </p>
+    <div className="mt-2 w-full h-2 rounded-full overflow-hidden">
+      <div
+        className={`h-full transition-all duration-300 ${getBarColor(
+          activityLevel
+        )}`}
+        style={{ width: `${(orderCount / 20) * 100}%` }}
+      />
+    </div>
+    <p className="mt-2 text-xs font-medium text-gray-700">
+      {orderCount} orders
+    </p>
+    <Tooltip id={tooltipId} className="z-50" delayShow={200} delayHide={100}>
+      {tooltipContent}
+    </Tooltip>
+  </div>
+);
+
+// Add this new component after ActivityCard
+const ScrollableContainer = ({ children }: { children: React.ReactNode }) => {
+  const containerRef = React.useRef<HTMLDivElement>(null);
+  const [showLeftScroll, setShowLeftScroll] = React.useState(false);
+  const [showRightScroll, setShowRightScroll] = React.useState(false);
+
+  const checkScroll = () => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    setShowLeftScroll(container.scrollLeft > 0);
+    setShowRightScroll(
+      container.scrollLeft < container.scrollWidth - container.clientWidth
+    );
+  };
+
+  React.useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    container.addEventListener("scroll", checkScroll);
+    checkScroll(); // Initial check
+
+    return () => container.removeEventListener("scroll", checkScroll);
+  }, []);
+
+  return (
+    <div className="relative">
+      {showLeftScroll && (
+        <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-white to-transparent pointer-events-none" />
+      )}
+      <div
+        ref={containerRef}
+        className="overflow-x-auto scrollbar-hide scroll-smooth"
+        style={{ scrollBehavior: "smooth" }}
+      >
+        {children}
+      </div>
+      {showRightScroll && (
+        <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-white to-transparent pointer-events-none" />
+      )}
+    </div>
+  );
+};
 
 const CalendarComponent: React.FC<CalendarComponentProps> = ({
   events = [],
   onDateSelect,
   period,
   initialDate = new Date(),
-  showOrderCount = true,
-  colorMapping = {
-    low: "green",
-    medium: "yellow",
-    high: "red",
-  },
+  selectedDate,
 }) => {
   const [currentDate, setCurrentDate] = useState(new Date(initialDate));
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [viewStartDate, setViewStartDate] = useState<Date | null>(null);
   const [viewEndDate, setViewEndDate] = useState<Date | null>(null);
+  // Update state types
+  const [weekActivityData, setWeekActivityData] = useState<WeekActivityDay[]>(
+    []
+  );
+  const [hourlyActivityData, setHourlyActivityData] = useState<
+    HourlyActivity[]
+  >([]);
 
   // Get current month and year
   const currentMonth = currentDate.getMonth();
@@ -77,6 +242,15 @@ const CalendarComponent: React.FC<CalendarComponentProps> = ({
       setViewEndDate(new Date(currentDate));
     }
   }, [period, currentDate, currentMonth, currentYear]);
+
+  // Update activity data when period or current date changes
+  useEffect(() => {
+    if (period === "week") {
+      setWeekActivityData(getWeekActivityMap());
+    } else if (period === "day") {
+      setHourlyActivityData(getHourlyActivity());
+    }
+  }, [period, currentDate]);
 
   // Navigation functions
   const prevPeriod = () => {
@@ -128,55 +302,16 @@ const CalendarComponent: React.FC<CalendarComponentProps> = ({
     return event ? event.type : null;
   };
 
-  // Get event count for a specific date
-  const getEventCount = (date: Date): number => {
-    const event = events.find(
-      (e) =>
-        e.date.getDate() === date.getDate() &&
-        e.date.getMonth() === date.getMonth() &&
-        e.date.getFullYear() === date.getFullYear()
-    );
-
-    return event ? event.count : 0;
-  };
-
-  // Helper function to get color based on activity level
-  const getActivityColor = (
-    level: "low" | "medium" | "high" | null
-  ): string => {
-    if (!level) return "transparent";
-
-    // Background colors
-    const bgColors = {
-      low: `bg-${colorMapping.low}-100`,
-      medium: `bg-${colorMapping.medium}-100`,
-      high: `bg-${colorMapping.high}-100`,
-    };
-
-    return bgColors[level];
-  };
-
-  // Helper function to get bar color based on activity level
-  const getBarColor = (level: "low" | "medium" | "high" | null): string => {
+  // Helper function to get dot color based on activity level
+  const getDotColor = (level: "low" | "medium" | "high" | null): string => {
     if (!level) return "bg-gray-200";
-
-    // Bar colors
-    const barColors = {
-      low: `bg-${colorMapping.low}-400`,
-      medium: `bg-${colorMapping.medium}-400`,
-      high: `bg-${colorMapping.high}-400`,
-    };
-
-    return barColors[level];
+    return activityColors[level].dot;
   };
 
   // Handler for date selection
   const handleDateClick = (day: number) => {
     const newSelectedDate = new Date(currentYear, currentMonth, day);
-    setSelectedDate(newSelectedDate);
-    if (onDateSelect) {
-      onDateSelect(newSelectedDate);
-    }
+    onDateSelect(newSelectedDate);
   };
 
   // Get the day names
@@ -271,25 +406,19 @@ const CalendarComponent: React.FC<CalendarComponentProps> = ({
     }
   };
 
-  // Legend component for color explanation
+  // Activity legend component
   const ActivityLegend = () => (
     <div className="flex items-center justify-center space-x-4 text-xs text-gray-500 mt-4">
       <div className="flex items-center">
-        <div
-          className={`w-3 h-3 rounded-full bg-${colorMapping.low}-400 mr-1`}
-        ></div>
+        <div className="w-3 h-3 rounded-full bg-green-400 mr-1"></div>
         <span>Low</span>
       </div>
       <div className="flex items-center">
-        <div
-          className={`w-3 h-3 rounded-full bg-${colorMapping.medium}-400 mr-1`}
-        ></div>
+        <div className="w-3 h-3 rounded-full bg-yellow-400 mr-1"></div>
         <span>Medium</span>
       </div>
       <div className="flex items-center">
-        <div
-          className={`w-3 h-3 rounded-full bg-${colorMapping.high}-400 mr-1`}
-        ></div>
+        <div className="w-3 h-3 rounded-full bg-red-400 mr-1"></div>
         <span>High</span>
       </div>
       <div className="flex items-center">
@@ -303,158 +432,144 @@ const CalendarComponent: React.FC<CalendarComponentProps> = ({
   );
 
   // Render different views based on period
-  if (period === "day") {
-    const hourlyActivity = getHourlyActivity();
-
-    return (
-      <div className="h-64 overflow-y-auto">
-        <ActivityLegend />
-        <div className="flex justify-between items-center mb-4">
-          <button
-            onClick={prevPeriod}
-            className="p-1 rounded-full hover:bg-gray-100"
-            aria-label="Previous day"
-          >
-            <ChevronLeft className="w-4 h-4" />
-          </button>
-          <div className="text-center">
-            <h3 className="font-medium">Today's Order Activity</h3>
-            <p className="text-sm text-gray-500">
-              {currentDate.toLocaleDateString()}
-            </p>
-          </div>
-          <button
-            onClick={nextPeriod}
-            className="p-1 rounded-full hover:bg-gray-100"
-            aria-label="Next day"
-          >
-            <ChevronRight className="w-4 h-4" />
-          </button>
-        </div>
-        <div className="grid grid-cols-4 gap-2">
-          {hourlyActivity.map((hour) => (
-            <div
-              key={hour.hour}
-              className={`rounded-lg p-2 text-center ${getActivityColor(
-                hour.activityLevel
-              )} hover:opacity-80 transition-opacity cursor-pointer`}
-              onClick={() =>
-                console.log(`Hour ${hour.hour}: ${hour.orderCount} orders`)
-              }
-              data-tooltip-id={`hour-tooltip-${hour.hour}`}
-            >
-              <p className="text-xs font-medium">{hour.label}</p>
-              <div
-                className={`mt-1 w-full h-1 rounded-full ${getBarColor(
-                  hour.activityLevel
-                )}`}
-              ></div>
-              {showOrderCount && (
-                <p className="mt-1 text-xs">{hour.orderCount} orders</p>
-              )}
-              <Tooltip id={`hour-tooltip-${hour.hour}`}>
-                {hour.label}: {hour.orderCount} orders ({hour.activityLevel}{" "}
-                activity)
-              </Tooltip>
-            </div>
-          ))}
-        </div>
-      </div>
-    );
-  }
-
   if (period === "week") {
-    const weekActivity = getWeekActivityMap();
-
     return (
-      <div className="h-64 overflow-y-auto">
-        <ActivityLegend />
-        <div className="flex justify-between items-center mb-4">
-          <button
-            onClick={prevPeriod}
-            className="p-1 rounded-full hover:bg-gray-100"
-            aria-label="Previous week"
-          >
-            <ChevronLeft className="w-4 h-4" />
-          </button>
-          <div className="text-center">
-            <h3 className="font-medium">This Week's Order Activity</h3>
-            <p className="text-sm text-gray-500">{formatDateRange()}</p>
+      <div className="flex flex-col h-64">
+        <div className="flex-none">
+          <ActivityLegend />
+          <div className="flex justify-between items-center mb-4">
             <button
-              onClick={goToToday}
-              className="text-xs text-indigo-600 hover:underline mt-1"
+              onClick={prevPeriod}
+              className="p-1 rounded-full hover:bg-gray-100"
+              aria-label="Previous week"
             >
-              Today
+              <ChevronLeft className="w-4 h-4" />
+            </button>
+            <div className="text-center">
+              <h3 className="font-medium">This Week's Order Activity</h3>
+              <p className="text-sm text-gray-500">{formatDateRange()}</p>
+              <button
+                onClick={goToToday}
+                className="text-xs text-indigo-600 hover:underline mt-1"
+              >
+                Today
+              </button>
+            </div>
+            <button
+              onClick={nextPeriod}
+              className="p-1 rounded-full hover:bg-gray-100"
+              aria-label="Next week"
+            >
+              <ChevronRight className="w-4 h-4" />
             </button>
           </div>
-          <button
-            onClick={nextPeriod}
-            className="p-1 rounded-full hover:bg-gray-100"
-            aria-label="Next week"
-          >
-            <ChevronRight className="w-4 h-4" />
-          </button>
-        </div>
-        <div className="flex justify-between space-x-2">
-          {weekActivity.map((day) => (
-            <div
-              key={day.date.toString()}
-              className={`flex-1 rounded-lg border border-gray-200 p-2 text-center cursor-pointer hover:bg-gray-50 transition-colors ${
-                selectedDate &&
-                day.date.getDate() === selectedDate.getDate() &&
-                day.date.getMonth() === selectedDate.getMonth() &&
-                day.date.getFullYear() === selectedDate.getFullYear()
-                  ? "border-indigo-400 ring-1 ring-indigo-400"
-                  : ""
-              }`}
-              onClick={() => handleDateClick(day.day)}
-              data-tooltip-id={`day-tooltip-${day.day}`}
-            >
-              <p className="text-xs text-gray-500">{day.dayName}</p>
-              <p
-                className={`font-medium ${
-                  day.date.getDate() === new Date().getDate() &&
-                  day.date.getMonth() === new Date().getMonth() &&
-                  day.date.getFullYear() === new Date().getFullYear()
-                    ? "text-indigo-600"
-                    : ""
-                }`}
-              >
-                {day.day}
-              </p>
-              <div
-                className={`mt-2 w-full h-2 rounded-full ${getBarColor(
-                  day.activityLevel
-                )}`}
-              ></div>
-              {showOrderCount && (
-                <p className="mt-1 text-xs font-medium">
-                  {day.orderCount} orders
-                </p>
-              )}
-              <Tooltip id={`day-tooltip-${day.day}`}>
-                {day.date.toLocaleDateString()}: {day.orderCount} orders (
-                {day.activityLevel} activity)
-              </Tooltip>
-            </div>
-          ))}
         </div>
 
-        {selectedDate && (
-          <div className="mt-4 p-3 bg-gray-50 rounded-lg">
-            <p className="text-sm font-medium">
-              Selected: {selectedDate.toLocaleDateString()}
-            </p>
-            <p className="text-xs text-gray-500">
-              Click on a day to see detailed order information
-            </p>
-          </div>
-        )}
+        <div className="flex-1 min-h-0 pb-4">
+          <ScrollableContainer>
+            <div className="flex gap-3 px-1">
+              {weekActivityData.map((day) => {
+                const isToday =
+                  day.date.getDate() === new Date().getDate() &&
+                  day.date.getMonth() === new Date().getMonth() &&
+                  day.date.getFullYear() === new Date().getFullYear();
+
+                const isSelected = Boolean(
+                  selectedDate &&
+                    day.date.getDate() === selectedDate.getDate() &&
+                    day.date.getMonth() === selectedDate.getMonth() &&
+                    day.date.getFullYear() === selectedDate.getFullYear()
+                );
+
+                return (
+                  <ActivityCard
+                    key={day.date.toString()}
+                    label={day.dayName}
+                    value={day.day}
+                    activityLevel={day.activityLevel}
+                    orderCount={day.orderCount}
+                    isSelected={isSelected}
+                    isToday={isToday}
+                    onClick={() => handleDateClick(day.day)}
+                    tooltipId={`day-tooltip-${day.day}`}
+                    tooltipContent={`${day.date.toLocaleDateString()}: ${
+                      day.orderCount
+                    } orders (${day.activityLevel} activity)`}
+                  />
+                );
+              })}
+            </div>
+          </ScrollableContainer>
+
+          {selectedDate && (
+            <div className="mt-4 p-3 bg-gray-50 rounded-lg animate-fade-in">
+              <p className="text-sm font-medium">
+                Selected: {selectedDate.toLocaleDateString()}
+              </p>
+              <p className="text-xs text-gray-500">
+                Click on a day to see detailed order information
+              </p>
+            </div>
+          )}
+        </div>
       </div>
     );
   }
 
-  // Month view (default)
+  if (period === "day") {
+    return (
+      <div className="flex flex-col h-64">
+        <div className="flex-none">
+          <ActivityLegend />
+          <div className="flex justify-between items-center mb-4">
+            <button
+              onClick={prevPeriod}
+              className="p-1 rounded-full hover:bg-gray-100"
+              aria-label="Previous day"
+            >
+              <ChevronLeft className="w-4 h-4" />
+            </button>
+            <div className="text-center">
+              <h3 className="font-medium">Today's Order Activity</h3>
+              <p className="text-sm text-gray-500">
+                {currentDate.toLocaleDateString()}
+              </p>
+            </div>
+            <button
+              onClick={nextPeriod}
+              className="p-1 rounded-full hover:bg-gray-100"
+              aria-label="Next day"
+            >
+              <ChevronRight className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+
+        <div className="flex-1 min-h-0 pb-4">
+          <ScrollableContainer>
+            <div className="flex gap-3 px-1">
+              {hourlyActivityData.map((hour) => (
+                <ActivityCard
+                  key={hour.hour}
+                  label="Time"
+                  value={hour.label}
+                  activityLevel={hour.activityLevel}
+                  orderCount={hour.orderCount}
+                  onClick={() =>
+                    console.log(`Hour ${hour.hour}: ${hour.orderCount} orders`)
+                  }
+                  tooltipId={`hour-tooltip-${hour.hour}`}
+                  tooltipContent={`${hour.label}: ${hour.orderCount} orders (${hour.activityLevel} activity)`}
+                />
+              ))}
+            </div>
+          </ScrollableContainer>
+        </div>
+      </div>
+    );
+  }
+
+  // Month view
   const monthDays = [];
   for (let i = 0; i < firstDayOfMonth; i++) {
     monthDays.push(null); // Empty cells before the first day
@@ -465,119 +580,123 @@ const CalendarComponent: React.FC<CalendarComponentProps> = ({
   }
 
   return (
-    <div className="h-64 overflow-y-auto">
-      <ActivityLegend />
-      <div className="flex justify-between items-center mb-4">
-        <button
-          onClick={prevPeriod}
-          className="p-1 rounded-full hover:bg-gray-100"
-          aria-label="Previous month"
-        >
-          <ChevronLeft className="w-4 h-4" />
-        </button>
-        <div className="text-center">
-          <h3 className="font-medium">
-            {new Date(currentYear, currentMonth).toLocaleDateString("default", {
-              month: "long",
-              year: "numeric",
-            })}
-          </h3>
+    <div className="flex flex-col h-64">
+      <div className="flex-none">
+        <ActivityLegend />
+        <div className="flex justify-between items-center mb-4">
           <button
-            onClick={goToToday}
-            className="text-xs text-indigo-600 hover:underline mt-1"
+            onClick={prevPeriod}
+            className="p-1 rounded-full hover:bg-gray-100"
+            aria-label="Previous month"
           >
-            Today
+            <ChevronLeft className="w-4 h-4" />
+          </button>
+          <div className="text-center">
+            <h3 className="font-medium">
+              {new Date(currentYear, currentMonth).toLocaleDateString(
+                "default",
+                {
+                  month: "long",
+                  year: "numeric",
+                }
+              )}
+            </h3>
+            <button
+              onClick={goToToday}
+              className="text-xs text-indigo-600 hover:underline mt-1"
+            >
+              Today
+            </button>
+          </div>
+          <button
+            onClick={nextPeriod}
+            className="p-1 rounded-full hover:bg-gray-100"
+            aria-label="Next month"
+          >
+            <ChevronRight className="w-4 h-4" />
           </button>
         </div>
-        <button
-          onClick={nextPeriod}
-          className="p-1 rounded-full hover:bg-gray-100"
-          aria-label="Next month"
-        >
-          <ChevronRight className="w-4 h-4" />
-        </button>
       </div>
 
-      <div className="grid grid-cols-7 gap-1">
-        {dayNames.map((name) => (
-          <div
-            key={name}
-            className="text-center text-xs font-medium text-gray-500 py-1"
-          >
-            {name}
-          </div>
-        ))}
-
-        {monthDays.map((day, index) => {
-          // Determine if this day is today
-          const isToday =
-            day === new Date().getDate() &&
-            currentMonth === new Date().getMonth() &&
-            currentYear === new Date().getFullYear();
-
-          // Determine if this day is selected
-          const isSelected =
-            selectedDate &&
-            day === selectedDate.getDate() &&
-            currentMonth === selectedDate.getMonth() &&
-            currentYear === selectedDate.getFullYear();
-
-          // Get activity level
-          const activityLevel = day !== null ? getActivityLevel(day) : null;
-
-          return (
+      <div className="flex-1 overflow-y-auto min-h-0">
+        <div className="grid grid-cols-7 gap-1">
+          {dayNames.map((name) => (
             <div
-              key={index}
-              className={`
-                aspect-square flex flex-col items-center justify-center text-sm p-1 relative
-                ${day === null ? "" : "cursor-pointer hover:bg-gray-100"}
-                ${isToday ? "bg-indigo-100" : ""}
-                ${isSelected ? "ring-2 ring-indigo-500 rounded-full" : ""}
-              `}
-              onClick={() => day !== null && handleDateClick(day)}
-              data-tooltip-id={day !== null ? `month-day-${day}` : undefined}
+              key={name}
+              className="text-center text-xs font-medium text-gray-500 py-1"
             >
-              {day !== null && (
-                <>
-                  <span
-                    className={
-                      isToday
-                        ? "text-indigo-800 font-medium"
-                        : isSelected
-                        ? "text-indigo-600"
-                        : ""
-                    }
-                  >
-                    {day}
-                  </span>
-                  {activityLevel && (
-                    <div
-                      className={`mt-1 w-2 h-2 rounded-full ${getBarColor(
-                        activityLevel
-                      )}`}
-                    />
-                  )}
-                  <Tooltip id={`month-day-${day}`}>
-                    {new Date(
-                      currentYear,
-                      currentMonth,
-                      day
-                    ).toLocaleDateString()}
-                    : {activityLevel || "No"} activity
-                  </Tooltip>
-                </>
-              )}
+              {name}
             </div>
-          );
-        })}
-      </div>
+          ))}
 
-      {selectedDate && (
-        <div className="mt-4 p-2 bg-gray-50 text-center rounded-lg text-sm">
-          <span className="font-medium">Selected: </span>
-          <span>{selectedDate.toLocaleDateString()}</span>
+          {monthDays.map((day, index) => {
+            const isToday =
+              day === new Date().getDate() &&
+              currentMonth === new Date().getMonth() &&
+              currentYear === new Date().getFullYear();
+
+            const isSelected =
+              selectedDate &&
+              day === selectedDate.getDate() &&
+              currentMonth === selectedDate.getMonth() &&
+              currentYear === selectedDate.getFullYear();
+
+            const activityLevel = day !== null ? getActivityLevel(day) : null;
+
+            return (
+              <div
+                key={index}
+                className={`
+                  aspect-square flex flex-col items-center justify-center text-sm p-1 relative
+                  ${day === null ? "" : "cursor-pointer hover:bg-gray-50"}
+                  ${isToday ? "bg-indigo-50" : ""}
+                  ${isSelected ? "ring-2 ring-indigo-500 rounded-full" : ""}
+                `}
+                onClick={() => day !== null && handleDateClick(day)}
+                data-tooltip-id={day !== null ? `month-day-${day}` : undefined}
+              >
+                {day !== null && (
+                  <>
+                    <span
+                      className={
+                        isToday
+                          ? "text-indigo-800 font-medium"
+                          : isSelected
+                          ? "text-indigo-600"
+                          : ""
+                      }
+                    >
+                      {day}
+                    </span>
+                    {activityLevel && (
+                      <div
+                        className={`mt-1 w-2 h-2 rounded-full ${getDotColor(
+                          activityLevel
+                        )}`}
+                      />
+                    )}
+                    <Tooltip id={`month-day-${day}`}>
+                      {new Date(
+                        currentYear,
+                        currentMonth,
+                        day
+                      ).toLocaleDateString()}
+                      : {activityLevel || "No"} activity
+                    </Tooltip>
+                  </>
+                )}
+              </div>
+            );
+          })}
         </div>
-      )}
+
+        {selectedDate && (
+          <div className="mt-4 p-2 bg-gray-50 text-center rounded-lg text-sm">
+            <span className="font-medium">Selected: </span>
+            <span>{selectedDate.toLocaleDateString()}</span>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

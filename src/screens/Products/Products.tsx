@@ -7,30 +7,30 @@ import {
   Tag,
   Plus,
   Filter,
-  Edit,
-  Eye,
   ChevronDown,
-  Image,
 } from "lucide-react";
 import Pagination from "../../components/molecules/Pagination/Pagination";
 import SearchInput from "../../components/atoms/SearchInput/SearchInput";
+import Button from "../../components/atoms/Button/Button";
+import ProductFilterGroup from "../../components/molecules/ProductFilterGroup/ProductFilterGroup";
+import ProductsTable, {
+  Product,
+} from "../../components/organisms/ProductsTable/ProductsTable";
 
-// Types
-type Product = {
-  id: string;
-  name: string;
-  category: string;
-  price: number;
-  stock: number;
-  sales: number;
-  status: "Active" | "Low Stock" | "Out of Stock";
-};
+const filterOptions = [
+  { id: "all", label: "All Categories" },
+  { id: "electronics", label: "Electronics" },
+  { id: "fitness", label: "Fitness" },
+  { id: "food & beverage", label: "Food & Beverage" },
+  { id: "accessories", label: "Accessories" },
+  { id: "lifestyle", label: "Lifestyle" },
+];
 
 export const Products: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
   const totalProducts = 1286;
-  const ProductsPerPage = 8;
+  const productsPerPage = 8;
 
   const [products, setProducts] = useState<Product[]>([
     {
@@ -148,35 +148,21 @@ export const Products: React.FC = () => {
     }
   };
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "Active":
-        return "bg-green-100 text-green-800";
-      case "Low Stock":
-        return "bg-yellow-100 text-yellow-800";
-      case "Out of Stock":
-        return "bg-red-100 text-red-800";
-      default:
-        return "bg-gray-100 text-gray-800";
-    }
-  };
-
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
     setCurrentPage(1); // Reset to first page when searching
   };
 
   return (
-    <div className="mb-6">
-      <div className="flex justify-between items-center mb-6">
+    <div className="space-y-6 pb-8">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <h1 className="text-2xl font-bold">Products</h1>
-        <button className="bg-indigo-600 text-white px-4 py-2 rounded-md flex items-center gap-2">
-          <Plus size={16} />
+        <Button variant="primary" leftIcon={<Plus size={16} />}>
           Add Product
-        </button>
+        </Button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
         <StatCard
           title="Total Products"
           value="186"
@@ -219,135 +205,50 @@ export const Products: React.FC = () => {
         />
       </div>
 
-      <div className="bg-white rounded-lg shadow mb-8">
-        <div className="p-4 border-b flex justify-between items-center">
+      <div className="bg-white rounded-lg shadow overflow-hidden">
+        <div className="p-4 border-b flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <h2 className="text-lg font-medium">Product Filters</h2>
-          <div className="flex gap-2">
-            <SearchInput
-              placeholder="Search customers..."
-              value={searchTerm}
-              onChange={handleSearch}
-            />
-            <button className="bg-gray-100 px-3 py-2 rounded-md flex items-center gap-1">
-              <Filter size={16} />
+          <div className="flex flex-wrap gap-2 w-full sm:w-auto">
+            <div className="w-full sm:w-64">
+              <SearchInput
+                placeholder="Search products..."
+                value={searchTerm}
+                onChange={handleSearch}
+              />
+            </div>
+            <Button
+              variant="secondary"
+              leftIcon={<Filter size={16} />}
+              rightIcon={<ChevronDown size={14} />}
+            >
               Filters
-              <ChevronDown size={14} />
-            </button>
+            </Button>
           </div>
         </div>
-        <div className="p-4 flex space-x-2">
-          <button
-            className={`px-4 py-2 rounded-md ${
-              category === "all"
-                ? "bg-indigo-100 text-indigo-800"
-                : "bg-gray-100"
-            }`}
-            onClick={() => setCategory("all")}
-          >
-            All Categories
-          </button>
-          <button
-            className={`px-4 py-2 rounded-md ${
-              category === "electronics"
-                ? "bg-indigo-100 text-indigo-800"
-                : "bg-gray-100"
-            }`}
-            onClick={() => setCategory("electronics")}
-          >
-            Electronics
-          </button>
-          <button
-            className={`px-4 py-2 rounded-md ${
-              category === "fitness"
-                ? "bg-indigo-100 text-indigo-800"
-                : "bg-gray-100"
-            }`}
-            onClick={() => setCategory("fitness")}
-          >
-            Fitness
-          </button>
-          <button
-            className={`px-4 py-2 rounded-md ${
-              category === "food & beverage"
-                ? "bg-indigo-100 text-indigo-800"
-                : "bg-gray-100"
-            }`}
-            onClick={() => setCategory("food & beverage")}
-          >
-            Food & Beverage
-          </button>
-          <button
-            className={`px-4 py-2 rounded-md ${
-              category === "accessories"
-                ? "bg-indigo-100 text-indigo-800"
-                : "bg-gray-100"
-            }`}
-            onClick={() => setCategory("accessories")}
-          >
-            Accessories
-          </button>
-          <button
-            className={`px-4 py-2 rounded-md ${
-              category === "lifestyle"
-                ? "bg-indigo-100 text-indigo-800"
-                : "bg-gray-100"
-            }`}
-            onClick={() => setCategory("lifestyle")}
-          >
-            Lifestyle
-          </button>
+        <div className="p-4 overflow-x-auto">
+          <ProductFilterGroup
+            options={filterOptions}
+            activeFilter={category}
+            onFilterChange={setCategory}
+          />
         </div>
       </div>
 
       <div className="bg-white rounded-lg shadow overflow-hidden">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 p-6">
-          {sortedProducts.map((product) => (
-            <div
-              key={product.id}
-              className="border rounded-lg overflow-hidden hover:shadow-md transition-shadow"
-            >
-              <div className="h-40 bg-gray-100 flex items-center justify-center">
-                <Image size={64} className="text-gray-400" />
-              </div>
-              <div className="p-4">
-                <div className="flex justify-between">
-                  <span className="text-xs text-gray-500">{product.id}</span>
-                  <span
-                    className={`text-xs px-2 py-1 rounded-full ${getStatusColor(
-                      product.status
-                    )}`}
-                  >
-                    {product.status}
-                  </span>
-                </div>
-                <h3 className="font-medium mt-1">{product.name}</h3>
-                <p className="text-sm text-gray-500">{product.category}</p>
-                <div className="flex justify-between items-center mt-3">
-                  <span className="font-bold text-indigo-600">
-                    ${product.price.toFixed(2)}
-                  </span>
-                  <span className="text-sm text-gray-500">
-                    Stock: {product.stock}
-                  </span>
-                </div>
-                <div className="flex gap-2 mt-4">
-                  <button className="flex-1 bg-indigo-50 text-indigo-600 px-2 py-1 rounded text-sm flex items-center justify-center gap-1">
-                    <Eye size={14} /> View
-                  </button>
-                  <button className="flex-1 bg-gray-50 text-gray-600 px-2 py-1 rounded text-sm flex items-center justify-center gap-1">
-                    <Edit size={14} /> Edit
-                  </button>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-        <Pagination
-          currentPage={currentPage}
-          totalItems={totalProducts}
-          itemsPerPage={ProductsPerPage}
-          onPageChange={setCurrentPage}
+        <ProductsTable
+          products={sortedProducts}
+          onSort={handleSort}
+          sortField={sortField}
+          sortDirection={sortDirection}
         />
+        <div className="border-t">
+          <Pagination
+            currentPage={currentPage}
+            totalItems={totalProducts}
+            itemsPerPage={productsPerPage}
+            onPageChange={setCurrentPage}
+          />
+        </div>
       </div>
     </div>
   );

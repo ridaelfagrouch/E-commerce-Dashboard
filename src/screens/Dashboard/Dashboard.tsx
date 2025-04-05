@@ -359,6 +359,7 @@ const Dashboard: React.FC = () => {
   // Stats cards data
   const statsCards = [
     {
+      id: "1",
       title: "Today's Revenue",
       value: "$1,245.89",
       icon: <DollarSign className="w-6 h-6" />,
@@ -367,6 +368,7 @@ const Dashboard: React.FC = () => {
       iconColor: "text-indigo-600",
     },
     {
+      id: "2",
       title: "Orders Completed",
       value: "24",
       icon: <CheckCircle className="w-6 h-6" />,
@@ -375,6 +377,7 @@ const Dashboard: React.FC = () => {
       iconColor: "text-green-600",
     },
     {
+      id: "3",
       title: "New Customers",
       value: "8",
       icon: <Users className="w-6 h-6" />,
@@ -383,6 +386,7 @@ const Dashboard: React.FC = () => {
       iconColor: "text-blue-600",
     },
     {
+      id: "4",
       title: "Low Stock Items",
       value: "12",
       icon: <Package className="w-6 h-6" />,
@@ -502,9 +506,9 @@ const Dashboard: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 mb-6 mx-auto max-w-7xl">
       <div className="mb-6">
-        <h1 className="text-2xl font-semibold text-gray-800">Dashboard</h1>
+        <h1 className="text-2xl font-bold">Dashboard</h1>
         <p className="text-gray-500">
           Welcome back! Here's what's happening with your store today.
         </p>
@@ -512,9 +516,9 @@ const Dashboard: React.FC = () => {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-        {statsCards.map((card, index) => (
+        {statsCards.map((card) => (
           <StatCard
-            key={index}
+            key={card.id}
             title={card.title}
             value={card.value}
             icon={card.icon}

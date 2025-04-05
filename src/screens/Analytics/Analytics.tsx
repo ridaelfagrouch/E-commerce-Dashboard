@@ -254,55 +254,61 @@ const Analytics: React.FC = () => {
   }, [salesData]);
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-2xl font-semibold text-gray-800">Analytics</h1>
-          <p className="text-gray-500">Track your store's performance</p>
+    <div className="container mx-auto mb-6  max-w-7xl">
+      <div className="space-y-6 sm:space-y-8">
+        {/* Header */}
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sm:gap-6">
+          <div className="w-full sm:w-auto">
+            <h1 className="text-2xl font-bold">Analytics</h1>
+            <p className="text-sm sm:text-base text-gray-500 mt-1">
+              Track your store's performance
+            </p>
+          </div>
+          <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 w-full sm:w-auto">
+            <Button
+              variant="secondary"
+              leftIcon={<Calendar className="w-4 h-4" />}
+              onClick={() => {}}
+              className="w-full sm:w-auto justify-center"
+            >
+              Last 7 days
+            </Button>
+            <Button
+              variant="secondary"
+              leftIcon={<Download className="w-4 h-4" />}
+              onClick={handleExportData}
+              className="w-full sm:w-auto justify-center"
+            >
+              Export
+            </Button>
+          </div>
         </div>
-        <div className="flex gap-3">
-          <Button
-            variant="secondary"
-            leftIcon={<Calendar className="w-4 h-4" />}
-            onClick={() => {}}
-          >
-            Last 7 days
-          </Button>
-          <Button
-            variant="secondary"
-            leftIcon={<Download className="w-4 h-4" />}
-            onClick={handleExportData}
-          >
-            Export
-          </Button>
-        </div>
+
+        {/* Stats Grid */}
+        <StatsGrid
+          salesData={salesData}
+          aovData={aovData}
+          bestSellers={bestSellers}
+          cancellations={cancellationData}
+        />
+
+        {/* Orders Section */}
+        <OrdersSection data={ordersData} />
+
+        {/* Traffic Analytics */}
+        <TrafficAnalytics
+          trafficSources={trafficSources}
+          visitorLocations={visitorLocations}
+        />
+
+        {/* Unfulfilled Orders Table */}
+        <UnfulfilledOrdersTable
+          orders={unfulfilledOrders}
+          onFilter={() => {}}
+          onPrevious={() => {}}
+          onNext={() => {}}
+        />
       </div>
-
-      {/* Stats Grid */}
-      <StatsGrid
-        salesData={salesData}
-        aovData={aovData}
-        bestSellers={bestSellers}
-        cancellations={cancellationData}
-      />
-
-      {/* Orders Section */}
-      <OrdersSection data={ordersData} />
-
-      {/* Traffic Analytics */}
-      <TrafficAnalytics
-        trafficSources={trafficSources}
-        visitorLocations={visitorLocations}
-      />
-
-      {/* Unfulfilled Orders Table */}
-      <UnfulfilledOrdersTable
-        orders={unfulfilledOrders}
-        onFilter={() => {}}
-        onPrevious={() => {}}
-        onNext={() => {}}
-      />
     </div>
   );
 };

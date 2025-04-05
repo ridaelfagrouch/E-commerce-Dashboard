@@ -128,10 +128,9 @@ const UnfulfilledOrdersTable: React.FC<UnfulfilledOrdersTableProps> = ({
                   </span>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <Badge
-                    text={order.paymentStatus.replace("_", " ")}
-                    variant={getPaymentStatusVariant(order.paymentStatus)}
-                  />
+                  <Badge variant={getPaymentStatusVariant(order.paymentStatus)}>
+                    {order.paymentStatus.replace("_", " ")}
+                  </Badge>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                   {order.items} {order.items === 1 ? "item" : "items"}
@@ -142,10 +141,12 @@ const UnfulfilledOrdersTable: React.FC<UnfulfilledOrdersTableProps> = ({
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="flex flex-wrap gap-1">
                     {order.priority === "high" && (
-                      <Badge text="Urgent" variant="error" />
+                      <Badge variant="error">Urgent</Badge>
                     )}
                     {order.tags?.map((tag, tagIndex) => (
-                      <Badge key={tagIndex} text={tag} variant="info" />
+                      <Badge key={tagIndex} variant="info">
+                        {tag}
+                      </Badge>
                     ))}
                   </div>
                 </td>

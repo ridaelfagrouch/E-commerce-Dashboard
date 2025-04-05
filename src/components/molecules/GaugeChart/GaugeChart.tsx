@@ -50,7 +50,7 @@ const GaugeChart: React.FC<GaugeChartProps> = ({
       options: {
         responsive: true,
         maintainAspectRatio: false,
-        cutout: "75%",
+        cutout: "65%",
         plugins: {
           legend: {
             display: false,
@@ -60,7 +60,12 @@ const GaugeChart: React.FC<GaugeChartProps> = ({
           },
         },
         layout: {
-          padding: 20,
+          padding: {
+            top: 5,
+            bottom: 5,
+            left: 10,
+            right: 10,
+          },
         },
       },
     });
@@ -73,15 +78,19 @@ const GaugeChart: React.FC<GaugeChartProps> = ({
   }, [value, min, max, color]);
 
   return (
-    <div style={{ height: `${height}px`, position: "relative" }}>
-      <canvas ref={canvasRef} />
-      <div
-        className="absolute inset-0 flex items-center justify-center"
-        style={{ marginTop: "40px" }}
-      >
-        <div className="text-center">
-          <div className="text-2xl font-bold text-gray-900">${value}</div>
-          <div className="text-sm text-gray-500">Average Order Value</div>
+    <div className="relative w-full" style={{ height: `${height}px` }}>
+      <canvas ref={canvasRef} className="w-full h-full" />
+      <div className="absolute inset-0 flex flex-col items-center">
+        <div
+          className="h-full flex flex-col items-center justify-center"
+          style={{ marginTop: "50px" }}
+        >
+          <div className="text-base font-bold text-gray-900 leading-tight">
+            ${value.toFixed(2)}
+          </div>
+          <div className="text-[10px] text-gray-500 leading-tight mt-0.5">
+            Order Value
+          </div>
         </div>
       </div>
     </div>

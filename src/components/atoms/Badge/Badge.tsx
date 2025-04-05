@@ -1,15 +1,15 @@
-import React from "react";
+import React, { ReactNode } from "react";
 
 type BadgeVariant = "success" | "warning" | "error" | "info" | "default";
 
 interface BadgeProps {
-  text: string;
+  children: ReactNode;
   variant?: BadgeVariant;
   className?: string;
 }
 
 const Badge: React.FC<BadgeProps> = ({
-  text,
+  children,
   variant = "default",
   className = "",
 }) => {
@@ -25,7 +25,7 @@ const Badge: React.FC<BadgeProps> = ({
     <span
       className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium capitalize ${variantStyles[variant]} ${className}`}
     >
-      {text}
+      {children}
     </span>
   );
 };

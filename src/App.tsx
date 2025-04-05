@@ -11,8 +11,7 @@ import Orders from "./screens/Orders/Orders";
 import Products from "./screens/Products/Products";
 import Customers from "./screens/Customers/Customers";
 import Analytics from "./screens/Analytics/Analytics";
-
-const Settings = () => <div>Settings Page</div>;
+import Settings from "./screens/Settings/Settings";
 
 const App: React.FC = () => {
   return (

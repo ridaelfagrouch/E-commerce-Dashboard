@@ -89,14 +89,14 @@ const LineChartCard: React.FC<LineChartCardProps> = ({
   }, [data, labels, chartColor]);
 
   return (
-    <div className="bg-white rounded-lg shadow p-6">
+    <div className="bg-white rounded-lg shadow-[0_2px_8px_rgba(0,0,0,0.06)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.1)] transition-shadow duration-300 p-6">
       <div className="flex justify-between items-start">
         <StatNumber value={value} label={title} />
-        <div className={`${iconBgColor} p-2 rounded-lg`}>
+        <div className={`${iconBgColor} p-2 rounded-lg shadow-sm`}>
           <Icon className={`w-5 h-5 ${iconColor}`} />
         </div>
       </div>
-      <Trend value={trend} className="mt-4" />
+      <Trend value={trend} className="mt-4 p-2 rounded-md bg-opacity-50" />
       <div style={{ height: `${height}px` }} className="mt-4">
         <canvas ref={chartRef} />
       </div>

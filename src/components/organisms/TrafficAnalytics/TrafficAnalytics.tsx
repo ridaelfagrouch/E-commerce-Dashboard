@@ -80,7 +80,7 @@ const TrafficAnalytics: React.FC<TrafficAnalyticsProps> = ({
         <div className="mb-6">
           <MapContainer
             center={[20, 0]}
-            zoom={2}
+            zoom={1}
             scrollWheelZoom={false}
             className="map-container"
           >

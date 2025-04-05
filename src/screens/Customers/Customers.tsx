@@ -29,9 +29,9 @@ export type Customer = {
 };
 
 export const Customers: React.FC = () => {
-  const [customers, setCustomers] = useState<Customer[]>([
+  const [customers] = useState<Customer[]>([
     {
-      id: "CUS-5432",
+      id: "CUS-5432", 
       name: "Sarah Johnson",
       email: "sarah.j@example.com",
       phone: "(555) 123-4567",
@@ -205,7 +205,7 @@ export const Customers: React.FC = () => {
   };
 
   return (
-    <div className="mb-6">
+    <div className="mb-6 mx-auto max-w-7xl">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">Customers</h1>
         <ActionButton

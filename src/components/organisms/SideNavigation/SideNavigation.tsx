@@ -86,7 +86,7 @@ const SideNavigation: React.FC<SideNavigationProps> = ({ className = "" }) => {
   return (
     <>
       {/* Mobile menu button */}
-      <div className="lg:hidden fixed top-4 left-4 z-20">
+      <div className="lg:hidden fixed top-4 z-20">
         <Button
           variant="ghost"
           onClick={toggleSidebar}
@@ -99,7 +99,7 @@ const SideNavigation: React.FC<SideNavigationProps> = ({ className = "" }) => {
       {/* Overlay for mobile */}
       {isOpen && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-50 z-10 lg:hidden"
+          className="fixed inset-0 bg-black/40 z-11 lg:hidden"
           onClick={toggleSidebar}
         />
       )}

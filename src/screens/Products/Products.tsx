@@ -36,6 +36,7 @@ const actionButtons = [
 
 const statsCards = [
   {
+    id: "1",
     title: "Total Products",
     value: "186",
     icon: <ShoppingBag size={24} />,
@@ -48,6 +49,7 @@ const statsCards = [
     iconColor: "text-indigo-600",
   },
   {
+    id: "2",
     title: "Total Sales",
     value: "1,432",
     icon: <TrendingUp size={24} />,
@@ -60,6 +62,7 @@ const statsCards = [
     iconColor: "text-green-600",
   },
   {
+    id: "3",
     title: "Average Price",
     value: "$68.99",
     icon: <Tag size={24} />,
@@ -72,6 +75,7 @@ const statsCards = [
     iconColor: "text-blue-600",
   },
   {
+    id: "4",
     title: "Low Stock Items",
     value: "12",
     icon: <Percent size={24} />,
@@ -230,7 +234,7 @@ export const Products: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6 pb-8">
+    <div className="space-y-6 mb-6 mx-auto max-w-7xl">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <h1 className="text-2xl font-bold">Products</h1>
         <div className="flex flex-wrap gap-3">

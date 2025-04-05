@@ -105,7 +105,7 @@ const generateHourlyData = (date: Date, totalOrders: number): HourlyData[] => {
   // Distribute remaining orders to peak hours
   while (remainingOrders > 0) {
     const peakHours = hourlyOrders
-      .map((orders, index) => ({
+      .map((index) => ({
         index,
         weight: hourlyWeights[index],
       }))

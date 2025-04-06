@@ -17,7 +17,7 @@ const ExportOrders: React.FC<ExportOrdersProps> = ({ onClose, onExport }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/25 backdrop-blur-sm z-50 flex items-center justify-center p-4 h-screen">
+    <div className="fixed inset-0 bg-black/25 backdrop-blur-sm z-[10000] flex items-center justify-center p-4 h-screen">
       <div className="bg-white rounded-xl shadow-xl w-full max-w-md transform transition-all duration-300 ease-out scale-100 opacity-100">
         <div className="flex items-center justify-between p-4 border-b">
           <h2 className="text-xl font-semibold">Export Orders</h2>

@@ -108,7 +108,7 @@ const EditProduct: React.FC<EditProductProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 bg-black/25 backdrop-blur-sm flex items-center justify-center z-50 h-screen">
+    <div className="fixed inset-0 bg-black/25 backdrop-blur-sm flex items-center justify-center z-[10000] h-screen">
       <div className="bg-white rounded-xl shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto transform transition-all duration-300 ease-out scale-100 opacity-100 mx-4">
         <div className="p-6">
           <div className="flex justify-between items-center mb-6">

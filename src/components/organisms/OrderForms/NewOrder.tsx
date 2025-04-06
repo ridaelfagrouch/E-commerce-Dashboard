@@ -112,7 +112,7 @@ const NewOrder: React.FC<NewOrderProps> = ({ onClose, onSubmit }) => {
     selectedProducts.length > 0;
 
   return (
-    <div className="fixed inset-0 bg-black/25 backdrop-blur-sm z-50 flex items-center justify-center p-0 sm:p-4">
+    <div className="fixed inset-0 bg-black/25 backdrop-blur-sm z-[10000] flex items-center justify-center p-0 sm:p-4">
       <div className="bg-white w-full h-full sm:h-auto sm:rounded-xl shadow-xl sm:max-w-4xl sm:max-h-[90vh] overflow-hidden transform transition-all duration-300 ease-out scale-100 opacity-100">
         <div className="flex items-center justify-between p-4 border-b bg-gray-50">
           <div className="flex items-center gap-4 sm:gap-8">

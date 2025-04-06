@@ -16,6 +16,9 @@ import FilterButtonGroup from "../../components/molecules/FilterButtonGroup/Filt
 import OrdersTable, {
   Order,
 } from "../../components/organisms/OrdersTable/OrdersTable";
+import ExportOrders from "../../components/organisms/OrderForms/ExportOrders";
+import NewOrder from "../../components/organisms/OrderForms/NewOrder";
+import FilterOrders from "../../components/organisms/OrderForms/FilterOrders";
 
 const filterOptions = [
   { id: "all", label: "All" },
@@ -24,19 +27,6 @@ const filterOptions = [
   { id: "shipped", label: "Shipped" },
   { id: "pending", label: "Pending" },
   { id: "cancelled", label: "Cancelled" },
-];
-
-const actionButtons = [
-  {
-    label: "Export",
-    variant: "secondary" as const,
-    icon: <Download size={16} />,
-  },
-  {
-    label: "New Order",
-    variant: "primary" as const,
-    icon: <Plus size={16} />,
-  },
 ];
 
 const statsCards = [
@@ -148,8 +138,11 @@ const initialOrders: Order[] = [
 export const Orders: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
-  const [orders] = useState<Order[]>(initialOrders);
+  const [orders, setOrders] = useState<Order[]>(initialOrders);
   const [filter, setFilter] = useState<string>("all");
+  const [showExportModal, setShowExportModal] = useState(false);
+  const [showNewOrderModal, setShowNewOrderModal] = useState(false);
+  const [showFilterModal, setShowFilterModal] = useState(false);
 
   const totalOrders = 1286;
   const ordersPerPage = 8;
@@ -173,16 +166,53 @@ export const Orders: React.FC = () => {
     setCurrentPage(1); // Reset to first page when searching
   };
 
+  const handleExport = (format: string, dateRange: string) => {
+    // Implement export functionality
+    console.log("Exporting orders:", { format, dateRange });
+  };
+
+  const handleNewOrder = (orderData: any) => {
+    // Implement new order creation
+    console.log("Creating new order:", orderData);
+    const newOrder: Order = {
+      id: `#ORD-${Math.floor(Math.random() * 1000)}`,
+      customer: orderData.customerName,
+      date: new Date().toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+      }),
+      status: "Pending",
+      amount: orderData.total,
+      items: orderData.products.length,
+    };
+    setOrders([newOrder, ...orders]);
+  };
+
+  const handleApplyFilters = (filters: any) => {
+    // Implement filter functionality
+    console.log("Applying filters:", filters);
+  };
+
   return (
     <div className="space-y-6 mb-6 mx-auto max-w-7xl">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <h1 className="text-2xl font-bold">Orders</h1>
         <div className="flex flex-wrap gap-3">
-          {actionButtons.map((button, index) => (
-            <Button key={index} variant={button.variant} leftIcon={button.icon}>
-              {button.label}
-            </Button>
-          ))}
+          <Button
+            variant="secondary"
+            leftIcon={<Download size={16} />}
+            onClick={() => setShowExportModal(true)}
+          >
+            Export
+          </Button>
+          <Button
+            variant="primary"
+            leftIcon={<Plus size={16} />}
+            onClick={() => setShowNewOrderModal(true)}
+          >
+            New Order
+          </Button>
         </div>
       </div>
 
@@ -215,6 +245,7 @@ export const Orders: React.FC = () => {
               variant="secondary"
               leftIcon={<Filter size={16} />}
               rightIcon={<ChevronDown size={14} />}
+              onClick={() => setShowFilterModal(true)}
             >
               Filters
             </Button>
@@ -240,6 +271,26 @@ export const Orders: React.FC = () => {
           />
         </div>
       </div>
+
+      {/* Modals */}
+      {showExportModal && (
+        <ExportOrders
+          onClose={() => setShowExportModal(false)}
+          onExport={handleExport}
+        />
+      )}
+      {showNewOrderModal && (
+        <NewOrder
+          onClose={() => setShowNewOrderModal(false)}
+          onSubmit={handleNewOrder}
+        />
+      )}
+      {showFilterModal && (
+        <FilterOrders
+          onClose={() => setShowFilterModal(false)}
+          onApplyFilters={handleApplyFilters}
+        />
+      )}
     </div>
   );
 };

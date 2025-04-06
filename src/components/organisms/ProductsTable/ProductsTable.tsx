@@ -2,23 +2,15 @@ import React from "react";
 import { Edit, Eye } from "lucide-react";
 import Button from "../../atoms/Button/Button";
 import Badge from "../../atoms/Badge/Badge";
+import { Product } from "../../../types/Product";
 
-export interface Product {
-  id: string;
-  name: string;
-  category: string;
-  price: number;
-  stock: number;
-  sales: number;
-  status: "Active" | "Low Stock" | "Out of Stock";
-  imageUrl?: string;
-}
-
-interface ProductsTableProps {
+export interface ProductsTableProps {
   products: Product[];
   onSort?: (field: string) => void;
   sortField?: string;
   sortDirection?: "asc" | "desc";
+  onEdit: (product: Product) => void;
+  onView: (product: Product) => void;
   className?: string;
 }
 
@@ -27,15 +19,17 @@ const ProductsTable: React.FC<ProductsTableProps> = ({
   onSort,
   sortField,
   sortDirection,
+  onEdit,
+  onView,
   className = "",
 }) => {
-  const getStatusVariant = (status: Product["status"]) => {
-    switch (status) {
-      case "Active":
+  const getStatusVariant = (status: string) => {
+    switch (status.toLowerCase()) {
+      case "active":
         return "success";
-      case "Low Stock":
+      case "low stock":
         return "warning";
-      case "Out of Stock":
+      case "out of stock":
         return "error";
       default:
         return "default";
@@ -111,6 +105,7 @@ const ProductsTable: React.FC<ProductsTableProps> = ({
                       <Button
                         variant="ghost"
                         size="sm"
+                        onClick={() => onEdit(product)}
                         leftIcon={<Edit size={16} />}
                       >
                         Edit
@@ -118,6 +113,7 @@ const ProductsTable: React.FC<ProductsTableProps> = ({
                       <Button
                         variant="ghost"
                         size="sm"
+                        onClick={() => onView(product)}
                         leftIcon={<Eye size={16} />}
                       >
                         View
@@ -196,6 +192,7 @@ const ProductsTable: React.FC<ProductsTableProps> = ({
                     variant="ghost"
                     size="sm"
                     className="flex-1"
+                    onClick={() => onEdit(product)}
                     leftIcon={<Edit size={16} />}
                   >
                     Edit
@@ -204,6 +201,7 @@ const ProductsTable: React.FC<ProductsTableProps> = ({
                     variant="ghost"
                     size="sm"
                     className="flex-1"
+                    onClick={() => onView(product)}
                     leftIcon={<Eye size={16} />}
                   >
                     View

@@ -1,37 +1,23 @@
 import React, { useState } from "react";
 import StatCard from "../../components/molecules/StatCard/StatCard";
-import {
-  ShoppingBag,
-  TrendingUp,
-  Percent,
-  Tag,
-  Plus,
-  Filter,
-  ChevronDown,
-} from "lucide-react";
+import { ShoppingBag, TrendingUp, Percent, Tag, Plus } from "lucide-react";
 import Pagination from "../../components/molecules/Pagination/Pagination";
 import SearchInput from "../../components/atoms/SearchInput/SearchInput";
 import Button from "../../components/atoms/Button/Button";
 import ProductFilterGroup from "../../components/molecules/ProductFilterGroup/ProductFilterGroup";
-import ProductsTable, {
-  Product,
-} from "../../components/organisms/ProductsTable/ProductsTable";
+import ProductsTable from "../../components/organisms/ProductsTable/ProductsTable";
+import EditProduct from "../../components/organisms/ProductForms/EditProduct";
+import ViewProduct from "../../components/organisms/ProductForms/ViewProduct";
+import FilterButton from "../../components/molecules/FilterButton/FilterButton";
+import { Product } from "../../types/Product";
 
 const filterOptions = [
   { id: "all", label: "All Categories" },
   { id: "electronics", label: "Electronics" },
   { id: "fitness", label: "Fitness" },
-  { id: "food & beverage", label: "Food & Beverage" },
+  { id: "food_beverage", label: "Food & Beverage" },
   { id: "accessories", label: "Accessories" },
   { id: "lifestyle", label: "Lifestyle" },
-];
-
-const actionButtons = [
-  {
-    label: "Add Product",
-    variant: "primary" as const,
-    icon: <Plus size={16} />,
-  },
 ];
 
 const statsCards = [
@@ -100,6 +86,9 @@ const initialProducts: Product[] = [
     status: "Active",
     imageUrl:
       "https://images.unsplash.com/photo-1572569511254-d8f925fe2cbb?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+    revenue: 12398.76,
+    revenueValue: 12398.76,
+    inventory: "in_stock",
   },
   {
     id: "PRD-002",
@@ -111,6 +100,9 @@ const initialProducts: Product[] = [
     status: "Low Stock",
     imageUrl:
       "https://images.unsplash.com/photo-1523275335684-37898b6baf30?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+    revenue: 19599.02,
+    revenueValue: 19599.02,
+    inventory: "low_stock",
   },
   {
     id: "PRD-003",
@@ -122,6 +114,9 @@ const initialProducts: Product[] = [
     status: "Active",
     imageUrl:
       "https://images.unsplash.com/photo-1575052814086-f385e2e2ad1b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+    revenue: 4349.13,
+    revenueValue: 4349.13,
+    inventory: "in_stock",
   },
   {
     id: "PRD-004",
@@ -133,6 +128,9 @@ const initialProducts: Product[] = [
     status: "Active",
     imageUrl:
       "https://images.unsplash.com/photo-1559056199-641a0ac8b55e?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+    revenue: 1899.24,
+    revenueValue: 1899.24,
+    inventory: "in_stock",
   },
   {
     id: "PRD-005",
@@ -144,6 +142,9 @@ const initialProducts: Product[] = [
     status: "Active",
     imageUrl:
       "https://images.unsplash.com/photo-1627123424574-724758594e93?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+    revenue: 3899.35,
+    revenueValue: 3899.35,
+    inventory: "in_stock",
   },
   {
     id: "PRD-006",
@@ -155,6 +156,9 @@ const initialProducts: Product[] = [
     status: "Low Stock",
     imageUrl:
       "https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+    revenue: 4959.38,
+    revenueValue: 4959.38,
+    inventory: "low_stock",
   },
   {
     id: "PRD-007",
@@ -166,6 +170,9 @@ const initialProducts: Product[] = [
     status: "Out of Stock",
     imageUrl:
       "https://images.unsplash.com/photo-1602143407151-7111542de6e8?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+    revenue: 2029.42,
+    revenueValue: 2029.42,
+    inventory: "out_of_stock",
   },
   {
     id: "PRD-008",
@@ -177,16 +184,23 @@ const initialProducts: Product[] = [
     status: "Active",
     imageUrl:
       "https://images.unsplash.com/photo-1622445275463-afa2ab738c34?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+    revenue: 1589.47,
+    revenueValue: 1589.47,
+    inventory: "in_stock",
   },
 ];
 
 export const Products: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
-  const [products] = useState<Product[]>(initialProducts);
+  const [products, setProducts] = useState<Product[]>(initialProducts);
   const [category, setCategory] = useState<string>("all");
   const [sortField, setSortField] = useState<string>("sales");
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("desc");
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [showViewModal, setShowViewModal] = useState(false);
+  const [showNewProductModal, setShowNewProductModal] = useState(false);
 
   const totalProducts = 1286;
   const productsPerPage = 8;
@@ -201,6 +215,8 @@ export const Products: React.FC = () => {
     })
     .filter((product) => {
       if (category === "all") return true;
+      if (category === "low_stock") return product.stock < 10;
+      if (category === "out_of_stock") return product.stock === 0;
       return product.category.toLowerCase() === category.toLowerCase();
     });
 
@@ -233,16 +249,99 @@ export const Products: React.FC = () => {
     setCurrentPage(1); // Reset to first page when searching
   };
 
+  const handleEditProduct = (product: Product) => {
+    setSelectedProduct(product);
+    setShowEditModal(true);
+  };
+
+  const handleViewProduct = (product: Product) => {
+    setSelectedProduct(product);
+    setShowViewModal(true);
+  };
+
+  const handleUpdateProduct = (updatedProduct: Product) => {
+    setProducts(
+      products.map((p) =>
+        p.id === updatedProduct.id ? { ...p, ...updatedProduct } : p
+      )
+    );
+    setShowEditModal(false);
+  };
+
+  const handleCreateProduct = (newProduct: Product) => {
+    const productWithDefaults: Product = {
+      ...newProduct,
+      revenue: 0,
+      revenueValue: 0,
+      inventory:
+        newProduct.stock > 20
+          ? "in_stock"
+          : newProduct.stock > 0
+          ? "low_stock"
+          : "out_of_stock",
+    };
+    setProducts([productWithDefaults, ...products]);
+    setShowNewProductModal(false);
+  };
+
+  const handleFilterSelect = (filter: string) => {
+    switch (filter) {
+      case "all":
+        setCategory("all");
+        setProducts(initialProducts);
+        break;
+      case "low_stock":
+        setCategory("all");
+        setProducts(initialProducts.filter((p) => p.stock < 10));
+        break;
+      case "out_of_stock":
+        setCategory("all");
+        setProducts(initialProducts.filter((p) => p.stock === 0));
+        break;
+      case "electronics":
+        setCategory("electronics");
+        setProducts(
+          initialProducts.filter((p) => p.category === "Electronics")
+        );
+        break;
+      case "fitness":
+        setCategory("fitness");
+        setProducts(initialProducts.filter((p) => p.category === "Fitness"));
+        break;
+      case "food_beverage":
+        setCategory("food_beverage");
+        setProducts(
+          initialProducts.filter((p) => p.category === "Food & Beverage")
+        );
+        break;
+      case "accessories":
+        setCategory("accessories");
+        setProducts(
+          initialProducts.filter((p) => p.category === "Accessories")
+        );
+        break;
+      case "lifestyle":
+        setCategory("lifestyle");
+        setProducts(initialProducts.filter((p) => p.category === "Lifestyle"));
+        break;
+      default:
+        setCategory("all");
+        setProducts(initialProducts);
+    }
+  };
+
   return (
     <div className="space-y-6 mb-6 mx-auto max-w-7xl">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <h1 className="text-2xl font-bold">Products</h1>
         <div className="flex flex-wrap gap-3">
-          {actionButtons.map((button, index) => (
-            <Button key={index} variant={button.variant} leftIcon={button.icon}>
-              {button.label}
-            </Button>
-          ))}
+          <Button
+            variant="primary"
+            leftIcon={<Plus size={16} />}
+            onClick={() => setShowNewProductModal(true)}
+          >
+            Add Product
+          </Button>
         </div>
       </div>
 
@@ -271,13 +370,7 @@ export const Products: React.FC = () => {
                 onChange={handleSearch}
               />
             </div>
-            <Button
-              variant="secondary"
-              leftIcon={<Filter size={16} />}
-              rightIcon={<ChevronDown size={14} />}
-            >
-              Filters
-            </Button>
+            <FilterButton onFilterSelect={handleFilterSelect} />
           </div>
         </div>
         <div className="p-4 overflow-x-auto">
@@ -295,6 +388,8 @@ export const Products: React.FC = () => {
           onSort={handleSort}
           sortField={sortField}
           sortDirection={sortDirection}
+          onEdit={handleEditProduct}
+          onView={handleViewProduct}
         />
         <div className="border-t">
           <Pagination
@@ -305,6 +400,30 @@ export const Products: React.FC = () => {
           />
         </div>
       </div>
+
+      {/* Modals */}
+      {showEditModal && selectedProduct && (
+        <EditProduct
+          product={selectedProduct}
+          onClose={() => setShowEditModal(false)}
+          onSave={handleUpdateProduct}
+        />
+      )}
+      {showViewModal && selectedProduct && (
+        <ViewProduct
+          product={selectedProduct}
+          onClose={() => {
+            setShowViewModal(false);
+          }}
+        />
+      )}
+      {showNewProductModal && (
+        <EditProduct
+          onClose={() => setShowNewProductModal(false)}
+          onSave={handleCreateProduct}
+          isNew
+        />
+      )}
     </div>
   );
 };

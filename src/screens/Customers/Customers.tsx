@@ -1,19 +1,14 @@
 import React, { useState } from "react";
 import StatCard from "../../components/molecules/StatCard/StatCard";
 import CustomerCard from "../../components/organisms/CustomerCard/CustomerCard";
-import FilterButton from "../../components/atoms/FilterButton/FilterButton";
+import FilterButton from "../../components/molecules/FilterButton/FilterButton";
 import SearchInput from "../../components/atoms/SearchInput/SearchInput";
 import Pagination from "../../components/molecules/Pagination/Pagination";
 import ActionButton from "../../components/atoms/ActionButton/ActionButton";
-import {
-  Users,
-  UserPlus,
-  ShoppingCart,
-  DollarSign,
-  Filter,
-  ChevronDown,
-} from "lucide-react";
+import AddCustomer from "../../components/organisms/CustomerForms/AddCustomer";
+import ViewCustomer from "../../components/organisms/CustomerForms/ViewCustomer";
 import Button from "../../components/atoms/Button/Button";
+import { Users, UserPlus, ShoppingCart, DollarSign } from "lucide-react";
 
 // Types
 export type Customer = {
@@ -29,9 +24,9 @@ export type Customer = {
 };
 
 export const Customers: React.FC = () => {
-  const [customers] = useState<Customer[]>([
+  const [customers, setCustomers] = useState<Customer[]>([
     {
-      id: "CUS-5432", 
+      id: "CUS-5432",
       name: "Sarah Johnson",
       email: "sarah.j@example.com",
       phone: "(555) 123-4567",
@@ -123,29 +118,18 @@ export const Customers: React.FC = () => {
   const [filter, setFilter] = useState<string>("all");
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
+  const [showAddCustomer, setShowAddCustomer] = useState(false);
+  const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(
+    null
+  );
   const customersPerPage = 8;
   const totalCustomers = 1286;
-
-  // Filter customers based on status and search term
-  const filteredCustomers = customers
-    .filter(
-      (customer) =>
-        filter === "all" ||
-        customer.status.toLowerCase() === filter.toLowerCase()
-    )
-    .filter(
-      (customer) =>
-        searchTerm === "" ||
-        customer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        customer.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        customer.id.toLowerCase().includes(searchTerm.toLowerCase())
-    );
 
   const filterOptions = [
     { id: "all", label: "All", color: "bg-indigo-100 text-indigo-800" },
     { id: "active", label: "Active", color: "bg-green-100 text-green-800" },
     { id: "new", label: "New", color: "bg-blue-100 text-blue-800" },
-    { id: "inactive", label: "Inactive", color: "bg-gray-200 text-gray-800" },
+    { id: "inactive", label: "Inactive", color: "bg-gray-100 text-gray-800" },
   ];
 
   const statsData = [
@@ -199,9 +183,87 @@ export const Customers: React.FC = () => {
     },
   ];
 
+  // Filter customers based on status and search term
+  const filteredCustomers = customers
+    .filter((customer) => {
+      let isMatch = true;
+      const thirtyDaysAgo = new Date();
+      thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+      switch (filter) {
+        case "all":
+          isMatch = true;
+          break;
+        case "active":
+          isMatch = customer.status === "Active";
+          break;
+        case "new":
+          isMatch = customer.status === "New";
+          break;
+        case "inactive":
+          isMatch = customer.status === "Inactive";
+          break;
+        case "high_value":
+          isMatch = customer.spent > 500;
+          break;
+        case "recent":
+          isMatch = new Date(customer.lastOrder) >= thirtyDaysAgo;
+          break;
+        default:
+          isMatch = true;
+      }
+      return isMatch;
+    })
+    .filter(
+      (customer) =>
+        searchTerm === "" ||
+        customer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        customer.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        customer.id.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
-    setCurrentPage(1); // Reset to first page when searching
+    setCurrentPage(1);
+  };
+
+  const handleFilterSelect = (selectedFilter: string) => {
+    setFilter(selectedFilter);
+    setCurrentPage(1);
+  };
+
+  const handleAddCustomer = (customerData: {
+    name: string;
+    email: string;
+    phone: string;
+    location: string;
+  }) => {
+    const newCustomer: Customer = {
+      id: `CUS-${String(customers.length + 5433).padStart(4, "0")}`,
+      name: customerData.name,
+      email: customerData.email,
+      phone: customerData.phone,
+      location: customerData.location,
+      orders: 0,
+      spent: 0,
+      status: "New",
+      lastOrder: "No orders yet",
+    };
+
+    setCustomers([newCustomer, ...customers]);
+    setShowAddCustomer(false);
+  };
+
+  const handleViewDetails = (customer: Customer) => {
+    setSelectedCustomer(customer);
+  };
+
+  const handleUpdateCustomer = (updatedCustomer: Customer) => {
+    setCustomers(
+      customers.map((customer) =>
+        customer.id === updatedCustomer.id ? updatedCustomer : customer
+      )
+    );
   };
 
   return (
@@ -212,11 +274,11 @@ export const Customers: React.FC = () => {
           icon={<UserPlus size={16} />}
           label="Add Customer"
           variant="primary"
-          onClick={() => console.log("Add customer clicked")}
+          onClick={() => setShowAddCustomer(true)}
         />
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-8">
         {statsData.map((stat, index) => (
           <StatCard
             key={index}
@@ -241,25 +303,19 @@ export const Customers: React.FC = () => {
                 onChange={handleSearch}
               />
             </div>
-            <Button
-              variant="secondary"
-              leftIcon={<Filter size={16} />}
-              rightIcon={<ChevronDown size={14} />}
-            >
-              Filters
-            </Button>
+            <FilterButton onFilterSelect={handleFilterSelect} />
           </div>
         </div>
         <div className="p-4 overflow-x-auto flex gap-2">
           {filterOptions.map((option) => (
-            <FilterButton
+            <Button
               key={option.id}
-              active={filter === option.id}
-              activeColor={option.color}
-              onClick={() => setFilter(option.id)}
+              variant="filter"
+              className={`${filter === option.id ? option.color : ""}`}
+              onClick={() => handleFilterSelect(option.id)}
             >
               {option.label}
-            </FilterButton>
+            </Button>
           ))}
         </div>
       </div>
@@ -270,9 +326,7 @@ export const Customers: React.FC = () => {
             <CustomerCard
               key={customer.id}
               customer={customer}
-              onViewDetails={() =>
-                console.log(`View details for ${customer.id}`)
-              }
+              onViewDetails={() => handleViewDetails(customer)}
             />
           ))}
         </div>
@@ -283,6 +337,21 @@ export const Customers: React.FC = () => {
           onPageChange={setCurrentPage}
         />
       </div>
+
+      {showAddCustomer && (
+        <AddCustomer
+          onClose={() => setShowAddCustomer(false)}
+          onSave={handleAddCustomer}
+        />
+      )}
+
+      {selectedCustomer && (
+        <ViewCustomer
+          customer={selectedCustomer}
+          onClose={() => setSelectedCustomer(null)}
+          onUpdate={handleUpdateCustomer}
+        />
+      )}
     </div>
   );
 };

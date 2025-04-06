@@ -15,6 +15,9 @@ import Button from "../../components/atoms/Button/Button";
 import DataTable from "../../components/organisms/DataTable/DataTable";
 import ChartCard from "../../components/molecules/ChartCard/ChartCard";
 import OrderActivity from "../../components/organisms/OrderActivity/OrderActivity";
+import EditProduct from "../../components/organisms/ProductForms/EditProduct";
+import ViewProduct from "../../components/organisms/ProductForms/ViewProduct";
+import { Product } from "../../types/Product";
 
 // Types
 interface Order {
@@ -69,6 +72,9 @@ const Dashboard: React.FC = () => {
   );
   // State for responsive layout
   const [isMobile, setIsMobile] = useState<boolean>(false);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
 
   // Check for mobile view on mount and resize
   useEffect(() => {
@@ -146,94 +152,118 @@ const Dashboard: React.FC = () => {
     },
   ];
 
-  const topProducts = [
+  const topProducts: Product[] = [
     {
+      id: "PRD-001",
       name: "Wireless Earbuds Pro",
-      sales: "1,234",
-      revenue: "$24,680",
+      category: "Electronics",
+      price: 99.99,
+      stock: 38,
+      sales: 1234,
+      status: "Active",
+      imageUrl:
+        "https://images.unsplash.com/photo-1572569511254-d8f925fe2cbb?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+      revenue: 24680,
       revenueValue: 24680,
       inventory: "in_stock",
-      stock: 156,
-      imageUrl:
-        "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-      category: "Electronics",
     },
     {
+      id: "PRD-002",
       name: "Ultra HD Smart Watch",
-      sales: "987",
-      revenue: "$29,610",
+      category: "Electronics",
+      price: 199.99,
+      stock: 15,
+      sales: 987,
+      status: "Low Stock",
+      imageUrl:
+        "https://images.unsplash.com/photo-1523275335684-37898b6baf30?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+      revenue: 29610,
       revenueValue: 29610,
       inventory: "low_stock",
-      stock: 23,
-      imageUrl:
-        "https://images.unsplash.com/photo-1546868871-7041f2a55e12?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-      category: "Electronics",
     },
     {
+      id: "PRD-003",
       name: "Premium Yoga Mat",
-      sales: "865",
-      revenue: "$17,300",
+      category: "Fitness",
+      price: 49.99,
+      stock: 52,
+      sales: 865,
+      status: "Active",
+      imageUrl:
+        "https://images.unsplash.com/photo-1575052814086-f385e2e2ad1b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+      revenue: 17300,
       revenueValue: 17300,
       inventory: "in_stock",
-      stock: 89,
-      imageUrl:
-        "https://images.unsplash.com/photo-1592432678016-e910b452f9a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-      category: "Fitness",
     },
     {
+      id: "PRD-004",
       name: "Organic Coffee Beans",
-      sales: "754",
-      revenue: "$15,080",
-      revenueValue: 15080,
-      inventory: "in_stock",
-      stock: 245,
+      category: "Food & Beverage",
+      price: 24.99,
+      stock: 125,
+      sales: 754,
+      status: "Active",
       imageUrl:
         "https://images.unsplash.com/photo-1559056199-641a0ac8b55e?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-      category: "Food & Beverage",
+      revenue: 15080,
+      revenueValue: 15080,
+      inventory: "in_stock",
     },
     {
-      name: "Smart Home Security Camera",
-      sales: "698",
-      revenue: "$34,900",
+      id: "PRD-005",
+      name: "Leather Wallet",
+      category: "Accessories",
+      price: 59.99,
+      stock: 28,
+      sales: 698,
+      status: "Active",
+      imageUrl:
+        "https://images.unsplash.com/photo-1627123424574-724758594e93?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+      revenue: 34900,
       revenueValue: 34900,
       inventory: "in_stock",
-      stock: 112,
-      imageUrl:
-        "https://images.unsplash.com/photo-1557324232-b8917d3c3dcb?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-      category: "Electronics",
     },
     {
-      name: "Fitness Tracking Band",
-      sales: "645",
-      revenue: "$12,900",
+      id: "PRD-006",
+      name: "Portable Bluetooth Speaker",
+      category: "Electronics",
+      price: 79.99,
+      stock: 3,
+      sales: 645,
+      status: "Low Stock",
+      imageUrl:
+        "https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+      revenue: 12900,
       revenueValue: 12900,
       inventory: "low_stock",
-      stock: 18,
-      imageUrl:
-        "https://images.unsplash.com/photo-1575311373937-040b8e1fd5b6?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-      category: "Electronics",
     },
     {
-      name: "Portable Power Bank",
-      sales: "589",
-      revenue: "$8,835",
+      id: "PRD-007",
+      name: "Stainless Steel Water Bottle",
+      category: "Lifestyle",
+      price: 34.99,
+      stock: 0,
+      sales: 589,
+      status: "Out of Stock",
+      imageUrl:
+        "https://images.unsplash.com/photo-1602143407151-7111542de6e8?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+      revenue: 8835,
       revenueValue: 8835,
       inventory: "out_of_stock",
-      stock: 0,
-      imageUrl:
-        "https://images.unsplash.com/photo-1618410320928-25228d811631?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-      category: "Electronics",
     },
     {
-      name: "Premium Bluetooth Headphones",
-      sales: "534",
-      revenue: "$32,040",
+      id: "PRD-008",
+      name: "Wireless Charging Pad",
+      category: "Electronics",
+      price: 29.99,
+      stock: 42,
+      sales: 534,
+      status: "Active",
+      imageUrl:
+        "https://images.unsplash.com/photo-1622445275463-afa2ab738c34?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+      revenue: 32040,
       revenueValue: 32040,
       inventory: "in_stock",
-      stock: 67,
-      imageUrl:
-        "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-      category: "Electronics",
     },
   ];
 
@@ -505,6 +535,22 @@ const Dashboard: React.FC = () => {
     },
   };
 
+  const handleEditProduct = (product: Product) => {
+    setSelectedProduct(product);
+    setIsEditModalOpen(true);
+  };
+
+  const handleViewProduct = (product: Product) => {
+    setSelectedProduct(product);
+    setIsViewModalOpen(true);
+  };
+
+  const handleSaveProduct = (updatedProduct: Product) => {
+    // Here you would typically make an API call to update the product
+    console.log("Saving product:", updatedProduct);
+    setIsEditModalOpen(false);
+  };
+
   return (
     <div className="space-y-6 mb-6 mx-auto max-w-7xl">
       <div className="mb-6">
@@ -644,6 +690,7 @@ const Dashboard: React.FC = () => {
                         size="sm"
                         className="flex-1"
                         leftIcon={<Edit size={16} />}
+                        onClick={() => handleEditProduct(product)}
                       >
                         Edit
                       </Button>
@@ -652,6 +699,7 @@ const Dashboard: React.FC = () => {
                         size="sm"
                         className="flex-1"
                         leftIcon={<Eye size={16} />}
+                        onClick={() => handleViewProduct(product)}
                       >
                         View
                       </Button>
@@ -663,6 +711,21 @@ const Dashboard: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* Modals */}
+      {isEditModalOpen && selectedProduct && (
+        <EditProduct
+          product={selectedProduct}
+          onClose={() => setIsEditModalOpen(false)}
+          onSave={handleSaveProduct}
+        />
+      )}
+      {isViewModalOpen && selectedProduct && (
+        <ViewProduct
+          product={selectedProduct}
+          onClose={() => setIsViewModalOpen(false)}
+        />
+      )}
 
       <OrderActivity />
     </div>

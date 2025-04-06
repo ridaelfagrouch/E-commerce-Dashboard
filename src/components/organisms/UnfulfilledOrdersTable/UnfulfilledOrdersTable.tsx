@@ -1,7 +1,7 @@
-import React from "react";
-import { Filter } from "lucide-react";
+import React, { useState, useMemo } from "react";
 import Button from "../../atoms/Button/Button";
 import Badge from "../../atoms/Badge/Badge";
+import OrderFilterDropdown from "./OrderFilterDropdown";
 
 interface UnfulfilledOrder {
   orderNumber: string;
@@ -21,7 +21,11 @@ interface UnfulfilledOrder {
 
 interface UnfulfilledOrdersTableProps {
   orders: UnfulfilledOrder[];
-  onFilter: () => void;
+  onFilter: (filters: {
+    status: string[];
+    priority: string[];
+    tags: string[];
+  }) => void;
   onPrevious: () => void;
   onNext: () => void;
 }
@@ -32,9 +36,56 @@ const UnfulfilledOrdersTable: React.FC<UnfulfilledOrdersTableProps> = ({
   onPrevious,
   onNext,
 }) => {
-  const getPaymentStatusVariant = (
-    status: UnfulfilledOrder["paymentStatus"]
-  ) => {
+  const [activeFilters, setActiveFilters] = useState<{
+    status: string[];
+    priority: string[];
+    tags: string[];
+  }>({
+    status: [],
+    priority: [],
+    tags: [],
+  });
+
+  const filteredOrders = useMemo(() => {
+    return orders.filter((order) => {
+      // Status filter
+      if (
+        activeFilters.status.length > 0 &&
+        !activeFilters.status.includes(order.paymentStatus)
+      ) {
+        return false;
+      }
+
+      // Priority filter
+      if (
+        activeFilters.priority.length > 0 &&
+        !activeFilters.priority.includes(order.priority)
+      ) {
+        return false;
+      }
+
+      // Tags filter
+      if (activeFilters.tags.length > 0) {
+        if (!order.tags) return false;
+        if (!activeFilters.tags.some((tag) => order.tags?.includes(tag))) {
+          return false;
+        }
+      }
+
+      return true;
+    });
+  }, [orders, activeFilters]);
+
+  const handleFilter = (filters: {
+    status: string[];
+    priority: string[];
+    tags: string[];
+  }) => {
+    setActiveFilters(filters);
+    onFilter(filters);
+  };
+
+  const getStatusColor = (status: string) => {
     switch (status) {
       case "paid":
         return "success";
@@ -51,124 +102,134 @@ const UnfulfilledOrdersTable: React.FC<UnfulfilledOrdersTableProps> = ({
     }
   };
 
+  const getTagColor = (tag: string) => {
+    switch (tag.toLowerCase()) {
+      case "urgent":
+        return "bg-red-100 text-red-700";
+      case "express":
+        return "bg-blue-100 text-blue-700";
+      case "international":
+        return "bg-indigo-100 text-indigo-700";
+      case "fragile":
+        return "bg-blue-100 text-blue-700";
+      case "priority":
+        return "bg-blue-100 text-blue-700";
+      default:
+        return "bg-gray-100 text-gray-700";
+    }
+  };
+
   return (
-    <div className="bg-white rounded-lg shadow">
-      <div className="px-6 py-4 border-b border-gray-200">
-        <div className="flex justify-between items-center">
-          <h2 className="text-lg font-medium text-gray-800">
-            Unfulfilled Orders
-          </h2>
-          <div className="flex items-center space-x-2">
-            <span className="text-sm text-gray-500">
-              {orders.length} orders
-            </span>
-            <Button
-              variant="secondary"
-              leftIcon={<Filter className="w-4 h-4" />}
-              onClick={onFilter}
-            >
-              Filter
-            </Button>
-          </div>
+    <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+      {/* Header */}
+      <div className="flex items-center justify-between p-4 border-b">
+        <div className="flex items-center gap-4">
+          <h2 className="text-lg font-semibold">Unfulfilled Orders</h2>
+          <span className="text-sm text-gray-500">
+            {filteredOrders.length} orders
+          </span>
         </div>
+        <OrderFilterDropdown onFilter={handleFilter} />
       </div>
+
+      {/* Table */}
       <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
-            <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+        <table className="w-full">
+          <thead>
+            <tr className="bg-gray-50 border-b border-gray-200 text-left">
+              <th className="py-3 px-4 text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Order Details
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="py-3 px-4 text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Customer
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="py-3 px-4 text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Status
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="py-3 px-4 text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Items
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="py-3 px-4 text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Total
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="py-3 px-4 text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Tags
               </th>
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
-            {orders.map((order, index) => (
-              <tr
-                key={index}
-                className={`hover:bg-gray-50 ${
-                  order.priority === "high"
-                    ? "bg-red-50/30"
-                    : order.priority === "medium"
-                    ? "bg-yellow-50/30"
-                    : ""
-                }`}
-              >
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="flex flex-col">
-                    <span className="text-sm font-medium text-gray-900">
-                      {order.orderNumber}
-                    </span>
-                    <span className="text-sm text-gray-500">
-                      {new Date(order.orderDate).toLocaleString("en-US", {
-                        hour: "numeric",
-                        minute: "numeric",
-                        hour12: true,
-                      })}
-                    </span>
-                  </div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <span className="text-sm text-gray-900">
-                    {order.customerName}
-                  </span>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <Badge variant={getPaymentStatusVariant(order.paymentStatus)}>
-                    {order.paymentStatus.replace("_", " ")}
-                  </Badge>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {order.items} {order.items === 1 ? "item" : "items"}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                  {order.totalPrice}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="flex flex-wrap gap-1">
-                    {order.priority === "high" && (
-                      <Badge variant="error">Urgent</Badge>
-                    )}
-                    {order.tags?.map((tag, tagIndex) => (
-                      <Badge key={tagIndex} variant="info">
-                        {tag}
-                      </Badge>
-                    ))}
-                  </div>
+          <tbody className="divide-y divide-gray-200">
+            {filteredOrders.length > 0 ? (
+              filteredOrders.map((order) => (
+                <tr key={order.orderNumber} className="hover:bg-gray-50">
+                  <td className="py-4 px-4">
+                    <div>
+                      <div className="font-medium text-gray-900">
+                        {order.orderNumber}
+                      </div>
+                      <div className="text-sm text-gray-500">
+                        {new Date(order.orderDate).toLocaleTimeString([], {
+                          hour: "numeric",
+                          minute: "2-digit",
+                          hour12: true,
+                        })}
+                      </div>
+                    </div>
+                  </td>
+                  <td className="py-4 px-4">
+                    <div className="font-medium text-gray-900">
+                      {order.customerName}
+                    </div>
+                  </td>
+                  <td className="py-4 px-4">
+                    <Badge variant={getStatusColor(order.paymentStatus)}>
+                      {order.paymentStatus.replace("_", " ")}
+                    </Badge>
+                  </td>
+                  <td className="py-4 px-4">
+                    <div className="text-sm text-gray-900">
+                      {order.items} items
+                    </div>
+                  </td>
+                  <td className="py-4 px-4">
+                    <div className="font-medium text-gray-900">
+                      {order.totalPrice}
+                    </div>
+                  </td>
+                  <td className="py-4 px-4">
+                    <div className="flex flex-wrap gap-2">
+                      {order.tags?.map((tag) => (
+                        <span
+                          key={tag}
+                          className={`px-2 py-1 rounded-full text-xs font-medium ${getTagColor(
+                            tag
+                          )}`}
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan={6} className="py-8 text-center text-gray-500">
+                  No orders match the selected filters
                 </td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
       </div>
-      <div className="px-6 py-4 border-t border-gray-200">
-        <div className="flex justify-between items-center">
-          <span className="text-sm text-gray-500">
-            Showing {orders.length} orders
-          </span>
-          <div className="flex items-center space-x-2">
-            <Button variant="secondary" onClick={onPrevious}>
-              Previous
-            </Button>
-            <Button variant="primary" onClick={onNext}>
-              Next
-            </Button>
-          </div>
-        </div>
+
+      {/* Pagination */}
+      <div className="flex items-center justify-end gap-2 p-4 border-t">
+        <Button variant="secondary" onClick={onPrevious}>
+          Previous
+        </Button>
+        <Button variant="secondary" onClick={onNext}>
+          Next
+        </Button>
       </div>
     </div>
   );

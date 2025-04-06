@@ -110,7 +110,7 @@ const FilterButton: React.FC<FilterButtonProps> = ({ onFilterSelect }) => {
         createPortal(
           <div
             ref={dropdownRef}
-            className="fixed w-56 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-[9999]"
+            className="fixed w-56 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-[999]"
             style={{
               top: `${dropdownPosition.top}px`,
               left: `${dropdownPosition.left}px`,

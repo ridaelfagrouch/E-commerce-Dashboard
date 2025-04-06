@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Calendar, Download } from "lucide-react";
 import Button from "../../components/atoms/Button/Button";
 import Chart, { Scale, CoreScaleOptions } from "chart.js/auto";
@@ -7,6 +7,7 @@ import StatsGrid from "../../components/organisms/StatsGrid/StatsGrid";
 import OrdersSection from "../../components/organisms/OrdersSection/OrdersSection";
 import TrafficAnalytics from "../../components/organisms/TrafficAnalytics/TrafficAnalytics";
 import UnfulfilledOrdersTable from "../../components/organisms/UnfulfilledOrdersTable/UnfulfilledOrdersTable";
+import ExportModal from "../../components/organisms/ExportModal/ExportModal";
 
 interface UnfulfilledOrder {
   orderNumber: string;
@@ -46,6 +47,7 @@ interface VisitorLocation {
 }
 
 const Analytics: React.FC = () => {
+  const [showExportModal, setShowExportModal] = useState(false);
   const salesChartRef = useRef<HTMLCanvasElement | null>(null);
   const salesChartInstance = useRef<Chart | null>(null);
 
@@ -101,6 +103,76 @@ const Analytics: React.FC = () => {
       items: 5,
       tags: ["Priority"],
       priority: "high",
+    },
+    {
+      orderNumber: "#ORD-2024-1872",
+      customerName: "Alex Thompson",
+      orderDate: "2024-03-15T08:30:00",
+      paymentStatus: "pending",
+      totalPrice: "$432.75",
+      items: 4,
+      tags: ["Urgent", "Express"],
+      priority: "high",
+    },
+    {
+      orderNumber: "#ORD-2024-1871",
+      customerName: "Maria Garcia",
+      orderDate: "2024-03-15T08:15:00",
+      paymentStatus: "failed",
+      totalPrice: "$156.80",
+      items: 1,
+      tags: ["International"],
+      priority: "low",
+    },
+    {
+      orderNumber: "#ORD-2024-1870",
+      customerName: "James Wilson",
+      orderDate: "2024-03-15T08:00:00",
+      paymentStatus: "paid",
+      totalPrice: "$789.99",
+      items: 6,
+      tags: ["Fragile", "Priority"],
+      priority: "medium",
+    },
+    {
+      orderNumber: "#ORD-2024-1869",
+      customerName: "Sophie Martin",
+      orderDate: "2024-03-15T07:45:00",
+      paymentStatus: "pending",
+      totalPrice: "$345.50",
+      items: 3,
+      tags: ["Express"],
+      priority: "medium",
+    },
+    {
+      orderNumber: "#ORD-2024-1868",
+      customerName: "David Lee",
+      orderDate: "2024-03-15T07:30:00",
+      paymentStatus: "refunded",
+      totalPrice: "$234.25",
+      items: 2,
+      tags: ["International", "Fragile"],
+      priority: "low",
+    },
+    {
+      orderNumber: "#ORD-2024-1867",
+      customerName: "Emily Brown",
+      orderDate: "2024-03-15T07:15:00",
+      paymentStatus: "paid",
+      totalPrice: "$678.00",
+      items: 5,
+      tags: ["Urgent", "Priority"],
+      priority: "high",
+    },
+    {
+      orderNumber: "#ORD-2024-1866",
+      customerName: "Lucas Anderson",
+      orderDate: "2024-03-15T07:00:00",
+      paymentStatus: "partially_refunded",
+      totalPrice: "$445.75",
+      items: 4,
+      tags: ["Express", "International"],
+      priority: "medium",
     },
   ];
 
@@ -179,8 +251,13 @@ const Analytics: React.FC = () => {
   ];
 
   const handleExportData = () => {
-    // Implement data export functionality
-    console.log("Exporting data...");
+    setShowExportModal(true);
+  };
+
+  const handleExport = (format: string, dateRange: string) => {
+    // Implement the actual export logic here
+    console.log(`Exporting data in ${format} format for ${dateRange}`);
+    // You can add the actual export implementation here
   };
 
   // Initialize sales chart
@@ -308,6 +385,14 @@ const Analytics: React.FC = () => {
           onPrevious={() => {}}
           onNext={() => {}}
         />
+
+        {/* Export Modal */}
+        {showExportModal && (
+          <ExportModal
+            onClose={() => setShowExportModal(false)}
+            onExport={handleExport}
+          />
+        )}
       </div>
     </div>
   );

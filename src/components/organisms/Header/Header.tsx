@@ -77,8 +77,8 @@ const Header: React.FC<HeaderProps> = ({
   const unreadCount = notifications.filter((n) => !n.read).length;
 
   return (
-    <header className={`bg-white shadow-sm ${className}`}>
-      <div className="flex justify-between items-center p-4">
+    <header className={`bg-white shadow-sm z-[9999] relative ${className}`}>
+      <div className="flex justify-between items-center p-4 ">
         <div className="flex items-center w-full max-w-xs lg:max-w-md pl-12 lg:pl-0">
           <div className="relative w-full">
             <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">

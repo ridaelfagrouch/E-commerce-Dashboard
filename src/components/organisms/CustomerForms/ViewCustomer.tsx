@@ -67,27 +67,27 @@ const ViewCustomer: React.FC<ViewCustomerProps> = ({
 
   return (
     <div className="fixed inset-0 bg-black/25 backdrop-blur-sm z-50 flex items-center justify-center p-4 h-screen">
-      <div className="bg-white rounded-xl shadow-xl w-full max-w-2xl transform transition-all duration-300 ease-out scale-100 opacity-100">
-        {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b">
+      <div className="bg-white rounded-xl shadow-xl w-full max-w-2xl max-h-[90vh] flex flex-col transform transition-all duration-300 ease-out scale-100 opacity-100">
+        {/* Header - Fixed */}
+        <div className="flex items-center justify-between p-4 sm:p-6 border-b shrink-0">
           <div>
-            <h2 className="text-xl font-semibold text-gray-900">
+            <h2 className="text-lg sm:text-xl font-semibold text-gray-900">
               Customer Details
             </h2>
             <p className="mt-1 text-sm text-gray-500">
-              View detailed information about this customer.
+              View detailed information about this customer
             </p>
           </div>
           <button
             onClick={onClose}
             className="p-2 hover:bg-gray-100 rounded-full transition-colors"
           >
-            <X className="w-5 h-5 text-gray-500" />
+            <X className="w-5 h-5" />
           </button>
         </div>
 
-        {/* Content */}
-        <div className="p-6">
+        {/* Content - Scrollable */}
+        <div className="p-4 sm:p-6 overflow-y-auto">
           {/* Customer Header */}
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-6 pb-6 border-b">
             <div className="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center flex-shrink-0">
@@ -127,7 +127,9 @@ const ViewCustomer: React.FC<ViewCustomerProps> = ({
                 </div>
                 <div>
                   <p className="text-sm text-gray-500">Email</p>
-                  <p className="text-sm font-medium">{customer.email}</p>
+                  <p className="text-sm font-medium break-all">
+                    {customer.email}
+                  </p>
                 </div>
               </div>
 
@@ -214,8 +216,8 @@ const ViewCustomer: React.FC<ViewCustomerProps> = ({
           </div>
         </div>
 
-        {/* Footer */}
-        <div className="flex justify-end gap-3 p-6 bg-gray-50 border-t rounded-b-xl">
+        {/* Footer - Fixed */}
+        <div className="flex justify-end gap-3 p-4 sm:p-6 bg-gray-50 border-t rounded-b-xl mt-auto shrink-0">
           <Button variant="ghost" onClick={onClose}>
             Close
           </Button>

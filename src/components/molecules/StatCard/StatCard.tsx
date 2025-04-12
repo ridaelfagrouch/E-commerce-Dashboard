@@ -1,5 +1,6 @@
 import React from "react";
 import { TrendingUp, TrendingDown } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 interface StatCardProps {
   title: string;
@@ -24,6 +25,8 @@ const StatCard: React.FC<StatCardProps> = ({
   iconColor = "text-indigo-600",
   className = "",
 }) => {
+  const { t } = useTranslation();
+
   return (
     <div className={`bg-white rounded-lg shadow p-4 sm:p-6 ${className}`}>
       <div className="flex items-center">
@@ -33,7 +36,7 @@ const StatCard: React.FC<StatCardProps> = ({
           {icon}
         </div>
         <div>
-          <p className="text-gray-500 text-sm">{title}</p>
+          <p className="text-gray-500 text-sm">{t(title)}</p>
           <p className="text-xl sm:text-2xl font-semibold text-gray-800">
             {value}
           </p>
@@ -49,7 +52,9 @@ const StatCard: React.FC<StatCardProps> = ({
                 <TrendingDown className="w-3 h-3 mr-1" />
               )}
               {trend.value}%{" "}
-              {trend.text || (trend.isPositive ? "increase" : "decrease")}
+              {trend.text
+                ? t(trend.text)
+                : t(trend.isPositive ? "common.increase" : "common.decrease")}
             </p>
           )}
         </div>

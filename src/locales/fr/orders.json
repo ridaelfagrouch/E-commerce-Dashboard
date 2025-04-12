@@ -1,0 +1,163 @@
+{
+  "orders": {
+    "title": "Commandes",
+    "description": "Gérer vos commandes",
+    "filters": {
+      "title": "Filtrer les commandes",
+      "all": "Toutes les commandes",
+      "all_statuses": "Tous les statuts",
+      "completed": "Terminée",
+      "processing": "En cours",
+      "pending": "En attente",
+      "shipped": "Expédiée",
+      "cancelled": "Annulée",
+      "search_placeholder": "Rechercher des commandes...",
+      "date_range": "Période",
+      "date_range_label": "Période",
+      "price_range": "Fourchette de prix",
+      "price_range_label": "Fourchette de prix",
+      "min_price": "Prix minimum",
+      "max_price": "Prix maximum",
+      "status": "Statut",
+      "status_label": "Statut",
+      "clear_filters": "Effacer les filtres",
+      "apply_filters": "Appliquer les filtres",
+      "date_ranges": {
+        "all": "Tout le temps",
+        "today": "Aujourd'hui",
+        "week": "Cette semaine",
+        "month": "Ce mois",
+        "year": "Cette année",
+        "custom": "Période personnalisée"
+      },
+      "start_date": "Date de début",
+      "end_date": "Date de fin"
+    },
+    "stats": {
+      "total_orders": "Total des commandes",
+      "today_orders": "Commandes du jour",
+      "average_order_value": "Valeur moyenne des commandes"
+    },
+    "activity": {
+      "title": "Activité des commandes",
+      "today": "Aujourd'hui",
+      "periods": {
+        "today": "Aujourd'hui",
+        "this_week": "Cette semaine",
+        "this_month": "Ce mois"
+      },
+      "orders_count": "{{count}} commandes",
+      "total_orders": "Total des commandes",
+      "total_revenue": "Total des revenus",
+      "order_status": "Statut de la commande",
+      "status_breakdown": "Répartition des statuts des commandes",
+      "orders_for_hour": "Commandes pour le {{date}}",
+      "orders_this_hour": "Commandes de cette heure",
+      "revenue_this_hour": "Revenus de cette heure",
+      "percentage_of_total": "{{percentage}}% du total",
+      "high_activity": "Activité élevée",
+      "medium_activity": "Activité moyenne",
+      "low_activity": "Activité faible"
+    },
+    "status": {
+      "completed": "Terminée",
+      "processing": "En cours",
+      "pending": "En attente",
+      "shipped": "Expédiée",
+      "cancelled": "Annulée"
+    },
+    "actions": {
+      "filter": "Filtrer",
+      "export": "Exporter",
+      "new_order": "Nouvelle commande",
+      "view": "Voir",
+      "edit": "Modifier",
+      "delete": "Supprimer"
+    },
+    "table": {
+      "id": "ID de commande",
+      "customer": "Client",
+      "date": "Date",
+      "status": "Statut",
+      "amount": "Montant",
+      "items": "Articles",
+      "actions": "Actions"
+    },
+    "export": {
+      "title": "Exporter les commandes",
+      "format_label": "Format d'exportation",
+      "date_range_label": "Période",
+      "export_button": "Exporter",
+      "date_ranges": {
+        "all": "Tout le temps",
+        "today": "Aujourd'hui",
+        "week": "Cette semaine",
+        "month": "Ce mois",
+        "year": "Cette année",
+        "custom": "Période personnalisée"
+      },
+      "start_date": "Date de début",
+      "end_date": "Date de fin"
+    },
+    "new": {
+      "title": "Créer une nouvelle commande",
+      "select_products": "Sélectionner les produits",
+      "customer_details": "Détails du client",
+      "search_placeholder": "Rechercher des produits...",
+      "stock": "Stock",
+      "add_to_order": "Ajouter à la commande",
+      "selected_products": "Produits sélectionnés",
+      "no_products": "Aucun produit sélectionné",
+      "quantity": "Quantité",
+      "total": "Total",
+      "customer_information": "Informations client",
+      "customer_name": "Nom du client",
+      "email_address": "Adresse e-mail",
+      "phone_number": "Numéro de téléphone",
+      "order_notes": "Notes de commande",
+      "enter_customer_name": "Entrez le nom du client",
+      "enter_email_address": "Entrez l'adresse e-mail",
+      "enter_phone_number": "Entrez le numéro de téléphone",
+      "add_any_special_instructions_or_notes": "Ajoutez des instructions ou notes spéciales",
+      "order_summary": "Résumé de la commande",
+      "back_to_products": "Retour aux produits",
+      "create_order": "Créer la commande",
+      "continue_to_details": "Continuer vers les détails"
+    },
+    "view": {
+      "title": "Détails de la commande",
+      "customer_info": "Informations client",
+      "customer_name": "Nom du client",
+      "email": "E-mail",
+      "phone": "Téléphone",
+      "order_items": "Articles de la commande",
+      "quantity": "Quantité",
+      "each": "chacun",
+      "total": "Total"
+    },
+    "edit": {
+      "title": "Modifier la commande",
+      "status": "Statut de la commande",
+      "select_status": "Sélectionner le statut",
+      "date": "Date de commande",
+      "customer_info": "Informations client",
+      "customer_name": "Nom du client",
+      "email": "E-mail",
+      "phone": "Téléphone",
+      "order_items": "Articles de la commande",
+      "items_read_only": "Les articles de la commande ne peuvent pas être modifiés après la création",
+      "total": "Total",
+      "errors": {
+        "customer_name_required": "Le nom du client est requis",
+        "status_required": "Le statut de la commande est requis",
+        "date_required": "La date de commande est requise"
+      }
+    },
+    "delete": {
+      "title": "Supprimer la commande",
+      "confirmation_message": "Êtes-vous sûr de vouloir supprimer cette commande ?",
+      "warning_message": "Cette action ne peut pas être annulée.",
+      "confirm_button": "Supprimer la commande"
+    }
+  }
+}

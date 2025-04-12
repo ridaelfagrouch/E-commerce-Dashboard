@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import {
   DollarSign,
   CheckCircle,
@@ -66,6 +67,7 @@ interface ColumnWithoutCell<T> extends BaseColumn<T> {
 type Column<T> = ColumnWithCell<T, keyof T> | ColumnWithoutCell<T>;
 
 const Dashboard: React.FC = () => {
+  const { t } = useTranslation();
   // State for chart period selection
   const [chartPeriod, setChartPeriod] = useState<"week" | "month" | "year">(
     "week"
@@ -390,37 +392,53 @@ const Dashboard: React.FC = () => {
   const statsCards = [
     {
       id: "1",
-      title: "Today's Revenue",
+      title: t("dashboard.stats.today_revenue"),
       value: "$1,245.89",
       icon: <DollarSign className="w-6 h-6" />,
-      trend: { value: 8.2, isPositive: true, text: "vs yesterday" },
+      trend: {
+        value: 8.2,
+        isPositive: true,
+        text: t("dashboard.stats.vs_yesterday"),
+      },
       iconBgColor: "bg-indigo-100",
       iconColor: "text-indigo-600",
     },
     {
       id: "2",
-      title: "Orders Completed",
+      title: t("dashboard.stats.orders_completed"),
       value: "24",
       icon: <CheckCircle className="w-6 h-6" />,
-      trend: { value: 4.7, isPositive: true, text: "vs yesterday" },
+      trend: {
+        value: 4.7,
+        isPositive: true,
+        text: t("dashboard.stats.vs_yesterday"),
+      },
       iconBgColor: "bg-green-100",
       iconColor: "text-green-600",
     },
     {
       id: "3",
-      title: "New Customers",
+      title: t("dashboard.stats.new_customers"),
       value: "8",
       icon: <Users className="w-6 h-6" />,
-      trend: { value: 12.5, isPositive: true, text: "vs yesterday" },
+      trend: {
+        value: 12.5,
+        isPositive: true,
+        text: t("dashboard.stats.vs_yesterday"),
+      },
       iconBgColor: "bg-blue-100",
       iconColor: "text-blue-600",
     },
     {
       id: "4",
-      title: "Low Stock Items",
+      title: t("dashboard.stats.low_stock"),
       value: "12",
       icon: <Package className="w-6 h-6" />,
-      trend: { value: 3, isPositive: false, text: "items need restock" },
+      trend: {
+        value: 3,
+        isPositive: false,
+        text: t("dashboard.stats.items_need_restock"),
+      },
       iconBgColor: "bg-yellow-100",
       iconColor: "text-yellow-600",
     },
@@ -428,9 +446,9 @@ const Dashboard: React.FC = () => {
 
   // Time period options for charts
   const timePeriodOptions = [
-    { id: "week", label: "This Week" },
-    { id: "month", label: "This Month" },
-    { id: "year", label: "This Year" },
+    { id: "week", label: t("dashboard.charts.time_periods.this_week") },
+    { id: "month", label: t("dashboard.charts.time_periods.this_month") },
+    { id: "year", label: t("dashboard.charts.time_periods.this_year") },
   ];
 
   // Chart configurations
@@ -554,10 +572,8 @@ const Dashboard: React.FC = () => {
   return (
     <div className="space-y-6 mb-6 mx-auto max-w-7xl">
       <div className="mb-6">
-        <h1 className="text-2xl font-bold">Dashboard</h1>
-        <p className="text-gray-500">
-          Welcome back! Here's what's happening with your store today.
-        </p>
+        <h1 className="text-2xl font-bold">{t("dashboard.title")}</h1>
+        <p className="text-gray-500">{t("dashboard.welcome")}</p>
       </div>
 
       {/* Stats Cards */}
@@ -580,7 +596,7 @@ const Dashboard: React.FC = () => {
         {/* Sales Over Time Chart */}
         <div className="lg:col-span-2">
           <ChartCard
-            title="Sales Performance"
+            title={t("dashboard.charts.sales_performance")}
             icon={<BarChart2 className="w-5 h-5" />}
             tabs={timePeriodOptions}
             activeTab={chartPeriod}
@@ -596,14 +612,14 @@ const Dashboard: React.FC = () => {
         {/* Category Distribution Chart */}
         <div className="lg:col-span-1">
           <ChartCard
-            title="Sales by Category"
+            title={t("dashboard.charts.sales_by_category")}
             icon={<PieChart className="w-5 h-5" />}
             chartConfig={categoryChartConfig}
             chartHeight={300}
             aspectRatio={1}
             footer={
               <div className="pt-2 text-sm text-gray-500 flex items-center justify-center">
-                <span>Total Products: 247</span>
+                <span>{t("dashboard.charts.total_products")}: 247</span>
               </div>
             }
           />
@@ -614,12 +630,12 @@ const Dashboard: React.FC = () => {
       <div className="space-y-6">
         {/* Recent Orders */}
         <DataTable
-          title="Recent Orders"
+          title={t("dashboard.charts.recent_orders")}
           data={recentOrders}
           columns={orderColumns}
           actionButton={
             <Button variant="ghost" className="text-sm">
-              View all
+              {t("dashboard.charts.view_all")}
             </Button>
           }
         />
@@ -627,9 +643,11 @@ const Dashboard: React.FC = () => {
         {/* Top Products */}
         <div className="bg-white rounded-lg shadow overflow-hidden">
           <div className="p-4 border-b flex justify-between items-center">
-            <h2 className="text-lg font-medium">Top Products</h2>
+            <h2 className="text-lg font-medium">
+              {t("dashboard.charts.top_products")}
+            </h2>
             <Button variant="ghost" className="text-sm">
-              View all
+              {t("dashboard.charts.view_all")}
             </Button>
           </div>
           <div className="p-4">
@@ -666,10 +684,10 @@ const Dashboard: React.FC = () => {
                         }
                       >
                         {product.inventory === "in_stock"
-                          ? "In Stock"
+                          ? t("dashboard.product_status.in_stock")
                           : product.inventory === "low_stock"
-                          ? "Low Stock"
-                          : "Out of Stock"}
+                          ? t("dashboard.product_status.low_stock")
+                          : t("dashboard.product_status.out_of_stock")}
                       </Badge>
                     </div>
                     <div className="mt-3 flex justify-between items-center">
@@ -692,7 +710,7 @@ const Dashboard: React.FC = () => {
                         leftIcon={<Edit size={16} />}
                         onClick={() => handleEditProduct(product)}
                       >
-                        Edit
+                        {t("dashboard.actions.edit")}
                       </Button>
                       <Button
                         variant="ghost"
@@ -701,7 +719,7 @@ const Dashboard: React.FC = () => {
                         leftIcon={<Eye size={16} />}
                         onClick={() => handleViewProduct(product)}
                       >
-                        View
+                        {t("dashboard.actions.view")}
                       </Button>
                     </div>
                   </div>

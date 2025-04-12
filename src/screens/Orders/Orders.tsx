@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import StatCard from "../../components/molecules/StatCard/StatCard";
 import {
   Package,
@@ -20,60 +21,27 @@ import ExportOrders from "../../components/organisms/OrderForms/ExportOrders";
 import NewOrder from "../../components/organisms/OrderForms/NewOrder";
 import FilterOrders from "../../components/organisms/OrderForms/FilterOrders";
 
-const filterOptions = [
-  { id: "all", label: "All" },
-  { id: "completed", label: "Completed" },
-  { id: "processing", label: "Processing" },
-  { id: "shipped", label: "Shipped" },
-  { id: "pending", label: "Pending" },
-  { id: "cancelled", label: "Cancelled" },
-];
+interface OrderFormData {
+  customerName: string;
+  total: number;
+  products: Array<{ id: string; quantity: number }>;
+}
 
-const statsCards = [
-  {
-    title: "Total Orders",
-    value: "256",
-    icon: <Package size={24} />,
-    trend: {
-      value: 12.5,
-      isPositive: true,
-      text: "vs last month",
-    },
-    iconBgColor: "bg-indigo-100",
-    iconColor: "text-indigo-600",
-  },
-  {
-    title: "Today's Orders",
-    value: "24",
-    icon: <Calendar size={24} />,
-    trend: {
-      value: 5.2,
-      isPositive: true,
-      text: "vs yesterday",
-    },
-    iconBgColor: "bg-green-100",
-    iconColor: "text-green-600",
-  },
-  {
-    title: "Average Order Value",
-    value: "$85.40",
-    icon: <DollarSign size={24} />,
-    trend: {
-      value: 3.8,
-      isPositive: true,
-      text: "vs last month",
-    },
-    iconBgColor: "bg-purple-100",
-    iconColor: "text-purple-600",
-  },
-];
+interface FilterData {
+  dateRange: string;
+  priceRange: {
+    min: string;
+    max: string;
+  };
+  statuses: string[];
+}
 
 const initialOrders: Order[] = [
   {
     id: "#ORD-5289",
     customer: "Sarah Johnson",
     date: "Apr 1, 2025",
-    status: "Completed",
+    status: "completed",
     amount: 128.5,
     items: 2,
   },
@@ -81,7 +49,7 @@ const initialOrders: Order[] = [
     id: "#ORD-5288",
     customer: "Michael Chen",
     date: "Apr 1, 2025",
-    status: "Processing",
+    status: "processing",
     amount: 74.99,
     items: 1,
   },
@@ -89,7 +57,7 @@ const initialOrders: Order[] = [
     id: "#ORD-5287",
     customer: "Emma Rodriguez",
     date: "Mar 31, 2025",
-    status: "Shipped",
+    status: "completed",
     amount: 219.0,
     items: 3,
   },
@@ -97,7 +65,7 @@ const initialOrders: Order[] = [
     id: "#ORD-5286",
     customer: "Daniel Kim",
     date: "Mar 31, 2025",
-    status: "Pending",
+    status: "pending",
     amount: 65.25,
     items: 1,
   },
@@ -105,7 +73,7 @@ const initialOrders: Order[] = [
     id: "#ORD-5285",
     customer: "Lisa Wong",
     date: "Mar 30, 2025",
-    status: "Completed",
+    status: "completed",
     amount: 95.75,
     items: 2,
   },
@@ -113,7 +81,7 @@ const initialOrders: Order[] = [
     id: "#ORD-5284",
     customer: "Jacob Miller",
     date: "Mar 30, 2025",
-    status: "Cancelled",
+    status: "cancelled",
     amount: 42.99,
     items: 1,
   },
@@ -121,7 +89,7 @@ const initialOrders: Order[] = [
     id: "#ORD-5283",
     customer: "Olivia Taylor",
     date: "Mar 29, 2025",
-    status: "Completed",
+    status: "completed",
     amount: 156.8,
     items: 4,
   },
@@ -129,13 +97,14 @@ const initialOrders: Order[] = [
     id: "#ORD-5282",
     customer: "Noah Brown",
     date: "Mar 29, 2025",
-    status: "Shipped",
+    status: "completed",
     amount: 87.5,
     items: 2,
   },
 ];
 
 export const Orders: React.FC = () => {
+  const { t } = useTranslation();
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
   const [orders, setOrders] = useState<Order[]>(initialOrders);
@@ -147,12 +116,64 @@ export const Orders: React.FC = () => {
   const totalOrders = 1286;
   const ordersPerPage = 8;
 
+  const filterOptions = [
+    { id: "all", label: t("orders.filters.all") },
+    { id: "completed", label: t("orders.status.completed") },
+    { id: "processing", label: t("orders.status.processing") },
+    { id: "shipped", label: t("orders.status.shipped") },
+    { id: "pending", label: t("orders.status.pending") },
+    { id: "cancelled", label: t("orders.status.cancelled") },
+  ];
+
+  const statsCards = [
+    {
+      title: t("orders.stats.total_orders"),
+      value: "256",
+      icon: <Package size={24} />,
+      trend: {
+        value: 12.5,
+        isPositive: true,
+        text: t("common.vs_last_month"),
+      },
+      iconBgColor: "bg-indigo-100",
+      iconColor: "text-indigo-600",
+    },
+    {
+      title: t("orders.stats.today_orders"),
+      value: "24",
+      icon: <Calendar size={24} />,
+      trend: {
+        value: 5.2,
+        isPositive: true,
+        text: t("common.vs_yesterday"),
+      },
+      iconBgColor: "bg-green-100",
+      iconColor: "text-green-600",
+    },
+    {
+      title: t("orders.stats.average_order_value"),
+      value: "$85.40",
+      icon: <DollarSign size={24} />,
+      trend: {
+        value: 3.8,
+        isPositive: true,
+        text: t("common.vs_last_month"),
+      },
+      iconBgColor: "bg-purple-100",
+      iconColor: "text-purple-600",
+    },
+  ];
+
   // Filter Orders based on status and search term
   const filteredOrders = orders
     .filter((order) => {
       const searchLower = searchTerm.toLowerCase();
+      const customerName =
+        typeof order.customer === "string"
+          ? order.customer
+          : order.customer.name;
       return (
-        order.customer.toLowerCase().includes(searchLower) ||
+        customerName.toLowerCase().includes(searchLower) ||
         order.id.toLowerCase().includes(searchLower)
       );
     })
@@ -171,7 +192,7 @@ export const Orders: React.FC = () => {
     console.log("Exporting orders:", { format, dateRange });
   };
 
-  const handleNewOrder = (orderData: any) => {
+  const handleNewOrder = (orderData: OrderFormData) => {
     // Implement new order creation
     console.log("Creating new order:", orderData);
     const newOrder: Order = {
@@ -182,14 +203,14 @@ export const Orders: React.FC = () => {
         day: "numeric",
         year: "numeric",
       }),
-      status: "Pending",
+      status: "pending",
       amount: orderData.total,
       items: orderData.products.length,
     };
     setOrders([newOrder, ...orders]);
   };
 
-  const handleApplyFilters = (filters: any) => {
+  const handleApplyFilters = (filters: FilterData) => {
     // Implement filter functionality
     console.log("Applying filters:", filters);
   };
@@ -197,21 +218,24 @@ export const Orders: React.FC = () => {
   return (
     <div className="space-y-6 mb-6 mx-auto max-w-7xl">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <h1 className="text-2xl font-bold">Orders</h1>
+        <div className="flex flex-col">
+          <h1 className="text-2xl font-bold">{t("orders.title")}</h1>
+          <p className="text-gray-500">{t("orders.description")}</p>
+        </div>
         <div className="flex flex-wrap gap-3">
           <Button
             variant="secondary"
             leftIcon={<Download size={16} />}
             onClick={() => setShowExportModal(true)}
           >
-            Export
+            {t("orders.actions.export")}
           </Button>
           <Button
             variant="primary"
             leftIcon={<Plus size={16} />}
             onClick={() => setShowNewOrderModal(true)}
           >
-            New Order
+            {t("orders.actions.new_order")}
           </Button>
         </div>
       </div>
@@ -232,11 +256,13 @@ export const Orders: React.FC = () => {
 
       <div className="bg-white rounded-lg shadow overflow-hidden">
         <div className="p-4 border-b flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-          <h2 className="text-lg font-medium">Order Filters</h2>
+          <h2 className="text-lg font-medium">
+            {t("orders.filters.all_statuses")}
+          </h2>
           <div className="flex flex-wrap gap-2 w-full sm:w-auto">
             <div className="w-full sm:w-64">
               <SearchInput
-                placeholder="Search orders..."
+                placeholder={t("orders.filters.search_placeholder")}
                 value={searchTerm}
                 onChange={handleSearch}
               />
@@ -247,7 +273,7 @@ export const Orders: React.FC = () => {
               rightIcon={<ChevronDown size={14} />}
               onClick={() => setShowFilterModal(true)}
             >
-              Filters
+              {t("orders.actions.filter")}
             </Button>
           </div>
         </div>

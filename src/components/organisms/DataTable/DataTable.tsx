@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
 import { Image as ImageIcon } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 interface Column {
   id: string;
@@ -27,11 +28,13 @@ const DataTable: React.FC<DataTableProps> = ({
   actionButton,
   variant = "default",
 }) => {
+  const { t } = useTranslation();
+
   if (variant === "product") {
     return (
       <div className="bg-white rounded-lg shadow overflow-hidden">
         <div className="p-4 border-b flex justify-between items-center">
-          <h2 className="text-lg font-semibold text-gray-800">{title}</h2>
+          <h2 className="text-lg font-semibold text-gray-800">{t(title)}</h2>
           {actionButton}
         </div>
         <div className="p-4">
@@ -90,7 +93,7 @@ const DataTable: React.FC<DataTableProps> = ({
   return (
     <div className="bg-white rounded-lg shadow overflow-hidden">
       <div className="p-4 border-b flex justify-between items-center">
-        <h2 className="text-lg font-semibold text-gray-800">{title}</h2>
+        <h2 className="text-lg font-semibold text-gray-800">{t(title)}</h2>
         {actionButton}
       </div>
 

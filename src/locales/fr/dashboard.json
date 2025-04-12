@@ -1,0 +1,36 @@
+{
+  "dashboard": {
+    "title": "Tableau de Bord",
+    "welcome": "Bienvenue ! Voici ce qui se passe dans votre boutique aujourd'hui.",
+    "stats": {
+      "today_revenue": "Revenu du Jour",
+      "orders_completed": "Commandes Terminées",
+      "new_customers": "Nouveaux Clients",
+      "low_stock": "Articles en Stock Faible",
+      "vs_yesterday": "vs hier",
+      "items_need_restock": "articles à réapprovisionner"
+    },
+    "charts": {
+      "sales_performance": "Performance des Ventes",
+      "sales_by_category": "Ventes par Catégorie",
+      "total_products": "Total des Produits",
+      "time_periods": {
+        "this_week": "Cette Semaine",
+        "this_month": "Ce Mois",
+        "this_year": "Cette Année"
+      },
+      "recent_orders": "Commandes Récentes",
+      "top_products": "Meilleurs Produits",
+      "view_all": "Voir tout"
+    },
+    "product_status": {
+      "in_stock": "En Stock",
+      "low_stock": "Stock Faible",
+      "out_of_stock": "Rupture de Stock"
+    },
+    "actions": {
+      "edit": "Modifier",
+      "view": "Voir"
+    }
+  }
+}

@@ -1,0 +1,83 @@
+{
+  "products": {
+    "title": "Products",
+    "description": "Manage your product catalog",
+    "filters": {
+      "all_categories": "All Categories",
+      "electronics": "Electronics",
+      "fitness": "Fitness",
+      "food_beverage": "Food & Beverage",
+      "accessories": "Accessories",
+      "lifestyle": "Lifestyle",
+      "search_placeholder": "Search products..."
+    },
+    "stats": {
+      "total_products": "Total Products",
+      "low_stock": "Low Stock",
+      "out_of_stock": "Out of Stock",
+      "active_products": "Active Products"
+    },
+    "actions": {
+      "add_product": "Add Product",
+      "export": "Export Products",
+      "import": "Import Products",
+      "bulk_edit": "Bulk Edit"
+    },
+    "view": {
+      "title": "View Product",
+      "name_label": "Product Name",
+      "category_label": "Category",
+      "price_label": "Price",
+      "stock_status_label": "Stock Status",
+      "stock_units": "{{count}} units in stock",
+      "total_sales_label": "Total Sales",
+      "units_sold": "{{count}} units sold",
+      "total_revenue_label": "Total Revenue",
+      "description_label": "Description",
+      "image_alt": "{{name}} product image"
+    },
+    "form": {
+      "add_title": "Add New Product",
+      "edit_title": "Edit Product",
+      "image_label": "Product Image",
+      "image_upload_text": "Click to upload or drag and drop",
+      "image_upload_hint": "Max file size: 5MB",
+      "image_preview_alt": "Product image preview",
+      "name_label": "Product Name",
+      "name_placeholder": "Enter product name",
+      "category_label": "Category",
+      "category_placeholder": "Select a category",
+      "price_label": "Price",
+      "price_placeholder": "Enter price",
+      "stock_label": "Stock",
+      "stock_placeholder": "Enter stock quantity",
+      "sales_label": "Total Sales",
+      "sales_placeholder": "Sales quantity",
+      "status_label": "Status",
+      "description_label": "Description",
+      "description_placeholder": "Enter product description",
+      "save_button": "Save Changes",
+      "add_button": "Add Product",
+      "errors": {
+        "name_required": "Product name is required",
+        "category_required": "Category is required",
+        "price_positive": "Price must be greater than 0",
+        "stock_negative": "Stock cannot be negative",
+        "image_required": "Product image is required",
+        "image_size": "Image size must be less than 5MB"
+      }
+    },
+    "categories": {
+      "electronics": "Electronics",
+      "fitness": "Fitness",
+      "food_beverage": "Food & Beverage",
+      "accessories": "Accessories",
+      "lifestyle": "Lifestyle"
+    },
+    "status": {
+      "in_stock": "In Stock",
+      "low_stock": "Low Stock",
+      "out_of_stock": "Out of Stock"
+    }
+  }
+}

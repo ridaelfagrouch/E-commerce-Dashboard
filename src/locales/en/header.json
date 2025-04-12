@@ -1,0 +1,9 @@
+{
+  "header": {
+    "search_placeholder": "Search...",
+    "language": "Language",
+    "notifications": "Notifications",
+    "mark_all_read": "Mark all as read",
+    "no_notifications": "No new notifications"
+  }
+}

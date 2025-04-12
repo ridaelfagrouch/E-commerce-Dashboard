@@ -1,0 +1,10 @@
+{
+  "navigation": {
+    "dashboard": "Tableau de bord",
+    "orders": "Commandes",
+    "products": "Produits",
+    "customers": "Clients",
+    "analytics": "Analytiques",
+    "settings": "Paramètres"
+  }
+}

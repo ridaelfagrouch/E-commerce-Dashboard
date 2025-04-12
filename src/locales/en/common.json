@@ -1,0 +1,33 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "success": "Success",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "view": "View",
+    "search": "Search",
+    "filter": "Filter",
+    "sort": "Sort",
+    "date": "Date",
+    "status": "Status",
+    "actions": "Actions",
+    "no_results": "No results found",
+    "showing": "Showing",
+    "of": "of",
+    "items": "items",
+    "per_page": "per page",
+    "next": "Next",
+    "previous": "Previous",
+    "first": "First",
+    "last": "Last",
+    "close": "Close",
+    "vs_yesterday": "vs yesterday",
+    "vs_last_month": "vs last month",
+    "since_last_month": "since last month"
+  }
+}
+
+

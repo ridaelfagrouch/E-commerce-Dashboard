@@ -1,7 +1,7 @@
 import React from "react";
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: "primary" | "secondary" | "ghost" | "filter";
+  variant?: "primary" | "secondary" | "ghost" | "filter" | "danger";
   size?: "sm" | "md" | "lg";
   leftIcon?: React.ReactNode;
   rightIcon?: React.ReactNode;
@@ -31,6 +31,7 @@ const Button: React.FC<ButtonProps> = ({
     filter: isActive
       ? `${activeColor || "bg-indigo-100 text-indigo-800"}`
       : "bg-gray-100 hover:bg-gray-200",
+    danger: "bg-red-600 text-white hover:bg-red-700",
   };
 
   const sizes = {

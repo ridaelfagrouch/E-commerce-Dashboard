@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { X, Plus, Search, Trash2, ChevronRight, ArrowLeft } from "lucide-react";
 import Button from "../../atoms/Button/Button";
 
@@ -28,6 +29,7 @@ interface NewOrderProps {
 }
 
 const NewOrder: React.FC<NewOrderProps> = ({ onClose, onSubmit }) => {
+  const { t } = useTranslation();
   const [step, setStep] = useState<1 | 2>(1);
   const [selectedProducts, setSelectedProducts] = useState<OrderProduct[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -125,7 +127,7 @@ const NewOrder: React.FC<NewOrderProps> = ({ onClose, onSubmit }) => {
               </button>
             )}
             <h2 className="text-lg sm:text-xl font-semibold">
-              Create New Order
+              {t("orders.new.title")}
             </h2>
             <div className="hidden sm:flex items-center gap-3 text-sm">
               <div
@@ -142,7 +144,7 @@ const NewOrder: React.FC<NewOrderProps> = ({ onClose, onSubmit }) => {
                 >
                   1
                 </span>
-                Select Products
+                {t("orders.new.select_products")}
               </div>
               <ChevronRight className="w-4 h-4 text-gray-400" />
               <div
@@ -159,7 +161,7 @@ const NewOrder: React.FC<NewOrderProps> = ({ onClose, onSubmit }) => {
                 >
                   2
                 </span>
-                Customer Details
+                {t("orders.new.customer_details")}
               </div>
             </div>
           </div>
@@ -188,7 +190,9 @@ const NewOrder: React.FC<NewOrderProps> = ({ onClose, onSubmit }) => {
               >
                 1
               </span>
-              <span className="text-xs font-medium">Products</span>
+              <span className="text-xs font-medium">
+                {t("orders.new.select_products")}
+              </span>
             </div>
             <div className="w-12 h-[2px] bg-gray-300 mt-[-20px]" />
             <div
@@ -205,7 +209,9 @@ const NewOrder: React.FC<NewOrderProps> = ({ onClose, onSubmit }) => {
               >
                 2
               </span>
-              <span className="text-xs font-medium">Details</span>
+              <span className="text-xs font-medium">
+                {t("orders.new.customer_details")}
+              </span>
             </div>
           </div>
         </div>
@@ -220,7 +226,7 @@ const NewOrder: React.FC<NewOrderProps> = ({ onClose, onSubmit }) => {
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
                     <input
                       type="text"
-                      placeholder="Search products..."
+                      placeholder={t("orders.new.search_placeholder")}
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
                       className="w-full pl-10 p-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
@@ -237,7 +243,7 @@ const NewOrder: React.FC<NewOrderProps> = ({ onClose, onSubmit }) => {
                           <div>
                             <h3 className="font-medium">{product.name}</h3>
                             <p className="text-sm text-gray-600">
-                              Stock: {product.stock}
+                              {t("orders.new.stock")}: {product.stock}
                             </p>
                           </div>
                           <span className="font-medium text-lg">
@@ -250,7 +256,7 @@ const NewOrder: React.FC<NewOrderProps> = ({ onClose, onSubmit }) => {
                           leftIcon={<Plus size={16} />}
                           className="w-full"
                         >
-                          Add to Order
+                          {t("orders.new.add_to_order")}
                         </Button>
                       </div>
                     ))}
@@ -261,10 +267,12 @@ const NewOrder: React.FC<NewOrderProps> = ({ onClose, onSubmit }) => {
               {/* Selected Products */}
               <div className="w-full sm:w-1/2 p-4 sm:p-6 bg-gray-50 overflow-y-auto border-t sm:border-t-0">
                 <div className="space-y-4">
-                  <h3 className="text-lg font-medium">Order Summary</h3>
+                  <h3 className="text-lg font-medium">
+                    {t("orders.new.selected_products")}
+                  </h3>
                   {selectedProducts.length === 0 ? (
                     <div className="text-center py-8 text-gray-500">
-                      No products selected yet
+                      {t("orders.new.no_products")}
                     </div>
                   ) : (
                     <div className="space-y-3">
@@ -276,7 +284,8 @@ const NewOrder: React.FC<NewOrderProps> = ({ onClose, onSubmit }) => {
                           <div className="flex-1">
                             <h4 className="font-medium">{product.name}</h4>
                             <p className="text-sm text-gray-600">
-                              ${product.price.toFixed(2)} each
+                              {t("orders.new.quantity")}: {product.quantity} x $
+                              {product.price.toFixed(2)}
                             </p>
                           </div>
                           <div className="flex items-center justify-between sm:gap-4">
@@ -318,7 +327,7 @@ const NewOrder: React.FC<NewOrderProps> = ({ onClose, onSubmit }) => {
                       ))}
                       <div className="bg-white p-4 rounded-lg border">
                         <div className="flex justify-between text-lg font-medium">
-                          <span>Total:</span>
+                          <span>{t("orders.new.total")}:</span>
                           <span>${calculateTotal().toFixed(2)}</span>
                         </div>
                       </div>
@@ -331,11 +340,13 @@ const NewOrder: React.FC<NewOrderProps> = ({ onClose, onSubmit }) => {
             <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto">
               <div className="max-w-2xl mx-auto p-4 sm:p-6 space-y-6">
                 <div className="space-y-4">
-                  <h3 className="text-lg font-medium">Customer Information</h3>
+                  <h3 className="text-lg font-medium">
+                    {t("orders.new.customer_information")}
+                  </h3>
                   <div className="grid gap-4">
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Customer Name *
+                        {t("orders.new.customer_name")} *
                       </label>
                       <input
                         type="text"
@@ -344,12 +355,12 @@ const NewOrder: React.FC<NewOrderProps> = ({ onClose, onSubmit }) => {
                         value={formData.customerName}
                         onChange={handleInputChange}
                         className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                        placeholder="Enter customer name"
+                        placeholder={t("orders.new.enter_customer_name")}
                       />
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Email Address *
+                        {t("orders.new.email_address")} *
                       </label>
                       <input
                         type="email"
@@ -358,12 +369,12 @@ const NewOrder: React.FC<NewOrderProps> = ({ onClose, onSubmit }) => {
                         value={formData.email}
                         onChange={handleInputChange}
                         className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                        placeholder="Enter email address"
+                        placeholder={t("orders.new.enter_email_address")}
                       />
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Phone Number
+                        {t("orders.new.phone_number")}
                       </label>
                       <input
                         type="tel"
@@ -371,12 +382,12 @@ const NewOrder: React.FC<NewOrderProps> = ({ onClose, onSubmit }) => {
                         value={formData.phone}
                         onChange={handleInputChange}
                         className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                        placeholder="Enter phone number"
+                        placeholder={t("orders.new.enter_phone_number")}
                       />
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Order Notes
+                        {t("orders.new.order_notes")}
                       </label>
                       <textarea
                         name="notes"
@@ -384,14 +395,18 @@ const NewOrder: React.FC<NewOrderProps> = ({ onClose, onSubmit }) => {
                         onChange={handleInputChange}
                         rows={3}
                         className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                        placeholder="Add any special instructions or notes"
+                        placeholder={t(
+                          "orders.new.add_any_special_instructions_or_notes"
+                        )}
                       />
                     </div>
                   </div>
                 </div>
 
                 <div className="bg-gray-50 p-4 rounded-lg border space-y-3">
-                  <h4 className="font-medium">Order Summary</h4>
+                  <h4 className="font-medium">
+                    {t("orders.new.order_summary")}
+                  </h4>
                   <div className="space-y-2">
                     {selectedProducts.map((product) => (
                       <div
@@ -407,7 +422,7 @@ const NewOrder: React.FC<NewOrderProps> = ({ onClose, onSubmit }) => {
                       </div>
                     ))}
                     <div className="border-t pt-2 flex justify-between font-medium">
-                      <span>Total</span>
+                      <span>{t("orders.new.total")}:</span>
                       <span>${calculateTotal().toFixed(2)}</span>
                     </div>
                   </div>
@@ -424,7 +439,7 @@ const NewOrder: React.FC<NewOrderProps> = ({ onClose, onSubmit }) => {
                   onClick={() => setStep(1)}
                   className="hidden sm:flex"
                 >
-                  Back to Products
+                  {t("orders.new.back_to_products")}
                 </Button>
                 <div className="flex flex-col-reverse sm:flex-row gap-2 sm:gap-3">
                   <Button
@@ -432,7 +447,7 @@ const NewOrder: React.FC<NewOrderProps> = ({ onClose, onSubmit }) => {
                     onClick={onClose}
                     className="w-full sm:w-auto"
                   >
-                    Cancel
+                    {t("common.cancel")}
                   </Button>
                   <Button
                     type="submit"
@@ -441,7 +456,7 @@ const NewOrder: React.FC<NewOrderProps> = ({ onClose, onSubmit }) => {
                     onClick={handleSubmit}
                     className="w-full sm:w-auto"
                   >
-                    Create Order
+                    {t("orders.new.create_order")}
                   </Button>
                 </div>
               </>
@@ -452,7 +467,7 @@ const NewOrder: React.FC<NewOrderProps> = ({ onClose, onSubmit }) => {
                   onClick={onClose}
                   className="w-full sm:w-auto"
                 >
-                  Cancel
+                  {t("common.cancel")}
                 </Button>
                 <Button
                   variant="primary"
@@ -460,7 +475,7 @@ const NewOrder: React.FC<NewOrderProps> = ({ onClose, onSubmit }) => {
                   disabled={!canProceed}
                   className="w-full sm:w-auto"
                 >
-                  Continue to Details
+                  {t("orders.new.continue_to_details")}
                 </Button>
               </>
             )}

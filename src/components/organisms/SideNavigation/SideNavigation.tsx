@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import {
   LayoutDashboard,
   ShoppingBag,
@@ -23,6 +24,7 @@ interface SideNavigationProps {
 }
 
 const SideNavigation: React.FC<SideNavigationProps> = ({ className = "" }) => {
+  const { t } = useTranslation();
   const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
 
@@ -51,32 +53,32 @@ const SideNavigation: React.FC<SideNavigationProps> = ({ className = "" }) => {
   const navItems: NavItem[] = [
     {
       path: "/dashboard",
-      label: "Dashboard",
+      label: t("navigation.dashboard"),
       icon: <LayoutDashboard className="w-5 h-5" />,
     },
     {
       path: "/orders",
-      label: "Orders",
+      label: t("navigation.orders"),
       icon: <ShoppingBag className="w-5 h-5" />,
     },
     {
       path: "/products",
-      label: "Products",
+      label: t("navigation.products"),
       icon: <Package className="w-5 h-5" />,
     },
     {
       path: "/customers",
-      label: "Customers",
+      label: t("navigation.customers"),
       icon: <Users className="w-5 h-5" />,
     },
     {
       path: "/analytics",
-      label: "Analytics",
+      label: t("navigation.analytics"),
       icon: <BarChart className="w-5 h-5" />,
     },
     {
       path: "/settings",
-      label: "Settings",
+      label: t("navigation.settings"),
       icon: <Settings className="w-5 h-5" />,
     },
   ];
@@ -86,7 +88,7 @@ const SideNavigation: React.FC<SideNavigationProps> = ({ className = "" }) => {
   return (
     <>
       {/* Mobile menu button */}
-      <div className="lg:hidden fixed top-4 z-20">
+      <div className="lg:hidden fixed top-4 z-[99999]">
         <Button
           variant="ghost"
           onClick={toggleSidebar}

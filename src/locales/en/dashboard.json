@@ -1,0 +1,36 @@
+{
+  "dashboard": {
+    "title": "Dashboard",
+    "welcome": "Welcome back! Here's what's happening with your store today.",
+    "stats": {
+      "today_revenue": "Today's Revenue",
+      "orders_completed": "Orders Completed",
+      "new_customers": "New Customers",
+      "low_stock": "Low Stock Items",
+      "vs_yesterday": "vs yesterday",
+      "items_need_restock": "items need restock"
+    },
+    "charts": {
+      "sales_performance": "Sales Performance",
+      "sales_by_category": "Sales by Category",
+      "total_products": "Total Products",
+      "time_periods": {
+        "this_week": "This Week",
+        "this_month": "This Month",
+        "this_year": "This Year"
+      },
+      "recent_orders": "Recent Orders",
+      "top_products": "Top Products",
+      "view_all": "View all"
+    },
+    "product_status": {
+      "in_stock": "In Stock",
+      "low_stock": "Low Stock",
+      "out_of_stock": "Out of Stock"
+    },
+    "actions": {
+      "edit": "Edit",
+      "view": "View"
+    }
+  }
+}

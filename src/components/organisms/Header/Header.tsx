@@ -1,5 +1,6 @@
 import React, { useState, useRef } from "react";
-import { Search, Bell } from "lucide-react";
+import { Search, Bell, ChevronDown } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import NotificationPanel from "../NotificationPanel/NotificationPanel";
 
 interface HeaderProps {
@@ -21,8 +22,11 @@ const Header: React.FC<HeaderProps> = ({
   avatarUrl,
   className = "",
 }) => {
+  const { t, i18n } = useTranslation();
   const [showNotifications, setShowNotifications] = useState(false);
+  const [showLanguageMenu, setShowLanguageMenu] = useState(false);
   const notificationBtnRef = useRef<HTMLButtonElement>(null);
+  const languageMenuRef = useRef<HTMLDivElement>(null);
   const [notifications, setNotifications] = useState<Notification[]>([
     {
       id: "1",
@@ -74,11 +78,39 @@ const Header: React.FC<HeaderProps> = ({
     );
   };
 
+  const handleLanguageChange = async (lang: string) => {
+    try {
+      await i18n.changeLanguage(lang);
+      localStorage.setItem("language", lang);
+      document.documentElement.lang = lang;
+      setShowLanguageMenu(false);
+    } catch (error) {
+      console.error("Error changing language:", error);
+    }
+  };
+
+  // Close language menu when clicking outside
+  React.useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        languageMenuRef.current &&
+        !languageMenuRef.current.contains(event.target as Node)
+      ) {
+        setShowLanguageMenu(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   const unreadCount = notifications.filter((n) => !n.read).length;
 
   return (
     <header className={`bg-white shadow-sm z-[9999] relative ${className}`}>
-      <div className="flex justify-between items-center p-4 ">
+      <div className="flex justify-between items-center p-4">
         <div className="flex items-center w-full max-w-xs lg:max-w-md pl-12 lg:pl-0">
           <div className="relative w-full">
             <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -86,7 +118,7 @@ const Header: React.FC<HeaderProps> = ({
             </div>
             <input
               type="text"
-              placeholder="Search..."
+              placeholder={t("header.search_placeholder")}
               className="border border-gray-300 rounded-lg w-full pl-10 p-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
           </div>
@@ -112,6 +144,48 @@ const Header: React.FC<HeaderProps> = ({
                 onMarkAllRead={handleMarkAllRead}
                 onNotificationClick={handleNotificationClick}
               />
+            )}
+          </div>
+
+          <div className="relative" ref={languageMenuRef}>
+            <button
+              className="flex items-center space-x-2 px-3 py-2 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors"
+              onClick={() => setShowLanguageMenu(!showLanguageMenu)}
+            >
+              <span className="text-sm font-medium">
+                {i18n.language?.substring(0, 2).toUpperCase()}
+              </span>
+              <ChevronDown className="w-4 h-4" />
+            </button>
+
+            {showLanguageMenu && (
+              <div className="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+                <div
+                  className="py-1"
+                  role="menu"
+                  aria-orientation="vertical"
+                  aria-labelledby="language-menu"
+                >
+                  <button
+                    className={`block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left ${
+                      i18n.language === "en" ? "bg-gray-50" : ""
+                    }`}
+                    onClick={() => handleLanguageChange("en")}
+                    role="menuitem"
+                  >
+                    English
+                  </button>
+                  <button
+                    className={`block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left ${
+                      i18n.language === "fr" ? "bg-gray-50" : ""
+                    }`}
+                    onClick={() => handleLanguageChange("fr")}
+                    role="menuitem"
+                  >
+                    Français
+                  </button>
+                </div>
+              </div>
             )}
           </div>
 

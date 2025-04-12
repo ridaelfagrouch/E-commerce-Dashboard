@@ -1,0 +1,31 @@
+{
+  "common": {
+    "loading": "Chargement...",
+    "error": "Une erreur est survenue",
+    "success": "Succès",
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "view": "Voir",
+    "search": "Rechercher",
+    "filter": "Filtrer",
+    "sort": "Trier",
+    "date": "Date",
+    "status": "Statut",
+    "actions": "Actions",
+    "no_results": "Aucun résultat trouvé",
+    "showing": "Affichage de",
+    "of": "sur",
+    "items": "éléments",
+    "per_page": "par page",
+    "next": "Suivant",
+    "previous": "Précédent",
+    "first": "Premier",
+    "last": "Dernier",
+    "close": "Fermer",
+    "vs_yesterday": "vs hier",
+    "vs_last_month": "vs mois dernier",
+    "since_last_month": "depuis le mois dernier"
+  }
+}

@@ -1,26 +1,37 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { X, Filter } from "lucide-react";
 import Button from "../../atoms/Button/Button";
 
+interface FilterData {
+  dateRange: string;
+  priceRange: {
+    min: string;
+    max: string;
+  };
+  statuses: string[];
+}
+
 interface FilterOrdersProps {
   onClose: () => void;
-  onApplyFilters: (filters: any) => void;
+  onApplyFilters: (filters: FilterData) => void;
 }
 
 const FilterOrders: React.FC<FilterOrdersProps> = ({
   onClose,
   onApplyFilters,
 }) => {
+  const { t } = useTranslation();
   const [dateRange, setDateRange] = useState("all");
   const [priceRange, setPriceRange] = useState({ min: "", max: "" });
   const [selectedStatuses, setSelectedStatuses] = useState<string[]>([]);
 
   const statuses = [
-    "Completed",
-    "Processing",
-    "Shipped",
-    "Pending",
-    "Cancelled",
+    "completed",
+    "processing",
+    "shipped",
+    "pending",
+    "cancelled",
   ];
 
   const handleStatusToggle = (status: string) => {
@@ -50,10 +61,11 @@ const FilterOrders: React.FC<FilterOrdersProps> = ({
     <div className="fixed inset-0 bg-black/50 z-[10000] flex items-center justify-center p-4">
       <div className="bg-white rounded-lg shadow-xl w-full max-w-md">
         <div className="flex items-center justify-between p-4 border-b">
-          <h2 className="text-xl font-semibold">Filter Orders</h2>
+          <h2 className="text-xl font-semibold">{t("orders.filters.title")}</h2>
           <button
             onClick={onClose}
             className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+            aria-label={t("common.close")}
           >
             <X className="w-5 h-5" />
           </button>
@@ -63,26 +75,36 @@ const FilterOrders: React.FC<FilterOrdersProps> = ({
           {/* Date Range */}
           <div className="space-y-4">
             <label className="block text-sm font-medium text-gray-700">
-              Date Range
+              {t("orders.filters.date_range_label")}
             </label>
             <select
               value={dateRange}
               onChange={(e) => setDateRange(e.target.value)}
               className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
             >
-              <option value="all">All Time</option>
-              <option value="today">Today</option>
-              <option value="week">This Week</option>
-              <option value="month">This Month</option>
-              <option value="year">This Year</option>
-              <option value="custom">Custom Range</option>
+              <option value="all">{t("orders.filters.date_ranges.all")}</option>
+              <option value="today">
+                {t("orders.filters.date_ranges.today")}
+              </option>
+              <option value="week">
+                {t("orders.filters.date_ranges.week")}
+              </option>
+              <option value="month">
+                {t("orders.filters.date_ranges.month")}
+              </option>
+              <option value="year">
+                {t("orders.filters.date_ranges.year")}
+              </option>
+              <option value="custom">
+                {t("orders.filters.date_ranges.custom")}
+              </option>
             </select>
 
             {dateRange === "custom" && (
               <div className="grid grid-cols-2 gap-4 mt-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Start Date
+                    {t("orders.filters.start_date")}
                   </label>
                   <input
                     type="date"
@@ -91,7 +113,7 @@ const FilterOrders: React.FC<FilterOrdersProps> = ({
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    End Date
+                    {t("orders.filters.end_date")}
                   </label>
                   <input
                     type="date"
@@ -105,13 +127,13 @@ const FilterOrders: React.FC<FilterOrdersProps> = ({
           {/* Price Range */}
           <div className="space-y-4">
             <label className="block text-sm font-medium text-gray-700">
-              Price Range
+              {t("orders.filters.price_range_label")}
             </label>
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <input
                   type="number"
-                  placeholder="Min"
+                  placeholder={t("orders.filters.min_price")}
                   value={priceRange.min}
                   onChange={(e) =>
                     setPriceRange({ ...priceRange, min: e.target.value })
@@ -122,7 +144,7 @@ const FilterOrders: React.FC<FilterOrdersProps> = ({
               <div>
                 <input
                   type="number"
-                  placeholder="Max"
+                  placeholder={t("orders.filters.max_price")}
                   value={priceRange.max}
                   onChange={(e) =>
                     setPriceRange({ ...priceRange, max: e.target.value })
@@ -136,7 +158,7 @@ const FilterOrders: React.FC<FilterOrdersProps> = ({
           {/* Order Status */}
           <div className="space-y-4">
             <label className="block text-sm font-medium text-gray-700">
-              Order Status
+              {t("orders.filters.status_label")}
             </label>
             <div className="grid grid-cols-2 gap-2">
               {statuses.map((status) => (
@@ -149,7 +171,7 @@ const FilterOrders: React.FC<FilterOrdersProps> = ({
                       : "hover:border-gray-300"
                   }`}
                 >
-                  {status}
+                  {t(`orders.status.${status}`)}
                 </button>
               ))}
             </div>
@@ -158,18 +180,18 @@ const FilterOrders: React.FC<FilterOrdersProps> = ({
 
         <div className="p-4 bg-gray-50 border-t rounded-b-lg flex justify-between">
           <Button variant="ghost" onClick={handleClearFilters}>
-            Clear Filters
+            {t("orders.filters.clear_filters")}
           </Button>
           <div className="space-x-3">
             <Button variant="ghost" onClick={onClose}>
-              Cancel
+              {t("common.cancel")}
             </Button>
             <Button
               variant="primary"
               onClick={handleApplyFilters}
               leftIcon={<Filter size={16} />}
             >
-              Apply Filters
+              {t("orders.filters.apply_filters")}
             </Button>
           </div>
         </div>

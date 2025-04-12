@@ -1,0 +1,10 @@
+{
+  "navigation": {
+    "dashboard": "Dashboard",
+    "orders": "Orders",
+    "products": "Products",
+    "customers": "Customers",
+    "analytics": "Analytics",
+    "settings": "Settings"
+  }
+}

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { X, FileText, FileSpreadsheet, Download } from "lucide-react";
 import Button from "../../atoms/Button/Button";
 
@@ -8,6 +9,7 @@ interface ExportOrdersProps {
 }
 
 const ExportOrders: React.FC<ExportOrdersProps> = ({ onClose, onExport }) => {
+  const { t } = useTranslation();
   const [selectedFormat, setSelectedFormat] = useState("csv");
   const [dateRange, setDateRange] = useState("all");
 
@@ -20,7 +22,7 @@ const ExportOrders: React.FC<ExportOrdersProps> = ({ onClose, onExport }) => {
     <div className="fixed inset-0 bg-black/25 backdrop-blur-sm z-[10000] flex items-center justify-center p-4 h-screen">
       <div className="bg-white rounded-xl shadow-xl w-full max-w-md transform transition-all duration-300 ease-out scale-100 opacity-100">
         <div className="flex items-center justify-between p-4 border-b">
-          <h2 className="text-xl font-semibold">Export Orders</h2>
+          <h2 className="text-xl font-semibold">{t("orders.export.title")}</h2>
           <button
             onClick={onClose}
             className="p-2 hover:bg-gray-100 rounded-full transition-colors"
@@ -33,7 +35,7 @@ const ExportOrders: React.FC<ExportOrdersProps> = ({ onClose, onExport }) => {
           {/* Export Format */}
           <div className="space-y-4">
             <label className="block text-sm font-medium text-gray-700">
-              Export Format
+              {t("orders.export.format_label")}
             </label>
             <div className="grid grid-cols-2 gap-4">
               <button
@@ -64,19 +66,29 @@ const ExportOrders: React.FC<ExportOrdersProps> = ({ onClose, onExport }) => {
           {/* Date Range */}
           <div className="space-y-4">
             <label className="block text-sm font-medium text-gray-700">
-              Date Range
+              {t("orders.export.date_range_label")}
             </label>
             <select
               value={dateRange}
               onChange={(e) => setDateRange(e.target.value)}
               className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
             >
-              <option value="all">All Time</option>
-              <option value="today">Today</option>
-              <option value="week">This Week</option>
-              <option value="month">This Month</option>
-              <option value="year">This Year</option>
-              <option value="custom">Custom Range</option>
+              <option value="all">{t("orders.export.date_ranges.all")}</option>
+              <option value="today">
+                {t("orders.export.date_ranges.today")}
+              </option>
+              <option value="week">
+                {t("orders.export.date_ranges.week")}
+              </option>
+              <option value="month">
+                {t("orders.export.date_ranges.month")}
+              </option>
+              <option value="year">
+                {t("orders.export.date_ranges.year")}
+              </option>
+              <option value="custom">
+                {t("orders.export.date_ranges.custom")}
+              </option>
             </select>
           </div>
 
@@ -84,7 +96,7 @@ const ExportOrders: React.FC<ExportOrdersProps> = ({ onClose, onExport }) => {
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Start Date
+                  {t("orders.export.start_date")}
                 </label>
                 <input
                   type="date"
@@ -93,7 +105,7 @@ const ExportOrders: React.FC<ExportOrdersProps> = ({ onClose, onExport }) => {
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  End Date
+                  {t("orders.export.end_date")}
                 </label>
                 <input
                   type="date"
@@ -106,14 +118,14 @@ const ExportOrders: React.FC<ExportOrdersProps> = ({ onClose, onExport }) => {
 
         <div className="p-4 bg-gray-50 border-t rounded-b-lg flex justify-end space-x-3">
           <Button variant="ghost" onClick={onClose}>
-            Cancel
+            {t("common.cancel")}
           </Button>
           <Button
             variant="primary"
             onClick={handleExport}
             leftIcon={<Download size={16} />}
           >
-            Export Orders
+            {t("orders.export.export_button")}
           </Button>
         </div>
       </div>

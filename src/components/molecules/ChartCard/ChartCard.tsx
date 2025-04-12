@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useRef, useState } from "react";
 import Chart from "chart.js/auto";
+import { useTranslation } from "react-i18next";
 import TabGroup from "../TabGroup/TabGroup";
 
 interface ChartCardProps {
@@ -26,6 +27,7 @@ const ChartCard: React.FC<ChartCardProps> = ({
   footer,
   aspectRatio = 2,
 }) => {
+  const { t } = useTranslation();
   const chartRef = useRef<HTMLCanvasElement | null>(null);
   const chartInstance = useRef<Chart | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -58,7 +60,7 @@ const ChartCard: React.FC<ChartCardProps> = ({
     return () => {
       window.removeEventListener("resize", handleResize);
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Chart creation/update effect
@@ -105,12 +107,15 @@ const ChartCard: React.FC<ChartCardProps> = ({
       <div className="p-4 border-b flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
         <div className="flex items-center">
           {icon && <span className="text-gray-500 mr-2">{icon}</span>}
-          <h2 className="text-lg font-semibold text-gray-800">{title}</h2>
+          <h2 className="text-lg font-semibold text-gray-800">{t(title)}</h2>
         </div>
         {tabs && activeTab && onTabChange && (
           <div className="w-full sm:w-auto">
             <TabGroup
-              tabs={tabs}
+              tabs={tabs.map((tab) => ({
+                ...tab,
+                label: t(tab.label),
+              }))}
               activeTab={activeTab}
               onTabChange={onTabChange}
               size="sm"

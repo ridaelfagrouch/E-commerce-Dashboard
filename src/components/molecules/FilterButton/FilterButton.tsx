@@ -1,12 +1,14 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Filter, ChevronDown } from "lucide-react";
 import { createPortal } from "react-dom";
+import { useTranslation } from "react-i18next";
 
 interface FilterButtonProps {
   onFilterSelect: (filter: string) => void;
 }
 
 const FilterButton: React.FC<FilterButtonProps> = ({ onFilterSelect }) => {
+  const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const [dropdownPosition, setDropdownPosition] = useState({
     top: 0,
@@ -16,12 +18,14 @@ const FilterButton: React.FC<FilterButtonProps> = ({ onFilterSelect }) => {
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const filterOptions = [
-    { id: "all", label: "All Customers" },
-    { id: "active", label: "Active Customers" },
-    { id: "new", label: "New Customers" },
-    { id: "inactive", label: "Inactive Customers" },
-    { id: "high_value", label: "High Value (>$500)" },
-    { id: "recent", label: "Recent Orders (30d)" },
+    { id: "all", label: t("products.filters.all_categories") },
+    { id: "low_stock", label: t("products.status.low_stock") },
+    { id: "out_of_stock", label: t("products.status.out_of_stock") },
+    { id: "electronics", label: t("products.filters.electronics") },
+    { id: "fitness", label: t("products.filters.fitness") },
+    { id: "food_beverage", label: t("products.filters.food_beverage") },
+    { id: "accessories", label: t("products.filters.accessories") },
+    { id: "lifestyle", label: t("products.filters.lifestyle") },
   ];
 
   const updateDropdownPosition = () => {
@@ -97,7 +101,7 @@ const FilterButton: React.FC<FilterButtonProps> = ({ onFilterSelect }) => {
         className="flex items-center gap-2 px-4 py-2 bg-white text-gray-700 rounded-lg border border-gray-200 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
       >
         <Filter size={16} className="text-gray-500" />
-        <span className="font-medium">Filters</span>
+        <span className="font-medium">{t("common.filters")}</span>
         <ChevronDown
           size={14}
           className={`text-gray-500 transition-transform ${

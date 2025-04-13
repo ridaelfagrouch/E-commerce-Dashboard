@@ -1,20 +1,10 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { X } from "lucide-react";
 import Button from "../../atoms/Button/Button";
 import InputField from "../../atoms/InputField/InputField";
 import SelectField from "../../atoms/SelectField/SelectField";
-
-interface Customer {
-  id: string;
-  name: string;
-  email: string;
-  phone: string;
-  location: string;
-  orders: number;
-  spent: number;
-  status: "Active" | "New" | "Inactive";
-  lastOrder: string;
-}
+import { Customer } from "../../../screens/Customers/Customers";
 
 interface EditCustomerProps {
   customer: Customer;
@@ -27,6 +17,7 @@ const EditCustomer: React.FC<EditCustomerProps> = ({
   onClose,
   onSave,
 }) => {
+  const { t } = useTranslation();
   const [formData, setFormData] = useState<Customer>({ ...customer });
   const [errors, setErrors] = useState<Record<string, string>>({});
 
@@ -34,21 +25,21 @@ const EditCustomer: React.FC<EditCustomerProps> = ({
     const newErrors: Record<string, string> = {};
 
     if (!formData.name.trim()) {
-      newErrors.name = "Name is required";
+      newErrors.name = t("customers.form.errors.name_required");
     }
 
     if (!formData.email.trim()) {
-      newErrors.email = "Email is required";
+      newErrors.email = t("customers.form.errors.email_required");
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = "Invalid email format";
+      newErrors.email = t("customers.form.errors.email_invalid");
     }
 
     if (!formData.phone.trim()) {
-      newErrors.phone = "Phone number is required";
+      newErrors.phone = t("customers.form.errors.phone_required");
     }
 
     if (!formData.location.trim()) {
-      newErrors.location = "Location is required";
+      newErrors.location = t("customers.form.errors.location_required");
     }
 
     setErrors(newErrors);
@@ -80,16 +71,16 @@ const EditCustomer: React.FC<EditCustomerProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 bg-black/25 backdrop-blur-sm z-50 flex items-center justify-center p-4 h-screen">
+    <div className="fixed inset-0 bg-black/25 backdrop-blur-sm z-[10000] flex items-center justify-center p-4 h-screen">
       <div className="bg-white rounded-xl shadow-xl w-full max-w-2xl transform transition-all duration-300 ease-out scale-100 opacity-100">
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b">
           <div>
             <h2 className="text-xl font-semibold text-gray-900">
-              Edit Customer
+              {t("customers.form.edit_title")}
             </h2>
             <p className="mt-1 text-sm text-gray-500">
-              Update customer information below.
+              {t("customers.form.edit_description")}
             </p>
           </div>
           <button
@@ -107,80 +98,91 @@ const EditCustomer: React.FC<EditCustomerProps> = ({
               {/* Basic Information */}
               <div className="space-y-4">
                 <h4 className="text-sm font-medium text-gray-500 uppercase tracking-wider">
-                  Basic Information
+                  {t("customers.form.basic_info")}
                 </h4>
 
                 <InputField
-                  label="Full Name"
+                  label={t("customers.form.name_label")}
                   name="name"
                   value={formData.name}
                   onChange={handleInputChange}
                   error={errors.name}
                   required
+                  placeholder={t("customers.form.name_placeholder")}
                 />
 
                 <InputField
-                  label="Email Address"
+                  label={t("customers.form.email_label")}
                   name="email"
                   type="email"
                   value={formData.email}
                   onChange={handleInputChange}
                   error={errors.email}
                   required
+                  placeholder={t("customers.form.email_placeholder")}
                 />
 
                 <InputField
-                  label="Phone Number"
+                  label={t("customers.form.phone_label")}
                   name="phone"
                   value={formData.phone}
                   onChange={handleInputChange}
                   error={errors.phone}
                   required
+                  placeholder={t("customers.form.phone_placeholder")}
                 />
 
                 <InputField
-                  label="Location"
+                  label={t("customers.form.location_label")}
                   name="location"
                   value={formData.location}
                   onChange={handleInputChange}
                   error={errors.location}
                   required
+                  placeholder={t("customers.form.location_placeholder")}
                 />
               </div>
 
               {/* Additional Information */}
               <div className="space-y-4">
                 <h4 className="text-sm font-medium text-gray-500 uppercase tracking-wider">
-                  Additional Information
+                  {t("customers.form.additional_info")}
                 </h4>
 
                 <SelectField
-                  label="Status"
+                  label={t("customers.form.status_label")}
                   name="status"
                   value={formData.status}
                   onChange={handleInputChange}
                   options={[
-                    { value: "Active", label: "Active" },
-                    { value: "New", label: "New" },
-                    { value: "Inactive", label: "Inactive" },
+                    { value: "active", label: t("customers.status.active") },
+                    { value: "new", label: t("customers.status.new") },
+                    {
+                      value: "inactive",
+                      label: t("customers.status.inactive"),
+                    },
                   ]}
                 />
 
                 <div className="bg-gray-50 rounded-lg p-4">
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <p className="text-sm text-gray-500">Total Orders</p>
+                      <p className="text-sm text-gray-500">
+                        {t("customers.customer.orders")}
+                      </p>
                       <p className="text-sm font-medium">{customer.orders}</p>
                     </div>
                     <div>
-                      <p className="text-sm text-gray-500">Total Spent</p>
+                      <p className="text-sm text-gray-500">
+                        {t("customers.customer.spent")}
+                      </p>
                       <p className="text-sm font-medium">
                         ${customer.spent.toLocaleString()}
                       </p>
                     </div>
                   </div>
                   <p className="text-xs text-gray-400 mt-2">
-                    Order history cannot be modified
+                    {t("customers.form.order_history_note")}
                   </p>
                 </div>
               </div>
@@ -190,10 +192,10 @@ const EditCustomer: React.FC<EditCustomerProps> = ({
           {/* Footer */}
           <div className="flex justify-end gap-3 p-6 bg-gray-50 border-t rounded-b-xl">
             <Button variant="ghost" type="button" onClick={onClose}>
-              Cancel
+              {t("customers.actions.cancel")}
             </Button>
             <Button variant="primary" type="submit">
-              Save Changes
+              {t("customers.actions.save")}
             </Button>
           </div>
         </form>

@@ -1,5 +1,6 @@
 import React from "react";
 import Button from "../../atoms/Button/Button";
+import { useTranslation } from "react-i18next";
 
 export interface FilterOption {
   id: string;
@@ -19,6 +20,8 @@ const ProductFilterGroup: React.FC<ProductFilterGroupProps> = ({
   onFilterChange,
   className = "",
 }) => {
+  const { t } = useTranslation();
+
   return (
     <div className={`flex flex-wrap gap-2 ${className}`}>
       {options.map((option) => (
@@ -29,7 +32,7 @@ const ProductFilterGroup: React.FC<ProductFilterGroupProps> = ({
           isActive={activeFilter === option.id}
           onClick={() => onFilterChange(option.id)}
         >
-          {option.label}
+          {t(option.label)}
         </Button>
       ))}
     </div>

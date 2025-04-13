@@ -1,0 +1,76 @@
+{
+  "customers": {
+    "title": "Customers",
+    "description": "Manage your customers",
+    "stats": {
+      "total_customers": "Total Customers",
+      "new_customers": "New Customers",
+      "average_orders": "Average Orders",
+      "average_lifetime_value": "Average Lifetime Value",
+      "since_last_month": "since last month"
+    },
+    "filters": {
+      "title": "Customer Filters",
+      "search_placeholder": "Search customers...",
+      "all": "All",
+      "active": "Active",
+      "new": "New",
+      "inactive": "Inactive",
+      "high_value": "High Value",
+      "recent": "Recent"
+    },
+    "status": {
+      "active": "Active",
+      "new": "New",
+      "inactive": "Inactive"
+    },
+    "customer": {
+      "id": "ID",
+      "name": "Name",
+      "email": "Email",
+      "phone": "Phone",
+      "location": "Location",
+      "orders": "Orders",
+      "spent": "Total Spent",
+      "last_order": "Last Order",
+      "no_orders": "No orders yet"
+    },
+    "actions": {
+      "add_customer": "Add Customer",
+      "view_details": "View Details",
+      "edit": "Edit Customer",
+      "save": "Save Changes",
+      "cancel": "Cancel"
+    },
+    "form": {
+      "add_title": "Add New Customer",
+      "add_description": "Fill in the information below to create a new customer.",
+      "edit_title": "Edit Customer",
+      "edit_description": "Update customer information below.",
+      "view_title": "Customer Details",
+      "basic_info": "Basic Information",
+      "additional_info": "Additional Information",
+      "contact_info": "Contact Information",
+      "order_info": "Order Information",
+      "recent_activity": "Recent Activity",
+      "name_label": "Full Name",
+      "name_placeholder": "Enter customer's full name",
+      "email_label": "Email Address",
+      "email_placeholder": "Enter email address",
+      "phone_label": "Phone Number",
+      "phone_placeholder": "Enter phone number",
+      "location_label": "Location",
+      "location_placeholder": "Enter location",
+      "status_label": "Status",
+      "order_history_note": "Order history cannot be modified",
+      "order_summary": "This customer has made {{count}} orders with a total value of ${{total}}",
+      "errors": {
+        "name_required": "Name is required",
+        "email_required": "Email is required",
+        "email_invalid": "Invalid email format",
+        "phone_required": "Phone number is required",
+        "location_required": "Location is required"
+      }
+    }
+  }
+}

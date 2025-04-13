@@ -1,0 +1,76 @@
+{
+  "customers": {
+    "title": "Clients",
+    "description": "Gérer vos clients",
+    "stats": {
+      "total_customers": "Total des Clients",
+      "new_customers": "Nouveaux Clients",
+      "average_orders": "Commandes Moyennes",
+      "average_lifetime_value": "Valeur Moyenne",
+      "since_last_month": "depuis le mois dernier"
+    },
+    "filters": {
+      "title": "Filtres Clients",
+      "search_placeholder": "Rechercher des clients...",
+      "all": "Tous",
+      "active": "Actifs",
+      "new": "Nouveaux",
+      "inactive": "Inactifs",
+      "high_value": "Haute Valeur",
+      "recent": "Récents"
+    },
+    "status": {
+      "active": "Actif",
+      "new": "Nouveau",
+      "inactive": "Inactif"
+    },
+    "customer": {
+      "id": "ID",
+      "name": "Nom",
+      "email": "Email",
+      "phone": "Téléphone",
+      "location": "Localisation",
+      "orders": "Commandes",
+      "spent": "Total Dépensé",
+      "last_order": "Dernière Commande",
+      "no_orders": "Pas encore de commandes"
+    },
+    "actions": {
+      "add_customer": "Ajouter un Client",
+      "view_details": "Voir les Détails",
+      "edit": "Modifier le Client",
+      "save": "Enregistrer les Modifications",
+      "cancel": "Annuler"
+    },
+    "form": {
+      "add_title": "Ajouter un Nouveau Client",
+      "add_description": "Remplissez les informations ci-dessous pour créer un nouveau client.",
+      "edit_title": "Modifier le Client",
+      "edit_description": "Mettre à jour les informations du client ci-dessous.",
+      "view_title": "Détails du Client",
+      "basic_info": "Informations de Base",
+      "additional_info": "Informations Supplémentaires",
+      "contact_info": "Informations de Contact",
+      "order_info": "Informations de Commande",
+      "recent_activity": "Activité Récente",
+      "name_label": "Nom Complet",
+      "name_placeholder": "Entrez le nom complet du client",
+      "email_label": "Adresse Email",
+      "email_placeholder": "Entrez l'adresse email",
+      "phone_label": "Numéro de Téléphone",
+      "phone_placeholder": "Entrez le numéro de téléphone",
+      "location_label": "Localisation",
+      "location_placeholder": "Entrez la localisation",
+      "status_label": "Statut",
+      "order_history_note": "L'historique des commandes ne peut pas être modifié",
+      "order_summary": "Ce client a effectué {{count}} commandes pour une valeur totale de {{total}} €",
+      "errors": {
+        "name_required": "Le nom est requis",
+        "email_required": "L'email est requis",
+        "email_invalid": "Format d'email invalide",
+        "phone_required": "Le numéro de téléphone est requis",
+        "location_required": "La localisation est requise"
+      }
+    }
+  }
+}

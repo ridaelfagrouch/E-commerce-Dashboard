@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   X,
   Mail,
@@ -11,18 +12,7 @@ import {
 import Button from "../../atoms/Button/Button";
 import Badge from "../../atoms/Badge/Badge";
 import EditCustomer from "./EditCustomer";
-
-interface Customer {
-  id: string;
-  name: string;
-  email: string;
-  phone: string;
-  location: string;
-  orders: number;
-  spent: number;
-  status: "Active" | "New" | "Inactive";
-  lastOrder: string;
-}
+import { Customer } from "../../../screens/Customers/Customers";
 
 interface ViewCustomerProps {
   customer: Customer;
@@ -35,15 +25,16 @@ const ViewCustomer: React.FC<ViewCustomerProps> = ({
   onClose,
   onUpdate,
 }) => {
+  const { t } = useTranslation();
   const [isEditing, setIsEditing] = useState(false);
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "Active":
+      case "active":
         return "success";
-      case "New":
+      case "new":
         return "info";
-      case "Inactive":
+      case "inactive":
         return "error";
       default:
         return "default";
@@ -66,16 +57,16 @@ const ViewCustomer: React.FC<ViewCustomerProps> = ({
   }
 
   return (
-    <div className="fixed inset-0 bg-black/25 backdrop-blur-sm z-50 flex items-center justify-center p-4 h-screen">
+    <div className="fixed inset-0 bg-black/25 backdrop-blur-sm z-[10000] flex items-center justify-center p-4 h-screen">
       <div className="bg-white rounded-xl shadow-xl w-full max-w-2xl max-h-[90vh] flex flex-col transform transition-all duration-300 ease-out scale-100 opacity-100">
         {/* Header - Fixed */}
         <div className="flex items-center justify-between p-4 sm:p-6 border-b shrink-0">
           <div>
             <h2 className="text-lg sm:text-xl font-semibold text-gray-900">
-              Customer Details
+              {t("customers.form.view_title")}
             </h2>
             <p className="mt-1 text-sm text-gray-500">
-              View detailed information about this customer
+              {t("customers.description")}
             </p>
           </div>
           <button
@@ -103,11 +94,11 @@ const ViewCustomer: React.FC<ViewCustomerProps> = ({
                 {customer.name}
               </h3>
               <p className="text-sm text-gray-500">
-                Customer ID: {customer.id}
+                {t("customers.customer.id")}: {customer.id}
               </p>
               <div className="mt-2">
                 <Badge variant={getStatusColor(customer.status)}>
-                  {customer.status}
+                  {t(`customers.status.${customer.status}`)}
                 </Badge>
               </div>
             </div>
@@ -118,7 +109,7 @@ const ViewCustomer: React.FC<ViewCustomerProps> = ({
             {/* Contact Information */}
             <div className="space-y-4">
               <h4 className="text-sm font-medium text-gray-500 uppercase tracking-wider">
-                Contact Information
+                {t("customers.form.contact_info")}
               </h4>
 
               <div className="flex items-center gap-3">
@@ -126,7 +117,9 @@ const ViewCustomer: React.FC<ViewCustomerProps> = ({
                   <Mail className="w-4 h-4 text-blue-600" />
                 </div>
                 <div>
-                  <p className="text-sm text-gray-500">Email</p>
+                  <p className="text-sm text-gray-500">
+                    {t("customers.customer.email")}
+                  </p>
                   <p className="text-sm font-medium break-all">
                     {customer.email}
                   </p>
@@ -138,7 +131,9 @@ const ViewCustomer: React.FC<ViewCustomerProps> = ({
                   <Phone className="w-4 h-4 text-green-600" />
                 </div>
                 <div>
-                  <p className="text-sm text-gray-500">Phone</p>
+                  <p className="text-sm text-gray-500">
+                    {t("customers.customer.phone")}
+                  </p>
                   <p className="text-sm font-medium">{customer.phone}</p>
                 </div>
               </div>
@@ -148,7 +143,9 @@ const ViewCustomer: React.FC<ViewCustomerProps> = ({
                   <MapPin className="w-4 h-4 text-purple-600" />
                 </div>
                 <div>
-                  <p className="text-sm text-gray-500">Location</p>
+                  <p className="text-sm text-gray-500">
+                    {t("customers.customer.location")}
+                  </p>
                   <p className="text-sm font-medium">{customer.location}</p>
                 </div>
               </div>
@@ -157,7 +154,7 @@ const ViewCustomer: React.FC<ViewCustomerProps> = ({
             {/* Order Information */}
             <div className="space-y-4">
               <h4 className="text-sm font-medium text-gray-500 uppercase tracking-wider">
-                Order Information
+                {t("customers.form.order_info")}
               </h4>
 
               <div className="flex items-center gap-3">
@@ -165,9 +162,12 @@ const ViewCustomer: React.FC<ViewCustomerProps> = ({
                   <ShoppingBag className="w-4 h-4 text-indigo-600" />
                 </div>
                 <div>
-                  <p className="text-sm text-gray-500">Total Orders</p>
+                  <p className="text-sm text-gray-500">
+                    {t("customers.customer.orders")}
+                  </p>
                   <p className="text-sm font-medium">
-                    {customer.orders} orders
+                    {customer.orders}{" "}
+                    {t("customers.customer.orders").toLowerCase()}
                   </p>
                 </div>
               </div>
@@ -177,7 +177,9 @@ const ViewCustomer: React.FC<ViewCustomerProps> = ({
                   <DollarSign className="w-4 h-4 text-yellow-600" />
                 </div>
                 <div>
-                  <p className="text-sm text-gray-500">Total Spent</p>
+                  <p className="text-sm text-gray-500">
+                    {t("customers.customer.spent")}
+                  </p>
                   <p className="text-sm font-medium">
                     ${customer.spent.toLocaleString()}
                   </p>
@@ -189,7 +191,9 @@ const ViewCustomer: React.FC<ViewCustomerProps> = ({
                   <Calendar className="w-4 h-4 text-red-600" />
                 </div>
                 <div>
-                  <p className="text-sm text-gray-500">Last Order</p>
+                  <p className="text-sm text-gray-500">
+                    {t("customers.customer.last_order")}
+                  </p>
                   <p className="text-sm font-medium">{customer.lastOrder}</p>
                 </div>
               </div>
@@ -199,17 +203,19 @@ const ViewCustomer: React.FC<ViewCustomerProps> = ({
           {/* Order History Preview */}
           <div className="mt-8">
             <h4 className="text-sm font-medium text-gray-500 uppercase tracking-wider mb-4">
-              Recent Activity
+              {t("customers.form.recent_activity")}
             </h4>
             <div className="bg-gray-50 rounded-lg p-4">
               <div className="text-center text-sm text-gray-500">
                 {customer.orders > 0 ? (
                   <p>
-                    This customer has made {customer.orders} orders with a total
-                    value of ${customer.spent.toLocaleString()}
+                    {t("customers.form.order_summary", {
+                      count: customer.orders,
+                      total: customer.spent.toLocaleString(),
+                    })}
                   </p>
                 ) : (
-                  <p>This customer hasn't made any orders yet</p>
+                  <p>{t("customers.customer.no_orders")}</p>
                 )}
               </div>
             </div>
@@ -219,10 +225,10 @@ const ViewCustomer: React.FC<ViewCustomerProps> = ({
         {/* Footer - Fixed */}
         <div className="flex justify-end gap-3 p-4 sm:p-6 bg-gray-50 border-t rounded-b-xl mt-auto shrink-0">
           <Button variant="ghost" onClick={onClose}>
-            Close
+            {t("customers.actions.cancel")}
           </Button>
           <Button variant="primary" onClick={() => setIsEditing(true)}>
-            Edit Customer
+            {t("customers.actions.edit")}
           </Button>
         </div>
       </div>

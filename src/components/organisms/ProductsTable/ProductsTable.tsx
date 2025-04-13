@@ -3,6 +3,7 @@ import { Edit, Eye } from "lucide-react";
 import Button from "../../atoms/Button/Button";
 import Badge from "../../atoms/Badge/Badge";
 import { Product } from "../../../types/Product";
+import { useTranslation } from "react-i18next";
 
 export interface ProductsTableProps {
   products: Product[];
@@ -14,6 +15,19 @@ export interface ProductsTableProps {
   className?: string;
 }
 
+const getStatusKey = (status: string): string => {
+  switch (status.toLowerCase()) {
+    case "out of stock":
+      return "out_of_stock";
+    case "low stock":
+      return "low_stock";
+    case "active":
+      return "in_stock";
+    default:
+      return status.toLowerCase().replace(" ", "_");
+  }
+};
+
 const ProductsTable: React.FC<ProductsTableProps> = ({
   products,
   onSort,
@@ -23,6 +37,8 @@ const ProductsTable: React.FC<ProductsTableProps> = ({
   onView,
   className = "",
 }) => {
+  const { t } = useTranslation();
+
   const getStatusVariant = (status: string) => {
     switch (status.toLowerCase()) {
       case "active":
@@ -65,7 +81,7 @@ const ProductsTable: React.FC<ProductsTableProps> = ({
       className={`flex items-center gap-1 text-xs font-medium text-gray-500 uppercase tracking-wider hover:text-gray-700`}
       onClick={() => onSort?.(field)}
     >
-      {label}
+      {t(label)}
       {sortField === field && (
         <span className="text-gray-400">
           {sortDirection === "asc" ? "↑" : "↓"}
@@ -108,7 +124,7 @@ const ProductsTable: React.FC<ProductsTableProps> = ({
                         onClick={() => onEdit(product)}
                         leftIcon={<Edit size={16} />}
                       >
-                        Edit
+                        {t("common.edit")}
                       </Button>
                       <Button
                         variant="ghost"
@@ -116,7 +132,7 @@ const ProductsTable: React.FC<ProductsTableProps> = ({
                         onClick={() => onView(product)}
                         leftIcon={<Eye size={16} />}
                       >
-                        View
+                        {t("common.view")}
                       </Button>
                     </div>
                   </div>
@@ -125,12 +141,16 @@ const ProductsTable: React.FC<ProductsTableProps> = ({
                       ${product.price.toFixed(2)}
                     </span>
                     <Badge variant={getStatusVariant(product.status)}>
-                      {product.status}
+                      {t(`products.status.${getStatusKey(product.status)}`)}
                     </Badge>
                   </div>
                   <div className="mt-1 flex justify-between text-sm text-gray-500">
-                    <span>{product.stock} in stock</span>
-                    <span>{product.sales} sales</span>
+                    <span>
+                      {t("products.view.stock_units", { count: product.stock })}
+                    </span>
+                    <span>
+                      {t("products.view.units_sold", { count: product.sales })}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -142,11 +162,11 @@ const ProductsTable: React.FC<ProductsTableProps> = ({
       {/* Desktop View */}
       <div className="hidden sm:block p-5">
         <div className="mb-4 flex gap-4 items-center">
-          <SortHeader field="name" label="Name" />
-          <SortHeader field="category" label="Category" />
-          <SortHeader field="price" label="Price" />
-          <SortHeader field="stock" label="Stock" />
-          <SortHeader field="sales" label="Sales" />
+          <SortHeader field="name" label="products.view.name_label" />
+          <SortHeader field="category" label="products.view.category_label" />
+          <SortHeader field="price" label="products.view.price_label" />
+          <SortHeader field="stock" label="products.view.stock_status_label" />
+          <SortHeader field="sales" label="products.view.total_sales_label" />
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           {products.map((product) => (
@@ -172,7 +192,7 @@ const ProductsTable: React.FC<ProductsTableProps> = ({
                     </div>
                   </div>
                   <Badge variant={getStatusVariant(product.status)}>
-                    {product.status}
+                    {t(`products.status.${getStatusKey(product.status)}`)}
                   </Badge>
                 </div>
                 <div className="mt-3 flex justify-between items-center">
@@ -180,12 +200,14 @@ const ProductsTable: React.FC<ProductsTableProps> = ({
                     ${product.price.toFixed(2)}
                   </span>
                   <span className="text-sm text-gray-500">
-                    {product.stock} in stock
+                    {t("products.view.stock_units", { count: product.stock })}
                   </span>
                 </div>
                 <div className="mt-4 flex justify-between text-sm text-gray-500">
                   <span>ID: {product.id}</span>
-                  <span>{product.sales} sales</span>
+                  <span>
+                    {t("products.view.units_sold", { count: product.sales })}
+                  </span>
                 </div>
                 <div className="mt-4 flex gap-2">
                   <Button
@@ -195,7 +217,7 @@ const ProductsTable: React.FC<ProductsTableProps> = ({
                     onClick={() => onEdit(product)}
                     leftIcon={<Edit size={16} />}
                   >
-                    Edit
+                    {t("common.edit")}
                   </Button>
                   <Button
                     variant="ghost"
@@ -204,7 +226,7 @@ const ProductsTable: React.FC<ProductsTableProps> = ({
                     onClick={() => onView(product)}
                     leftIcon={<Eye size={16} />}
                   >
-                    View
+                    {t("common.view")}
                   </Button>
                 </div>
               </div>

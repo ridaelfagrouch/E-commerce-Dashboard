@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { Mail, Phone, MapPin } from "lucide-react";
 import { Customer } from "../../../screens/Customers/Customers";
 
@@ -7,14 +8,19 @@ type CustomerCardProps = {
   onViewDetails: () => void;
 };
 
-const CustomerCard: React.FC<CustomerCardProps> = ({ customer, onViewDetails }) => {
+const CustomerCard: React.FC<CustomerCardProps> = ({
+  customer,
+  onViewDetails,
+}) => {
+  const { t } = useTranslation();
+
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "Active":
+      case "active":
         return "bg-green-100 text-green-800";
-      case "New":
+      case "new":
         return "bg-blue-100 text-blue-800";
-      case "Inactive":
+      case "inactive":
         return "bg-gray-100 text-gray-800";
       default:
         return "bg-gray-100 text-gray-800";
@@ -41,7 +47,7 @@ const CustomerCard: React.FC<CustomerCardProps> = ({ customer, onViewDetails }) 
             customer.status
           )}`}
         >
-          {customer.status}
+          {t(`customers.status.${customer.status}`)}
         </span>
       </div>
       <div className="p-4">
@@ -59,23 +65,27 @@ const CustomerCard: React.FC<CustomerCardProps> = ({ customer, onViewDetails }) 
         </div>
         <div className="grid grid-cols-2 gap-4 mb-4">
           <div className="bg-gray-50 p-2 rounded">
-            <p className="text-xs text-gray-500">Orders</p>
+            <p className="text-xs text-gray-500">
+              {t("customers.customer.orders")}
+            </p>
             <p className="font-medium">{customer.orders}</p>
           </div>
           <div className="bg-gray-50 p-2 rounded">
-            <p className="text-xs text-gray-500">Total Spent</p>
+            <p className="text-xs text-gray-500">
+              {t("customers.customer.spent")}
+            </p>
             <p className="font-medium">${customer.spent.toFixed(2)}</p>
           </div>
         </div>
         <div className="border-t pt-3 flex justify-between items-center">
           <span className="text-xs text-gray-500">
-            Last order: {customer.lastOrder}
+            {t("customers.customer.last_order")}: {customer.lastOrder}
           </span>
-          <button 
+          <button
             onClick={onViewDetails}
             className="text-indigo-600 hover:text-indigo-800 text-sm"
           >
-            View Details
+            {t("customers.actions.view_details")}
           </button>
         </div>
       </div>

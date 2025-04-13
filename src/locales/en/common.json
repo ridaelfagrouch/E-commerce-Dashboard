@@ -10,6 +10,7 @@
     "view": "View",
     "search": "Search",
     "filter": "Filter",
+    "filters": "Filters",
     "sort": "Sort",
     "date": "Date",
     "status": "Status",
@@ -29,5 +30,3 @@
     "since_last_month": "since last month"
   }
 }
-
-

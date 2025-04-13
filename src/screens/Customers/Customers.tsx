@@ -9,6 +9,7 @@ import AddCustomer from "../../components/organisms/CustomerForms/AddCustomer";
 import ViewCustomer from "../../components/organisms/CustomerForms/ViewCustomer";
 import Button from "../../components/atoms/Button/Button";
 import { Users, UserPlus, ShoppingCart, DollarSign } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 // Types
 export type Customer = {
@@ -19,11 +20,12 @@ export type Customer = {
   location: string;
   orders: number;
   spent: number;
-  status: "Active" | "New" | "Inactive";
+  status: "active" | "new" | "inactive";
   lastOrder: string;
 };
 
 export const Customers: React.FC = () => {
+  const { t } = useTranslation();
   const [customers, setCustomers] = useState<Customer[]>([
     {
       id: "CUS-5432",
@@ -33,7 +35,7 @@ export const Customers: React.FC = () => {
       location: "New York, USA",
       orders: 8,
       spent: 845.75,
-      status: "Active",
+      status: "active",
       lastOrder: "Apr 1, 2025",
     },
     {
@@ -44,7 +46,7 @@ export const Customers: React.FC = () => {
       location: "San Francisco, USA",
       orders: 3,
       spent: 274.99,
-      status: "Active",
+      status: "active",
       lastOrder: "Apr 1, 2025",
     },
     {
@@ -55,7 +57,7 @@ export const Customers: React.FC = () => {
       location: "Chicago, USA",
       orders: 12,
       spent: 1254.5,
-      status: "Active",
+      status: "active",
       lastOrder: "Mar 31, 2025",
     },
     {
@@ -66,7 +68,7 @@ export const Customers: React.FC = () => {
       location: "Los Angeles, USA",
       orders: 1,
       spent: 65.25,
-      status: "New",
+      status: "new",
       lastOrder: "Mar 31, 2025",
     },
     {
@@ -77,7 +79,7 @@ export const Customers: React.FC = () => {
       location: "Seattle, USA",
       orders: 5,
       spent: 428.95,
-      status: "Active",
+      status: "active",
       lastOrder: "Mar 30, 2025",
     },
     {
@@ -88,7 +90,7 @@ export const Customers: React.FC = () => {
       location: "Boston, USA",
       orders: 0,
       spent: 0,
-      status: "Inactive",
+      status: "inactive",
       lastOrder: "Feb 15, 2025",
     },
     {
@@ -99,7 +101,7 @@ export const Customers: React.FC = () => {
       location: "Austin, USA",
       orders: 1,
       spent: 49.99,
-      status: "New",
+      status: "new",
       lastOrder: "Mar 29, 2025",
     },
     {
@@ -110,7 +112,7 @@ export const Customers: React.FC = () => {
       location: "Denver, USA",
       orders: 7,
       spent: 634.8,
-      status: "Active",
+      status: "active",
       lastOrder: "Mar 28, 2025",
     },
   ]);
@@ -134,49 +136,49 @@ export const Customers: React.FC = () => {
 
   const statsData = [
     {
-      title: "Total Customers",
+      title: "customers.stats.total_customers",
       value: "1,286",
       icon: <Users size={24} />,
       trend: {
         value: 8.5,
         isPositive: true,
-        text: "since last month",
+        text: "customers.stats.since_last_month",
       },
       iconBgColor: "bg-indigo-100",
       iconColor: "text-indigo-600",
     },
     {
-      title: "New Customers",
+      title: "customers.stats.new_customers",
       value: "28",
       icon: <UserPlus size={24} />,
       trend: {
         value: 12.3,
         isPositive: true,
-        text: "since last month",
+        text: "customers.stats.since_last_month",
       },
       iconBgColor: "bg-green-100",
       iconColor: "text-green-600",
     },
     {
-      title: "Average Orders",
+      title: "customers.stats.average_orders",
       value: "4.7",
       icon: <ShoppingCart size={24} />,
       trend: {
         value: 3.2,
         isPositive: true,
-        text: "since last month",
+        text: "customers.stats.since_last_month",
       },
       iconBgColor: "bg-blue-100",
       iconColor: "text-blue-600",
     },
     {
-      title: "Average Lifetime Value",
+      title: "customers.stats.average_lifetime_value",
       value: "$387.42",
       icon: <DollarSign size={24} />,
       trend: {
         value: 5.8,
         isPositive: true,
-        text: "since last month",
+        text: "customers.stats.since_last_month",
       },
       iconBgColor: "bg-purple-100",
       iconColor: "text-purple-600",
@@ -195,13 +197,13 @@ export const Customers: React.FC = () => {
           isMatch = true;
           break;
         case "active":
-          isMatch = customer.status === "Active";
+          isMatch = customer.status === "active";
           break;
         case "new":
-          isMatch = customer.status === "New";
+          isMatch = customer.status === "new";
           break;
         case "inactive":
-          isMatch = customer.status === "Inactive";
+          isMatch = customer.status === "inactive";
           break;
         case "high_value":
           isMatch = customer.spent > 500;
@@ -228,6 +230,7 @@ export const Customers: React.FC = () => {
   };
 
   const handleFilterSelect = (selectedFilter: string) => {
+    console.log("selectedFilter: ", selectedFilter);
     setFilter(selectedFilter);
     setCurrentPage(1);
   };
@@ -246,7 +249,7 @@ export const Customers: React.FC = () => {
       location: customerData.location,
       orders: 0,
       spent: 0,
-      status: "New",
+      status: "new",
       lastOrder: "No orders yet",
     };
 
@@ -269,16 +272,19 @@ export const Customers: React.FC = () => {
   return (
     <div className="mb-6 mx-auto max-w-7xl">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Customers</h1>
+        <div className="flex flex-col">
+          <h1 className="text-2xl font-bold">{t("customers.title")}</h1>
+          <p className="text-gray-500">{t("customers.description")}</p>
+        </div>
         <ActionButton
           icon={<UserPlus size={16} />}
-          label="Add Customer"
+          label={t("customers.actions.add_customer")}
           variant="primary"
           onClick={() => setShowAddCustomer(true)}
         />
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 md:gap-6 mb-8">
         {statsData.map((stat, index) => (
           <StatCard
             key={index}

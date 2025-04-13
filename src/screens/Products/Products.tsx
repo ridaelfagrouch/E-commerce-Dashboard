@@ -10,65 +10,66 @@ import EditProduct from "../../components/organisms/ProductForms/EditProduct";
 import ViewProduct from "../../components/organisms/ProductForms/ViewProduct";
 import FilterButton from "../../components/molecules/FilterButton/FilterButton";
 import { Product } from "../../types/Product";
+import { useTranslation } from "react-i18next";
 
 const filterOptions = [
-  { id: "all", label: "All Categories" },
-  { id: "electronics", label: "Electronics" },
-  { id: "fitness", label: "Fitness" },
-  { id: "food_beverage", label: "Food & Beverage" },
-  { id: "accessories", label: "Accessories" },
-  { id: "lifestyle", label: "Lifestyle" },
+  { id: "all", label: "products.filters.all_categories" },
+  { id: "electronics", label: "products.filters.electronics" },
+  { id: "fitness", label: "products.filters.fitness" },
+  { id: "food_beverage", label: "products.filters.food_beverage" },
+  { id: "accessories", label: "products.filters.accessories" },
+  { id: "lifestyle", label: "products.filters.lifestyle" },
 ];
 
 const statsCards = [
   {
     id: "1",
-    title: "Total Products",
+    title: "products.stats.total_products",
     value: "186",
     icon: <ShoppingBag size={24} />,
     trend: {
       value: 12.5,
       isPositive: true,
-      text: "since last month",
+      text: "products.stats.since_last_month",
     },
     iconBgColor: "bg-indigo-100",
     iconColor: "text-indigo-600",
   },
   {
     id: "2",
-    title: "Total Sales",
+    title: "products.stats.total_sales",
     value: "1,432",
     icon: <TrendingUp size={24} />,
     trend: {
       value: 8.3,
       isPositive: true,
-      text: "since last month",
+      text: "products.stats.since_last_month",
     },
     iconBgColor: "bg-green-100",
     iconColor: "text-green-600",
   },
   {
     id: "3",
-    title: "Average Price",
+    title: "products.stats.average_price",
     value: "$68.99",
     icon: <Tag size={24} />,
     trend: {
       value: 5.2,
       isPositive: true,
-      text: "since last month",
+      text: "products.stats.since_last_month",
     },
     iconBgColor: "bg-blue-100",
     iconColor: "text-blue-600",
   },
   {
     id: "4",
-    title: "Low Stock Items",
+    title: "products.stats.low_stock_items",
     value: "12",
     icon: <Percent size={24} />,
     trend: {
       value: 3.5,
       isPositive: false,
-      text: "since last month",
+      text: "products.stats.since_last_month",
     },
     iconBgColor: "bg-yellow-100",
     iconColor: "text-yellow-600",
@@ -191,6 +192,7 @@ const initialProducts: Product[] = [
 ];
 
 export const Products: React.FC = () => {
+  const { t } = useTranslation();
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
   const [products, setProducts] = useState<Product[]>(initialProducts);
@@ -333,20 +335,23 @@ export const Products: React.FC = () => {
   return (
     <div className="space-y-6 mb-6 mx-auto max-w-7xl">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <h1 className="text-2xl font-bold">Products</h1>
-        
+        <div className="flex flex-col">
+          <h1 className="text-2xl font-bold">{t("products.title")}</h1>
+          <p className="text-gray-500">{t("products.description")}</p>
+        </div>
+
         <div className="flex flex-wrap gap-3">
           <Button
             variant="primary"
             leftIcon={<Plus size={16} />}
             onClick={() => setShowNewProductModal(true)}
           >
-            Add Product
+            {t("products.actions.add_product")}
           </Button>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 md:gap-6">
         {statsCards.map((card, index) => (
           <StatCard
             key={index}
@@ -362,11 +367,11 @@ export const Products: React.FC = () => {
 
       <div className="bg-white rounded-lg shadow overflow-hidden">
         <div className="p-4 border-b flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-          <h2 className="text-lg font-medium">Product Filters</h2>
+          <h2 className="text-lg font-medium">{t("products.filters.title")}</h2>
           <div className="flex flex-wrap gap-2 w-full sm:w-auto">
             <div className="w-full sm:w-64">
               <SearchInput
-                placeholder="Search products..."
+                placeholder={t("products.filters.search_placeholder")}
                 value={searchTerm}
                 onChange={handleSearch}
               />

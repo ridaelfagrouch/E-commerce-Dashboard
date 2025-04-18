@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { X } from "lucide-react";
 import Button from "../../atoms/Button/Button";
 import { Order } from "../../../types/order";
+import SelectField from "../../atoms/SelectField/SelectField";
 
 interface EditOrderProps {
   order: Order;
@@ -110,6 +111,15 @@ const EditOrder: React.FC<EditOrderProps> = ({ order, onClose, onSave }) => {
     return formData.customer.phone || "";
   };
 
+  // Status options for SelectField
+  const statusOptions = [
+    { value: "", label: t("orders.edit.select_status") },
+    { value: "completed", label: t("orders.status.completed") },
+    { value: "processing", label: t("orders.status.processing") },
+    { value: "pending", label: t("orders.status.pending") },
+    { value: "cancelled", label: t("orders.status.cancelled") },
+  ];
+
   return (
     <div className="fixed inset-0 bg-black/50 z-[10000] flex items-center justify-center p-4">
       <div className="bg-white rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
@@ -127,35 +137,16 @@ const EditOrder: React.FC<EditOrderProps> = ({ order, onClose, onSave }) => {
         </div>
 
         <form onSubmit={handleSubmit} className="p-6 space-y-6">
-          {/* Order Status */}
-          <div className="space-y-2">
-            <label
-              htmlFor="status"
-              className="block text-sm font-medium text-gray-700"
-            >
-              {t("orders.edit.status")}
-            </label>
-            <select
-              id="status"
-              name="status"
-              value={formData.status}
-              onChange={handleChange}
-              className={`w-full p-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 ${
-                errors.status ? "border-red-500" : ""
-              }`}
-            >
-              <option value="">{t("orders.edit.select_status")}</option>
-              <option value="completed">{t("orders.status.completed")}</option>
-              <option value="processing">
-                {t("orders.status.processing")}
-              </option>
-              <option value="pending">{t("orders.status.pending")}</option>
-              <option value="cancelled">{t("orders.status.cancelled")}</option>
-            </select>
-            {errors.status && (
-              <p className="text-sm text-red-600">{errors.status}</p>
-            )}
-          </div>
+          {/* Order Status - Using the imported SelectField */}
+          <SelectField
+            label={t("orders.edit.status")}
+            name="status"
+            value={formData.status || ""}
+            onChange={handleChange}
+            options={statusOptions}
+            error={errors.status}
+            required
+          />
 
           {/* Order Date */}
           <div className="space-y-2">

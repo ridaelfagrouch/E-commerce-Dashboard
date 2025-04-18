@@ -55,7 +55,7 @@ const NotificationPanel: React.FC<NotificationPanelProps> = ({
       <div className="fixed inset-0 bg-black/5 z-40" aria-hidden="true" />
       <div
         ref={panelRef}
-        className="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-lg border border-gray-200 z-50 animate-in fade-in slide-in-from-top-2 duration-200"
+        className="absolute left-[-170px] left-3 mt-2 w-80 bg-white rounded-lg shadow-lg border border-gray-200 z-50 animate-in fade-in slide-in-from-top-2 duration-200"
       >
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b">

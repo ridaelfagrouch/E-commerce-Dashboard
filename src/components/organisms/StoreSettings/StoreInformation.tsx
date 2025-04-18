@@ -5,9 +5,9 @@ import {
   MapPin,
   DollarSign,
   AlertCircle,
-  ChevronDown,
 } from "lucide-react";
 import BackButton from "../../atoms/BackButton/BackButton";
+import SelectField from "../../atoms/SelectField/SelectField";
 
 interface StoreInformationProps {
   onBack: () => void;
@@ -179,59 +179,6 @@ const StoreInformation: React.FC<StoreInformationProps> = ({ onBack }) => {
     </div>
   );
 
-  const SelectField = ({
-    label,
-    name,
-    children,
-  }: {
-    label: string;
-    name: keyof typeof formData;
-    children: React.ReactNode;
-  }) => (
-    <div className="relative">
-      <label
-        htmlFor={name}
-        className="block text-sm font-medium mb-1.5 text-gray-900"
-      >
-        {label}
-      </label>
-      <div className="relative group">
-        <select
-          id={name}
-          name={name}
-          value={formData[name]}
-          onChange={handleInputChange}
-          className="
-            appearance-none
-            w-full
-            px-4
-            py-2.5
-            text-gray-900
-            bg-white
-            border
-            border-gray-200
-            rounded-lg
-            transition-all
-            duration-200
-            ease-in-out
-            hover:border-gray-300
-            focus:border-indigo-500
-            focus:ring-4
-            focus:ring-indigo-100
-            focus:outline-none
-            text-sm
-          "
-        >
-          {children}
-        </select>
-        <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-          <ChevronDown className="h-5 w-5 text-gray-400" />
-        </div>
-        <div className="absolute inset-0 rounded-lg pointer-events-none transition-all duration-200 group-focus-within:shadow-[0_0_0_4px_rgba(99,102,241,0.1)]" />
-      </div>
-    </div>
-  );
-
   const TextAreaField = ({
     label,
     name,
@@ -351,15 +298,21 @@ const StoreInformation: React.FC<StoreInformationProps> = ({ onBack }) => {
                 placeholder="+1 (555) 123-4567"
                 pattern="[+]?[0-9\s-()]+"
               />
-              <SelectField label="Timezone" name="timezone">
-                <option value="America/New_York">Eastern Time (ET)</option>
-                <option value="America/Chicago">Central Time (CT)</option>
-                <option value="America/Denver">Mountain Time (MT)</option>
-                <option value="America/Los_Angeles">Pacific Time (PT)</option>
-                <option value="Europe/London">London (GMT)</option>
-                <option value="Asia/Tokyo">Tokyo (JST)</option>
-                <option value="Australia/Sydney">Sydney (AEST)</option>
-              </SelectField>
+              <SelectField
+                label="Timezone"
+                name="timezone"
+                value={formData.timezone}
+                onChange={handleInputChange}
+                options={[
+                  { value: "America/New_York", label: "Eastern Time (ET)" },
+                  { value: "America/Chicago", label: "Central Time (CT)" },
+                  { value: "America/Denver", label: "Mountain Time (MT)" },
+                  { value: "America/Los_Angeles", label: "Pacific Time (PT)" },
+                  { value: "Europe/London", label: "London (GMT)" },
+                  { value: "Asia/Tokyo", label: "Tokyo (JST)" },
+                  { value: "Australia/Sydney", label: "Sydney (AEST)" },
+                ]}
+              />
               <InputField
                 label="Website"
                 name="website"
@@ -413,15 +366,21 @@ const StoreInformation: React.FC<StoreInformationProps> = ({ onBack }) => {
                 required
                 placeholder="Enter ZIP code"
               />
-              <SelectField label="Country" name="country">
-                <option value="US">United States</option>
-                <option value="CA">Canada</option>
-                <option value="GB">United Kingdom</option>
-                <option value="AU">Australia</option>
-                <option value="DE">Germany</option>
-                <option value="FR">France</option>
-                <option value="JP">Japan</option>
-              </SelectField>
+              <SelectField
+                label="Country"
+                name="country"
+                value={formData.country}
+                onChange={handleInputChange}
+                options={[
+                  { value: "US", label: "United States" },
+                  { value: "CA", label: "Canada" },
+                  { value: "GB", label: "United Kingdom" },
+                  { value: "AU", label: "Australia" },
+                  { value: "DE", label: "Germany" },
+                  { value: "FR", label: "France" },
+                  { value: "JP", label: "Japan" },
+                ]}
+              />
             </div>
           </div>
         </div>
@@ -441,21 +400,33 @@ const StoreInformation: React.FC<StoreInformationProps> = ({ onBack }) => {
                 name="taxId"
                 placeholder="Enter tax ID or VAT number"
               />
-              <SelectField label="Business Type" name="businessType">
-                <option value="retail">Retail</option>
-                <option value="wholesale">Wholesale</option>
-                <option value="manufacturing">Manufacturing</option>
-                <option value="service">Service</option>
-                <option value="digital">Digital Products</option>
-              </SelectField>
-              <SelectField label="Default Currency" name="currency">
-                <option value="USD">US Dollar (USD)</option>
-                <option value="EUR">Euro (EUR)</option>
-                <option value="GBP">British Pound (GBP)</option>
-                <option value="CAD">Canadian Dollar (CAD)</option>
-                <option value="AUD">Australian Dollar (AUD)</option>
-                <option value="JPY">Japanese Yen (JPY)</option>
-              </SelectField>
+              <SelectField
+                label="Business Type"
+                name="businessType"
+                value={formData.businessType}
+                onChange={handleInputChange}
+                options={[
+                  { value: "retail", label: "Retail" },
+                  { value: "wholesale", label: "Wholesale" },
+                  { value: "manufacturing", label: "Manufacturing" },
+                  { value: "service", label: "Service" },
+                  { value: "digital", label: "Digital Products" },
+                ]}
+              />
+              <SelectField
+                label="Default Currency"
+                name="currency"
+                value={formData.currency}
+                onChange={handleInputChange}
+                options={[
+                  { value: "USD", label: "US Dollar (USD)" },
+                  { value: "EUR", label: "Euro (EUR)" },
+                  { value: "GBP", label: "British Pound (GBP)" },
+                  { value: "CAD", label: "Canadian Dollar (CAD)" },
+                  { value: "AUD", label: "Australian Dollar (AUD)" },
+                  { value: "JPY", label: "Japanese Yen (JPY)" },
+                ]}
+              />
             </div>
           </div>
         </div>

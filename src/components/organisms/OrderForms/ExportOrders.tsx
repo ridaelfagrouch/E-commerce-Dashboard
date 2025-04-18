@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { X, FileText, FileSpreadsheet, Download } from "lucide-react";
 import Button from "../../atoms/Button/Button";
+import SelectField from "../../atoms/SelectField/SelectField";
 
 interface ExportOrdersProps {
   onClose: () => void;
@@ -65,31 +66,38 @@ const ExportOrders: React.FC<ExportOrdersProps> = ({ onClose, onExport }) => {
 
           {/* Date Range */}
           <div className="space-y-4">
-            <label className="block text-sm font-medium text-gray-700">
-              {t("orders.export.date_range_label")}
-            </label>
-            <select
+            <SelectField
+              label={t("orders.export.date_range_label")}
+              name="date_range"
               value={dateRange}
               onChange={(e) => setDateRange(e.target.value)}
-              className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-            >
-              <option value="all">{t("orders.export.date_ranges.all")}</option>
-              <option value="today">
-                {t("orders.export.date_ranges.today")}
-              </option>
-              <option value="week">
-                {t("orders.export.date_ranges.week")}
-              </option>
-              <option value="month">
-                {t("orders.export.date_ranges.month")}
-              </option>
-              <option value="year">
-                {t("orders.export.date_ranges.year")}
-              </option>
-              <option value="custom">
-                {t("orders.export.date_ranges.custom")}
-              </option>
-            </select>
+              options={[
+                {
+                  value: "all",
+                  label: t("orders.export.date_ranges.all"),
+                },
+                {
+                  value: "today",
+                  label: t("orders.export.date_ranges.today"),
+                },
+                {
+                  value: "week",
+                  label: t("orders.export.date_ranges.week"),
+                },
+                {
+                  value: "month",
+                  label: t("orders.export.date_ranges.month"),
+                },
+                {
+                  value: "year",
+                  label: t("orders.export.date_ranges.year"),
+                },
+                {
+                  value: "custom",
+                  label: t("orders.export.date_ranges.custom"),
+                },
+              ]}
+            />
           </div>
 
           {dateRange === "custom" && (

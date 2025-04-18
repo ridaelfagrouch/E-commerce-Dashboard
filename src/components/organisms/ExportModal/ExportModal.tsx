@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { X, Download, FileSpreadsheet, FileJson } from "lucide-react";
 import Button from "../../atoms/Button/Button";
 import { useTranslation } from "react-i18next";
+import SelectField from "../../atoms/SelectField/SelectField";
 
 interface ExportModalProps {
   onClose: () => void;
@@ -104,31 +105,35 @@ const ExportModal: React.FC<ExportModalProps> = ({ onClose, onExport }) => {
             </div>
 
             {/* Date Range Selection */}
-            <div>
-              <label className="text-sm font-medium text-gray-700">
-                {t("analytics.exportModal.dateRange.label")}
-              </label>
-              <select
+            <div >
+              <SelectField
+                label={t("analytics.exportModal.dateRange.label")}
+                name="dateRange"
                 value={dateRange}
                 onChange={(e) => setDateRange(e.target.value)}
-                className="mt-2 block w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:border-indigo-500 focus:ring-indigo-500"
-              >
-                <option value="7days">
-                  {t("analytics.exportModal.dateRange.last7Days")}
-                </option>
-                <option value="30days">
-                  {t("analytics.exportModal.dateRange.last30Days")}
-                </option>
-                <option value="90days">
-                  {t("analytics.exportModal.dateRange.last90Days")}
-                </option>
-                <option value="1year">
-                  {t("analytics.exportModal.dateRange.lastYear")}
-                </option>
-                <option value="allTime">
-                  {t("analytics.exportModal.dateRange.allTime")}
-                </option>
-              </select>
+                options={[
+                  {
+                    value: "7days",
+                    label: t("analytics.exportModal.dateRange.last7Days"),
+                  },
+                  {
+                    value: "30days",
+                    label: t("analytics.exportModal.dateRange.last30Days"),
+                  },
+                  {
+                    value: "90days",
+                    label: t("analytics.exportModal.dateRange.last90Days"),
+                  },
+                  {
+                    value: "1year",
+                    label: t("analytics.exportModal.dateRange.lastYear"),
+                  },
+                  {
+                    value: "allTime",
+                    label: t("analytics.exportModal.dateRange.allTime"),
+                  },
+                ]}
+              />
             </div>
           </div>
         </div>

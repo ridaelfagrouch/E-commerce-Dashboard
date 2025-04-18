@@ -2,6 +2,7 @@ import React from "react";
 import { DollarSign, ShoppingCart, TrendingUp, Star } from "lucide-react";
 import LineChartCard from "../../molecules/LineChartCard/LineChartCard";
 import GaugeChart from "../../molecules/GaugeChart/GaugeChart";
+import { useTranslation } from "react-i18next";
 
 interface SalesData {
   today: number;
@@ -37,11 +38,17 @@ const StatsGrid: React.FC<StatsGridProps> = ({
   bestSellers,
   cancellations,
 }) => {
+  const { t } = useTranslation();
+
+  const translateCancellationReason = (reason: string) => {
+    return t(`analytics.stats.cancellations.reasons.${reason}`);
+  };
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
       {/* Sales Card */}
       <LineChartCard
-        title="Sales"
+        title={t("analytics.stats.sales.title")}
         value={`$${(salesData.today / 1000).toFixed(1)}K`}
         trend={salesData.trend}
         data={salesData.weeklyData}
@@ -50,6 +57,8 @@ const StatsGrid: React.FC<StatsGridProps> = ({
         iconBgColor="bg-blue-50"
         iconColor="text-blue-600"
         chartColor="#3B82F6"
+        subtitle={t("analytics.stats.sales.today")}
+        trendLabel={t("analytics.stats.sales.trend")}
       />
 
       {/* AOV Card */}
@@ -57,7 +66,7 @@ const StatsGrid: React.FC<StatsGridProps> = ({
         <div className="flex justify-between items-start mb-2 sm:mb-4">
           <div className="flex-1">
             <p className="text-sm font-medium text-gray-500">
-              Average Order Value
+              {t("analytics.stats.aov.title")}
             </p>
             <h3 className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-900 mt-0.5 sm:mt-1">
               ${aovData.value.toFixed(2)}
@@ -82,7 +91,9 @@ const StatsGrid: React.FC<StatsGridProps> = ({
       <div className="bg-white rounded-lg shadow-[0_2px_8px_rgba(0,0,0,0.06)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.1)] transition-shadow duration-300 p-4 sm:p-6">
         <div className="flex justify-between items-start mb-4">
           <div>
-            <p className="text-sm font-medium text-gray-500">Best Sellers</p>
+            <p className="text-sm font-medium text-gray-500">
+              {t("analytics.stats.bestSellers.title")}
+            </p>
           </div>
           <div className="bg-green-50 p-2 rounded-lg shadow-sm">
             <TrendingUp className="w-5 h-5 text-green-600" />
@@ -107,7 +118,9 @@ const StatsGrid: React.FC<StatsGridProps> = ({
       <div className="bg-white rounded-lg shadow-[0_2px_8px_rgba(0,0,0,0.06)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.1)] transition-shadow duration-300 p-4 sm:p-6">
         <div className="flex justify-between items-start mb-4">
           <div>
-            <p className="text-sm font-medium text-gray-500">Cancellations</p>
+            <p className="text-sm font-medium text-gray-500">
+              {t("analytics.stats.cancellations.title")}
+            </p>
             <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mt-1">
               {cancellations.total}
             </h3>
@@ -121,7 +134,9 @@ const StatsGrid: React.FC<StatsGridProps> = ({
           <span className="text-red-500 font-medium">
             {cancellations.change}%
           </span>
-          <span className="text-gray-500 ml-1">vs. last month</span>
+          <span className="text-gray-500 ml-1">
+            {t("analytics.stats.cancellations.change")}
+          </span>
         </div>
         <div className="space-y-2">
           {cancellations.reasons.map((reason, index) => (
@@ -129,7 +144,9 @@ const StatsGrid: React.FC<StatsGridProps> = ({
               key={index}
               className="flex justify-between items-center p-2 rounded-md hover:bg-gray-50 transition-colors duration-200"
             >
-              <span className="text-sm text-gray-600">{reason.reason}</span>
+              <span className="text-sm text-gray-600">
+                {translateCancellationReason(reason.reason)}
+              </span>
               <span className="text-sm font-medium text-gray-900">
                 {reason.count}
               </span>

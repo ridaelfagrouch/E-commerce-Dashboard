@@ -128,10 +128,26 @@ export const Customers: React.FC = () => {
   const totalCustomers = 1286;
 
   const filterOptions = [
-    { id: "all", label: "All", color: "bg-indigo-100 text-indigo-800" },
-    { id: "active", label: "Active", color: "bg-green-100 text-green-800" },
-    { id: "new", label: "New", color: "bg-blue-100 text-blue-800" },
-    { id: "inactive", label: "Inactive", color: "bg-gray-100 text-gray-800" },
+    {
+      id: "all",
+      label: t("customers.filters.all"),
+      color: "bg-indigo-100 text-indigo-800",
+    },
+    {
+      id: "active",
+      label: t("customers.filters.active"),
+      color: "bg-green-100 text-green-800",
+    },
+    {
+      id: "new",
+      label: t("customers.filters.new"),
+      color: "bg-blue-100 text-blue-800",
+    },
+    {
+      id: "inactive",
+      label: t("customers.filters.inactive"),
+      color: "bg-gray-100 text-gray-800",
+    },
   ];
 
   const statsData = [

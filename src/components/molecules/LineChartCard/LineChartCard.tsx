@@ -15,6 +15,8 @@ interface LineChartCardProps {
   iconColor: string;
   chartColor: string;
   height?: number;
+  subtitle?: string;
+  trendLabel?: string;
 }
 
 const LineChartCard: React.FC<LineChartCardProps> = ({
@@ -28,9 +30,13 @@ const LineChartCard: React.FC<LineChartCardProps> = ({
   iconColor,
   chartColor,
   height = 120,
+  subtitle,
+  trendLabel,
 }) => {
   const chartRef = useRef<HTMLCanvasElement | null>(null);
   const chartInstance = useRef<Chart | null>(null);
+
+  console.log("LineChartCard subtitle:", subtitle);
 
   useEffect(() => {
     if (!chartRef.current) return;
@@ -96,7 +102,11 @@ const LineChartCard: React.FC<LineChartCardProps> = ({
           <Icon className={`w-5 h-5 ${iconColor}`} />
         </div>
       </div>
-      <Trend value={trend} className="mt-4 p-2 rounded-md bg-opacity-50" />
+      <Trend
+        value={trend}
+        className="mt-4 p-2 rounded-md bg-opacity-50"
+        suffix={trendLabel}
+      />
       <div style={{ height: `${height}px` }} className="mt-4">
         <canvas ref={chartRef} />
       </div>

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { X, Download, FileSpreadsheet, FileJson } from "lucide-react";
 import Button from "../../atoms/Button/Button";
+import { useTranslation } from "react-i18next";
 
 interface ExportModalProps {
   onClose: () => void;
@@ -8,8 +9,11 @@ interface ExportModalProps {
 }
 
 const ExportModal: React.FC<ExportModalProps> = ({ onClose, onExport }) => {
+  const { t } = useTranslation();
   const [selectedFormat, setSelectedFormat] = useState("csv");
-  const [dateRange, setDateRange] = useState("7days");
+  const [dateRange, setDateRange] = useState(
+    t("analytics.exportModal.dateRange.last7Days")
+  );
 
   const handleExport = () => {
     onExport(selectedFormat, dateRange);
@@ -17,16 +21,16 @@ const ExportModal: React.FC<ExportModalProps> = ({ onClose, onExport }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/25 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div className=" p-4 fixed inset-0 bg-black/25 backdrop-blur-sm flex items-center justify-center z-[10000]">
       <div className="bg-white rounded-xl shadow-xl w-full max-w-md max-h-[90vh] flex flex-col">
         {/* Header */}
         <div className="flex items-center justify-between p-4 sm:p-6 border-b shrink-0">
           <div>
             <h2 className="text-lg sm:text-xl font-semibold text-gray-900">
-              Export Analytics Data
+              {t("analytics.exportModal.title")}
             </h2>
             <p className="mt-1 text-sm text-gray-500">
-              Choose your export preferences
+              {t("analytics.exportModal.description")}
             </p>
           </div>
           <button
@@ -43,7 +47,7 @@ const ExportModal: React.FC<ExportModalProps> = ({ onClose, onExport }) => {
           <div className="space-y-4">
             <div>
               <label className="text-sm font-medium text-gray-700">
-                Export Format
+                {t("analytics.exportModal.format.label")}
               </label>
               <div className="mt-2 grid grid-cols-2 gap-3">
                 <button
@@ -102,18 +106,28 @@ const ExportModal: React.FC<ExportModalProps> = ({ onClose, onExport }) => {
             {/* Date Range Selection */}
             <div>
               <label className="text-sm font-medium text-gray-700">
-                Date Range
+                {t("analytics.exportModal.dateRange.label")}
               </label>
               <select
                 value={dateRange}
                 onChange={(e) => setDateRange(e.target.value)}
                 className="mt-2 block w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:border-indigo-500 focus:ring-indigo-500"
               >
-                <option value="7days">Last 7 days</option>
-                <option value="30days">Last 30 days</option>
-                <option value="90days">Last 90 days</option>
-                <option value="12months">Last 12 months</option>
-                <option value="all">All time</option>
+                <option value="7days">
+                  {t("analytics.exportModal.dateRange.last7Days")}
+                </option>
+                <option value="30days">
+                  {t("analytics.exportModal.dateRange.last30Days")}
+                </option>
+                <option value="90days">
+                  {t("analytics.exportModal.dateRange.last90Days")}
+                </option>
+                <option value="1year">
+                  {t("analytics.exportModal.dateRange.lastYear")}
+                </option>
+                <option value="allTime">
+                  {t("analytics.exportModal.dateRange.allTime")}
+                </option>
               </select>
             </div>
           </div>
@@ -122,14 +136,14 @@ const ExportModal: React.FC<ExportModalProps> = ({ onClose, onExport }) => {
         {/* Footer */}
         <div className="flex justify-end gap-3 p-4 sm:p-6 border-t mt-auto shrink-0">
           <Button variant="ghost" onClick={onClose}>
-            Cancel
+            {t("analytics.exportModal.actions.cancel")}
           </Button>
           <Button
             variant="primary"
             onClick={handleExport}
             leftIcon={<Download className="w-4 h-4" />}
           >
-            Export Data
+            {t("analytics.exportModal.actions.export")}
           </Button>
         </div>
       </div>

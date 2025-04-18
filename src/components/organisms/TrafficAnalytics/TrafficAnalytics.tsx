@@ -4,6 +4,7 @@ import DoughnutChartCard from "../../molecules/DoughnutChartCard/DoughnutChartCa
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import L from "leaflet";
 import "./TrafficAnalytics.css";
+import { useTranslation } from "react-i18next";
 
 interface TrafficSource {
   source: string;
@@ -40,6 +41,7 @@ const TrafficAnalytics: React.FC<TrafficAnalyticsProps> = ({
   trafficSources,
   visitorLocations,
 }) => {
+  const { t } = useTranslation();
   const chartColors = [
     "rgba(79, 70, 229, 0.8)",
     "rgba(16, 185, 129, 0.8)",
@@ -52,8 +54,8 @@ const TrafficAnalytics: React.FC<TrafficAnalyticsProps> = ({
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
       {/* Traffic Sources Chart */}
       <DoughnutChartCard
-        title="Traffic Sources"
-        subtitle="Where your visitors come from"
+        title={t("analytics.traffic.sources.title")}
+        subtitle={t("analytics.traffic.sources.visitors")}
         data={trafficSources.map((source) => ({
           label: source.source,
           value: source.visitors,
@@ -68,9 +70,11 @@ const TrafficAnalytics: React.FC<TrafficAnalyticsProps> = ({
       <div className="bg-white rounded-lg shadow p-6">
         <div className="flex justify-between items-start mb-6">
           <div>
-            <h3 className="text-lg font-medium text-gray-800">Live Visitors</h3>
+            <h3 className="text-lg font-medium text-gray-800">
+              {t("analytics.traffic.locations.title")}
+            </h3>
             <p className="text-sm text-gray-500 mt-1">
-              Current visitor locations worldwide
+              {t("analytics.traffic.locations.subtitle")}
             </p>
           </div>
           <div className="bg-indigo-50 p-2 rounded-lg">
@@ -122,7 +126,8 @@ const TrafficAnalytics: React.FC<TrafficAnalyticsProps> = ({
                   </span>
                 </div>
                 <span className="text-sm font-medium text-gray-900">
-                  {location.visitors} active
+                  {location.visitors}{" "}
+                  {t("analytics.traffic.locations.visitors").toLowerCase()}
                 </span>
               </div>
             ))}

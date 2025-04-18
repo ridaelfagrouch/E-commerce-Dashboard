@@ -1,0 +1,143 @@
+{
+  "analytics": {
+    "title": "Analytique",
+    "subtitle": "Suivez les performances de votre boutique",
+    "dateFilters": {
+      "last7Days": "7 derniers jours"
+    },
+    "actions": {
+      "export": "Exporter"
+    },
+    "stats": {
+      "sales": {
+        "title": "Ventes",
+        "today": "Aujourd'hui",
+        "trend": "vs. hier"
+      },
+      "aov": {
+        "title": "Valeur Moyenne des Commandes",
+        "info": "Valeur moyenne de vos commandes"
+      },
+      "bestSellers": {
+        "title": "Meilleures Ventes",
+        "items": "articles"
+      },
+      "cancellations": {
+        "title": "Annulations",
+        "total": "Total",
+        "change": "variation",
+        "reasons": {
+          "customer": "Initiée par le client",
+          "declined": "Paiement refusé",
+          "fraud": "Détection de fraude",
+          "inventory": "Problèmes de stock"
+        }
+      }
+    },
+    "orders": {
+      "title": "Commandes",
+      "today": "Aujourd'hui",
+      "thisMonth": "Ce mois-ci",
+      "trend": "vs. période précédente",
+      "progress": "Progression vers l'objectif quotidien"
+    },
+    "traffic": {
+      "title": "Analyse du Trafic",
+      "direct": "Direct",
+      "organic": "Recherche Organique",
+      "referral": "Référencement",
+      "social": "Réseaux Sociaux",
+      "email": "Email",
+      "sources": {
+        "title": "Sources de Trafic",
+        "visitors": "visiteurs",
+        "source": "Source",
+        "percentage": "Pourcentage",
+        "trend": "Tendance"
+      },
+      "locations": {
+        "title": "Localisation des Visiteurs",
+        "subtitle": "Localisation actuelle des visiteurs dans le monde entier",
+        "country": "Pays",
+        "city": "Ville",
+        "visitors": "Visiteurs"
+      }
+    },
+    "unfulfilledOrders": {
+      "title": "Commandes Non Traitées",
+      "columns": {
+        "orderNumber": "N° de commande",
+        "customer": "Client",
+        "date": "Date de commande",
+        "payment": "Statut de paiement",
+        "total": "Total",
+        "items": "Articles",
+        "priority": "Priorité"
+      },
+      "pagination": {
+        "showing": "Affichage de",
+        "of": "sur",
+        "entries": "entrées",
+        "previous": "Précédent",
+        "next": "Suivant"
+      },
+      "paymentStatus": {
+        "paid": "Payée",
+        "pending": "En attente",
+        "failed": "Échouée",
+        "refunded": "Remboursée",
+        "partially_refunded": "Partiellement remboursée"
+      },
+      "priority": {
+        "high": "Haute",
+        "medium": "Moyenne",
+        "low": "Basse"
+      },
+      "filters": {
+        "title": "Filtres",
+        "status": "Statut",
+        "priority": "Priorité",
+        "tags": "Tags",
+        "clearAll": "Effacer tout",
+        "apply": "Appliquer les filtres",
+        "noResults": "Aucune commande ne correspond aux filtres sélectionnés",
+        "count": "commandes",
+        "tagOptions": {
+          "urgent": "Urgent",
+          "express": "Express",
+          "international": "International",
+          "fragile": "Fragile",
+          "priority": "Prioritaire"
+        }
+      }
+    },
+    "exportModal": {
+      "title": "Exporter les Données",
+      "description": "Choisissez vos préférences d'exportation",
+      "format": {
+        "label": "Format",
+        "csv": "CSV",
+        "excel": "Excel",
+        "pdf": "PDF"
+      },
+      "dateRange": {
+        "label": "Période",
+        "today": "Aujourd'hui",
+        "yesterday": "Hier",
+        "last7Days": "7 derniers jours",
+        "last30Days": "30 derniers jours",
+        "last90Days": "90 derniers jours",
+        "thisMonth": "Ce mois-ci",
+        "lastMonth": "Mois dernier",
+        "thisYear": "Cette année",
+        "lastYear": "Année dernière",
+        "custom": "Période personnalisée",
+        "allTime": "Tout le temps"
+      },
+      "actions": {
+        "cancel": "Annuler",
+        "export": "Exporter"
+      }
+    }
+  }
+}

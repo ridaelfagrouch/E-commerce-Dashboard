@@ -1,6 +1,7 @@
 import React from "react";
 import { ShoppingBag, LineChart } from "lucide-react";
 import LineChartCard from "../../molecules/LineChartCard/LineChartCard";
+import { useTranslation } from "react-i18next";
 
 interface OrdersData {
   today: number;
@@ -16,13 +17,17 @@ interface OrdersSectionProps {
 }
 
 const OrdersSection: React.FC<OrdersSectionProps> = ({ data }) => {
+  const { t } = useTranslation();
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       {/* Today's Orders */}
       <div className="bg-white rounded-lg shadow p-6">
         <div className="flex justify-between items-start">
           <div>
-            <p className="text-sm font-medium text-gray-500">Orders Today</p>
+            <p className="text-sm font-medium text-gray-500">
+              {t("analytics.orders.today")}
+            </p>
             <h3 className="text-2xl font-bold text-gray-900 mt-1">
               {data.today}
             </h3>
@@ -40,11 +45,13 @@ const OrdersSection: React.FC<OrdersSectionProps> = ({ data }) => {
             {data.todayTrend > 0 ? "+" : ""}
             {data.todayTrend}%
           </span>
-          <span className="text-gray-500 ml-1">vs. yesterday</span>
+          <span className="text-gray-500 ml-1">
+            {t("analytics.orders.trend")}
+          </span>
         </div>
         <div className="mt-4">
           <div className="flex items-center justify-between text-sm text-gray-500">
-            <span>Progress to daily goal</span>
+            <span>{t("analytics.orders.progress")}</span>
             <span>78%</span>
           </div>
           <div className="mt-2 h-2 bg-gray-100 rounded-full overflow-hidden">
@@ -58,7 +65,7 @@ const OrdersSection: React.FC<OrdersSectionProps> = ({ data }) => {
 
       {/* Monthly Orders */}
       <LineChartCard
-        title="Orders This Month"
+        title={t("analytics.orders.thisMonth")}
         value={data.thisMonth}
         trend={data.monthlyTrend}
         data={data.monthlyData}
@@ -68,6 +75,7 @@ const OrdersSection: React.FC<OrdersSectionProps> = ({ data }) => {
         iconColor="text-green-600"
         chartColor="#10B981"
         height={150}
+        trendLabel={t("analytics.orders.trend")}
       />
     </div>
   );

@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import Chart from "chart.js/auto";
 import { LucideIcon } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 interface ChartData {
   label: string;
@@ -26,6 +27,7 @@ const DoughnutChartCard: React.FC<DoughnutChartCardProps> = ({
   icon: Icon,
   height = 300,
 }) => {
+  const { t } = useTranslation();
   const chartRef = useRef<HTMLCanvasElement | null>(null);
   const chartInstance = useRef<Chart | null>(null);
 
@@ -42,7 +44,7 @@ const DoughnutChartCard: React.FC<DoughnutChartCardProps> = ({
     chartInstance.current = new Chart(ctx, {
       type: "doughnut",
       data: {
-        labels: data.map((item) => item.label),
+        labels: data.map((item) => t(item.label)),
         datasets: [
           {
             data: data.map((item) => item.percentage),
@@ -92,7 +94,7 @@ const DoughnutChartCard: React.FC<DoughnutChartCardProps> = ({
         {data.map((item, index) => (
           <div key={index} className="flex items-center justify-between">
             <div className="flex items-center">
-              <span className="text-sm text-gray-600">{item.label}</span>
+              <span className="text-sm text-gray-600">{t(item.label)}</span>
               <span
                 className={`ml-2 text-xs ${
                   item.trend > 0 ? "text-green-500" : "text-red-500"

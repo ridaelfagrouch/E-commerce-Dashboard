@@ -8,6 +8,7 @@ import OrdersSection from "../../components/organisms/OrdersSection/OrdersSectio
 import TrafficAnalytics from "../../components/organisms/TrafficAnalytics/TrafficAnalytics";
 import UnfulfilledOrdersTable from "../../components/organisms/UnfulfilledOrdersTable/UnfulfilledOrdersTable";
 import ExportModal from "../../components/organisms/ExportModal/ExportModal";
+import { useTranslation } from "react-i18next";
 
 interface UnfulfilledOrder {
   orderNumber: string;
@@ -47,6 +48,7 @@ interface VisitorLocation {
 }
 
 const Analytics: React.FC = () => {
+  const { t } = useTranslation();
   const [showExportModal, setShowExportModal] = useState(false);
   const salesChartRef = useRef<HTMLCanvasElement | null>(null);
   const salesChartInstance = useRef<Chart | null>(null);
@@ -200,11 +202,36 @@ const Analytics: React.FC = () => {
   };
 
   const trafficSources: TrafficSource[] = [
-    { source: "Direct", visitors: 12450, percentage: 35, trend: 12.3 },
-    { source: "Organic Search", visitors: 8320, percentage: 28, trend: 8.7 },
-    { source: "Social Media", visitors: 6240, percentage: 20, trend: 15.2 },
-    { source: "Referral", visitors: 3120, percentage: 12, trend: -3.5 },
-    { source: "Email", visitors: 1560, percentage: 5, trend: 5.8 },
+    {
+      source: "analytics.traffic.direct",
+      visitors: 12450,
+      percentage: 35,
+      trend: 12.3,
+    },
+    {
+      source: "analytics.traffic.organic",
+      visitors: 8320,
+      percentage: 28,
+      trend: 8.7,
+    },
+    {
+      source: "analytics.traffic.social",
+      visitors: 6240,
+      percentage: 20,
+      trend: 15.2,
+    },
+    {
+      source: "analytics.traffic.referral",
+      visitors: 3120,
+      percentage: 12,
+      trend: -3.5,
+    },
+    {
+      source: "analytics.traffic.email",
+      visitors: 1560,
+      percentage: 5,
+      trend: 5.8,
+    },
   ];
 
   const visitorLocations: VisitorLocation[] = [
@@ -331,14 +358,14 @@ const Analytics: React.FC = () => {
   }, [salesData]);
 
   return (
-    <div className="container mx-auto mb-6  max-w-7xl">
+    <div className="container mx-auto mb-6 max-w-7xl">
       <div className="space-y-6 sm:space-y-8">
         {/* Header */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sm:gap-6">
           <div className="w-full sm:w-auto">
-            <h1 className="text-2xl font-bold">Analytics</h1>
+            <h1 className="text-2xl font-bold">{t("analytics.title")}</h1>
             <p className="text-sm sm:text-base text-gray-500 mt-1">
-              Track your store's performance
+              {t("analytics.subtitle")}
             </p>
           </div>
           <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 w-full sm:w-auto">
@@ -348,7 +375,7 @@ const Analytics: React.FC = () => {
               onClick={() => {}}
               className="w-full sm:w-auto justify-center"
             >
-              Last 7 days
+              {t("analytics.dateFilters.last7Days")}
             </Button>
             <Button
               variant="secondary"
@@ -356,7 +383,7 @@ const Analytics: React.FC = () => {
               onClick={handleExportData}
               className="w-full sm:w-auto justify-center"
             >
-              Export
+              {t("analytics.actions.export")}
             </Button>
           </div>
         </div>

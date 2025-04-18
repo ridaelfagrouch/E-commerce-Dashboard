@@ -2,6 +2,7 @@ import React, { useState, useMemo } from "react";
 import Button from "../../atoms/Button/Button";
 import Badge from "../../atoms/Badge/Badge";
 import OrderFilterDropdown from "./OrderFilterDropdown";
+import { useTranslation } from "react-i18next";
 
 interface UnfulfilledOrder {
   orderNumber: string;
@@ -36,6 +37,7 @@ const UnfulfilledOrdersTable: React.FC<UnfulfilledOrdersTableProps> = ({
   onPrevious,
   onNext,
 }) => {
+  const { t } = useTranslation();
   const [activeFilters, setActiveFilters] = useState<{
     status: string[];
     priority: string[];
@@ -119,14 +121,25 @@ const UnfulfilledOrdersTable: React.FC<UnfulfilledOrdersTableProps> = ({
     }
   };
 
+  const translatePaymentStatus = (status: string) => {
+    return t(`analytics.unfulfilledOrders.paymentStatus.${status}`);
+  };
+
+  // const translatePriority = (priority: string) => {
+  //   return t(`analytics.unfulfilledOrders.priority.${priority}`);
+  // };
+
   return (
     <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
       {/* Header */}
       <div className="flex items-center justify-between p-4 border-b">
         <div className="flex items-center gap-4">
-          <h2 className="text-lg font-semibold">Unfulfilled Orders</h2>
+          <h2 className="text-lg font-semibold">
+            {t("analytics.unfulfilledOrders.title")}
+          </h2>
           <span className="text-sm text-gray-500">
-            {filteredOrders.length} orders
+            {filteredOrders.length}{" "}
+            {t("analytics.unfulfilledOrders.filters.count")}
           </span>
         </div>
         <OrderFilterDropdown onFilter={handleFilter} />
@@ -138,22 +151,22 @@ const UnfulfilledOrdersTable: React.FC<UnfulfilledOrdersTableProps> = ({
           <thead>
             <tr className="bg-gray-50 border-b border-gray-200 text-left">
               <th className="py-3 px-4 text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Order Details
+                {t("analytics.unfulfilledOrders.columns.orderNumber")}
               </th>
               <th className="py-3 px-4 text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Customer
+                {t("analytics.unfulfilledOrders.columns.customer")}
               </th>
               <th className="py-3 px-4 text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Status
+                {t("analytics.unfulfilledOrders.columns.payment")}
               </th>
               <th className="py-3 px-4 text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Items
+                {t("analytics.unfulfilledOrders.columns.items")}
               </th>
               <th className="py-3 px-4 text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Total
+                {t("analytics.unfulfilledOrders.columns.total")}
               </th>
               <th className="py-3 px-4 text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Tags
+                {t("analytics.unfulfilledOrders.filters.tags")}
               </th>
             </tr>
           </thead>
@@ -182,12 +195,13 @@ const UnfulfilledOrdersTable: React.FC<UnfulfilledOrdersTableProps> = ({
                   </td>
                   <td className="py-4 px-4">
                     <Badge variant={getStatusColor(order.paymentStatus)}>
-                      {order.paymentStatus.replace("_", " ")}
+                      {translatePaymentStatus(order.paymentStatus)}
                     </Badge>
                   </td>
                   <td className="py-4 px-4">
                     <div className="text-sm text-gray-900">
-                      {order.items} items
+                      {order.items}{" "}
+                      {t("analytics.stats.bestSellers.items").toLowerCase()}
                     </div>
                   </td>
                   <td className="py-4 px-4">
@@ -204,7 +218,10 @@ const UnfulfilledOrdersTable: React.FC<UnfulfilledOrdersTableProps> = ({
                             tag
                           )}`}
                         >
-                          {tag}
+                          {t(
+                            `analytics.unfulfilledOrders.filters.tagOptions.${tag.toLowerCase()}`,
+                            tag
+                          )}
                         </span>
                       ))}
                     </div>
@@ -214,7 +231,7 @@ const UnfulfilledOrdersTable: React.FC<UnfulfilledOrdersTableProps> = ({
             ) : (
               <tr>
                 <td colSpan={6} className="py-8 text-center text-gray-500">
-                  No orders match the selected filters
+                  {t("analytics.unfulfilledOrders.filters.noResults")}
                 </td>
               </tr>
             )}
@@ -225,10 +242,10 @@ const UnfulfilledOrdersTable: React.FC<UnfulfilledOrdersTableProps> = ({
       {/* Pagination */}
       <div className="flex items-center justify-end gap-2 p-4 border-t">
         <Button variant="secondary" onClick={onPrevious}>
-          Previous
+          {t("analytics.unfulfilledOrders.pagination.previous")}
         </Button>
         <Button variant="secondary" onClick={onNext}>
-          Next
+          {t("analytics.unfulfilledOrders.pagination.next")}
         </Button>
       </div>
     </div>

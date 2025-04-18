@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { Filter, ChevronDown } from "lucide-react";
 import Button from "../../atoms/Button/Button";
 import { createPortal } from "react-dom";
+import { useTranslation } from "react-i18next";
 
 interface OrderFilterDropdownProps {
   onFilter: (filters: {
@@ -14,6 +15,7 @@ interface OrderFilterDropdownProps {
 const OrderFilterDropdown: React.FC<OrderFilterDropdownProps> = ({
   onFilter,
 }) => {
+  const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const [selectedStatus, setSelectedStatus] = useState<string[]>([]);
   const [selectedPriority, setSelectedPriority] = useState<string[]>([]);
@@ -107,25 +109,73 @@ const OrderFilterDropdown: React.FC<OrderFilterDropdownProps> = ({
   };
 
   const statusOptions = [
-    { value: "paid", label: "Paid" },
-    { value: "pending", label: "Pending" },
-    { value: "failed", label: "Failed" },
-    { value: "refunded", label: "Refunded" },
-    { value: "partially_refunded", label: "Partially Refunded" },
+    {
+      value: "paid",
+      label: t("analytics.unfulfilledOrders.paymentStatus.paid"),
+    },
+    {
+      value: "pending",
+      label: t("analytics.unfulfilledOrders.paymentStatus.pending"),
+    },
+    {
+      value: "failed",
+      label: t("analytics.unfulfilledOrders.paymentStatus.failed"),
+    },
+    {
+      value: "refunded",
+      label: t("analytics.unfulfilledOrders.paymentStatus.refunded"),
+    },
+    {
+      value: "partially_refunded",
+      label: t("analytics.unfulfilledOrders.paymentStatus.partially_refunded"),
+    },
   ];
 
   const priorityOptions = [
-    { value: "high", label: "High Priority" },
-    { value: "medium", label: "Medium Priority" },
-    { value: "low", label: "Low Priority" },
+    {
+      value: "high",
+      label:
+        t("analytics.unfulfilledOrders.priority.high") +
+        " " +
+        t("analytics.unfulfilledOrders.columns.priority"),
+    },
+    {
+      value: "medium",
+      label:
+        t("analytics.unfulfilledOrders.priority.medium") +
+        " " +
+        t("analytics.unfulfilledOrders.columns.priority"),
+    },
+    {
+      value: "low",
+      label:
+        t("analytics.unfulfilledOrders.priority.low") +
+        " " +
+        t("analytics.unfulfilledOrders.columns.priority"),
+    },
   ];
 
   const tagOptions = [
-    { value: "urgent", label: "Urgent" },
-    { value: "express", label: "Express" },
-    { value: "international", label: "International" },
-    { value: "fragile", label: "Fragile" },
-    { value: "priority", label: "Priority" },
+    {
+      value: "urgent",
+      label: t("analytics.unfulfilledOrders.filters.tagOptions.urgent"),
+    },
+    {
+      value: "express",
+      label: t("analytics.unfulfilledOrders.filters.tagOptions.express"),
+    },
+    {
+      value: "international",
+      label: t("analytics.unfulfilledOrders.filters.tagOptions.international"),
+    },
+    {
+      value: "fragile",
+      label: t("analytics.unfulfilledOrders.filters.tagOptions.fragile"),
+    },
+    {
+      value: "priority",
+      label: t("analytics.unfulfilledOrders.filters.tagOptions.priority"),
+    },
   ];
 
   const handleToggleStatus = (value: string) => {
@@ -185,7 +235,7 @@ const OrderFilterDropdown: React.FC<OrderFilterDropdownProps> = ({
         onClick={handleToggleDropdown}
         className="whitespace-nowrap"
       >
-        Filters
+        {t("analytics.unfulfilledOrders.filters.title")}
         {totalFiltersSelected > 0 && (
           <span className="ml-1.5 px-2 py-0.5 text-xs font-medium bg-indigo-100 text-indigo-700 rounded-full">
             {totalFiltersSelected}
@@ -212,7 +262,7 @@ const OrderFilterDropdown: React.FC<OrderFilterDropdownProps> = ({
               {/* Status Filter */}
               <div className="p-4 border-b border-gray-200">
                 <h3 className="text-sm font-medium text-gray-900 mb-3">
-                  Status
+                  {t("analytics.unfulfilledOrders.filters.status")}
                 </h3>
                 <div className="space-y-2">
                   {statusOptions.map((option) => (
@@ -237,7 +287,7 @@ const OrderFilterDropdown: React.FC<OrderFilterDropdownProps> = ({
               {/* Priority Filter */}
               <div className="p-4 border-b border-gray-200">
                 <h3 className="text-sm font-medium text-gray-900 mb-3">
-                  Priority
+                  {t("analytics.unfulfilledOrders.filters.priority")}
                 </h3>
                 <div className="space-y-2">
                   {priorityOptions.map((option) => (
@@ -261,7 +311,9 @@ const OrderFilterDropdown: React.FC<OrderFilterDropdownProps> = ({
 
               {/* Tags Filter */}
               <div className="p-4 border-b border-gray-200">
-                <h3 className="text-sm font-medium text-gray-900 mb-3">Tags</h3>
+                <h3 className="text-sm font-medium text-gray-900 mb-3">
+                  {t("analytics.unfulfilledOrders.filters.tags")}
+                </h3>
                 <div className="space-y-2">
                   {tagOptions.map((option) => (
                     <label
@@ -290,13 +342,13 @@ const OrderFilterDropdown: React.FC<OrderFilterDropdownProps> = ({
                   onClick={handleClearFilters}
                   className="text-sm font-medium text-gray-700 hover:text-gray-900"
                 >
-                  Clear all
+                  {t("analytics.unfulfilledOrders.filters.clearAll")}
                 </button>
                 <button
                   onClick={handleApplyFilters}
                   className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                 >
-                  Apply filters
+                  {t("analytics.unfulfilledOrders.filters.apply")}
                 </button>
               </div>
             </div>

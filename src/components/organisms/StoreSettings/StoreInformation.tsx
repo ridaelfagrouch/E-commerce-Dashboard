@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 import BackButton from "../../atoms/BackButton/BackButton";
 import SelectField from "../../atoms/SelectField/SelectField";
+import { useTranslation } from "react-i18next";
 
 interface StoreInformationProps {
   onBack: () => void;
@@ -18,6 +19,8 @@ interface FormErrors {
 }
 
 const StoreInformation: React.FC<StoreInformationProps> = ({ onBack }) => {
+  const { t } = useTranslation();
+
   const [formData, setFormData] = useState({
     storeName: "ShopDash Store",
     email: "contact@shopdash.com",
@@ -42,31 +45,31 @@ const StoreInformation: React.FC<StoreInformationProps> = ({ onBack }) => {
     const newErrors: FormErrors = {};
 
     if (!formData.storeName.trim()) {
-      newErrors.storeName = "Store name is required";
+      newErrors.storeName = t("storeInformation.validation.storeName");
     }
 
     if (!formData.email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
-      newErrors.email = "Please enter a valid email address";
+      newErrors.email = t("storeInformation.validation.email");
     }
 
     if (!formData.phone.trim()) {
-      newErrors.phone = "Phone number is required";
+      newErrors.phone = t("storeInformation.validation.phone");
     }
 
     if (!formData.address.trim()) {
-      newErrors.address = "Address is required";
+      newErrors.address = t("storeInformation.validation.address");
     }
 
     if (!formData.city.trim()) {
-      newErrors.city = "City is required";
+      newErrors.city = t("storeInformation.validation.city");
     }
 
     if (!formData.state.trim()) {
-      newErrors.state = "State is required";
+      newErrors.state = t("storeInformation.validation.state");
     }
 
     if (!formData.zip.trim()) {
-      newErrors.zip = "ZIP code is required";
+      newErrors.zip = t("storeInformation.validation.zip");
     }
 
     setErrors(newErrors);
@@ -231,12 +234,150 @@ const StoreInformation: React.FC<StoreInformationProps> = ({ onBack }) => {
     </div>
   );
 
+  // Create translated timezone options
+  const timezoneOptions = [
+    {
+      value: "America/New_York",
+      label: t("storeInformation.sections.basic.fields.timezone.options.et"),
+    },
+    {
+      value: "America/Chicago",
+      label: t("storeInformation.sections.basic.fields.timezone.options.ct"),
+    },
+    {
+      value: "America/Denver",
+      label: t("storeInformation.sections.basic.fields.timezone.options.mt"),
+    },
+    {
+      value: "America/Los_Angeles",
+      label: t("storeInformation.sections.basic.fields.timezone.options.pt"),
+    },
+    {
+      value: "Europe/London",
+      label: t("storeInformation.sections.basic.fields.timezone.options.gmt"),
+    },
+    {
+      value: "Asia/Tokyo",
+      label: t("storeInformation.sections.basic.fields.timezone.options.jst"),
+    },
+    {
+      value: "Australia/Sydney",
+      label: t("storeInformation.sections.basic.fields.timezone.options.aest"),
+    },
+  ];
+
+  // Create translated country options
+  const countryOptions = [
+    {
+      value: "US",
+      label: t("storeInformation.sections.address.fields.country.options.us"),
+    },
+    {
+      value: "CA",
+      label: t("storeInformation.sections.address.fields.country.options.ca"),
+    },
+    {
+      value: "GB",
+      label: t("storeInformation.sections.address.fields.country.options.gb"),
+    },
+    {
+      value: "AU",
+      label: t("storeInformation.sections.address.fields.country.options.au"),
+    },
+    {
+      value: "DE",
+      label: t("storeInformation.sections.address.fields.country.options.de"),
+    },
+    {
+      value: "FR",
+      label: t("storeInformation.sections.address.fields.country.options.fr"),
+    },
+    {
+      value: "JP",
+      label: t("storeInformation.sections.address.fields.country.options.jp"),
+    },
+  ];
+
+  // Create translated business type options
+  const businessTypeOptions = [
+    {
+      value: "retail",
+      label: t(
+        "storeInformation.sections.business.fields.businessType.options.retail"
+      ),
+    },
+    {
+      value: "wholesale",
+      label: t(
+        "storeInformation.sections.business.fields.businessType.options.wholesale"
+      ),
+    },
+    {
+      value: "manufacturing",
+      label: t(
+        "storeInformation.sections.business.fields.businessType.options.manufacturing"
+      ),
+    },
+    {
+      value: "service",
+      label: t(
+        "storeInformation.sections.business.fields.businessType.options.service"
+      ),
+    },
+    {
+      value: "digital",
+      label: t(
+        "storeInformation.sections.business.fields.businessType.options.digital"
+      ),
+    },
+  ];
+
+  // Create translated currency options
+  const currencyOptions = [
+    {
+      value: "USD",
+      label: t(
+        "storeInformation.sections.business.fields.currency.options.usd"
+      ),
+    },
+    {
+      value: "EUR",
+      label: t(
+        "storeInformation.sections.business.fields.currency.options.eur"
+      ),
+    },
+    {
+      value: "GBP",
+      label: t(
+        "storeInformation.sections.business.fields.currency.options.gbp"
+      ),
+    },
+    {
+      value: "CAD",
+      label: t(
+        "storeInformation.sections.business.fields.currency.options.cad"
+      ),
+    },
+    {
+      value: "AUD",
+      label: t(
+        "storeInformation.sections.business.fields.currency.options.aud"
+      ),
+    },
+    {
+      value: "JPY",
+      label: t(
+        "storeInformation.sections.business.fields.currency.options.jpy"
+      ),
+    },
+  ];
+
   return (
     <div className="space-y-6 max-w-4xl mx-auto">
       {/* Header */}
       <div className="border-b border-gray-200 pb-5">
         <div className="flex items-center justify-between">
-          <BackButton onClick={onBack} />
+          <BackButton onClick={onBack} label={t("common.back")} />
           <button
             type="button"
             disabled={!isDirty}
@@ -247,7 +388,7 @@ const StoreInformation: React.FC<StoreInformationProps> = ({ onBack }) => {
             }`}
             onClick={handleSubmit}
           >
-            Save Changes
+            {t("storeInformation.saveChanges")}
           </button>
         </div>
         <div className="mt-4 flex items-center">
@@ -256,10 +397,10 @@ const StoreInformation: React.FC<StoreInformationProps> = ({ onBack }) => {
           </div>
           <div className="ml-4">
             <h2 className="text-xl font-semibold text-gray-900">
-              Store Information
+              {t("storeInformation.title")}
             </h2>
             <p className="mt-1 text-sm text-gray-500">
-              Update your store details and business information
+              {t("storeInformation.description")}
             </p>
           </div>
         </div>
@@ -272,58 +413,68 @@ const StoreInformation: React.FC<StoreInformationProps> = ({ onBack }) => {
           <div className="flex items-center">
             <Building2 className="w-5 h-5 text-gray-400 mr-2" />
             <h3 className="text-lg font-medium text-gray-900">
-              Basic Information
+              {t("storeInformation.sections.basic.title")}
             </h3>
           </div>
           <div className="bg-white rounded-lg border border-gray-200 p-6">
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
               <InputField
-                label="Store Name"
+                label={t(
+                  "storeInformation.sections.basic.fields.storeName.label"
+                )}
                 name="storeName"
                 required
-                placeholder="Enter your store name"
+                placeholder={t(
+                  "storeInformation.sections.basic.fields.storeName.placeholder"
+                )}
               />
               <InputField
-                label="Business Email"
+                label={t("storeInformation.sections.basic.fields.email.label")}
                 name="email"
                 type="email"
                 required
-                placeholder="contact@example.com"
+                placeholder={t(
+                  "storeInformation.sections.basic.fields.email.placeholder"
+                )}
               />
               <InputField
-                label="Phone Number"
+                label={t("storeInformation.sections.basic.fields.phone.label")}
                 name="phone"
                 type="tel"
                 required
-                placeholder="+1 (555) 123-4567"
+                placeholder={t(
+                  "storeInformation.sections.basic.fields.phone.placeholder"
+                )}
                 pattern="[+]?[0-9\s-()]+"
               />
               <SelectField
-                label="Timezone"
+                label={t(
+                  "storeInformation.sections.basic.fields.timezone.label"
+                )}
                 name="timezone"
                 value={formData.timezone}
                 onChange={handleInputChange}
-                options={[
-                  { value: "America/New_York", label: "Eastern Time (ET)" },
-                  { value: "America/Chicago", label: "Central Time (CT)" },
-                  { value: "America/Denver", label: "Mountain Time (MT)" },
-                  { value: "America/Los_Angeles", label: "Pacific Time (PT)" },
-                  { value: "Europe/London", label: "London (GMT)" },
-                  { value: "Asia/Tokyo", label: "Tokyo (JST)" },
-                  { value: "Australia/Sydney", label: "Sydney (AEST)" },
-                ]}
+                options={timezoneOptions}
               />
               <InputField
-                label="Website"
+                label={t(
+                  "storeInformation.sections.basic.fields.website.label"
+                )}
                 name="website"
                 type="url"
-                placeholder="https://example.com"
+                placeholder={t(
+                  "storeInformation.sections.basic.fields.website.placeholder"
+                )}
               />
               <div className="sm:col-span-2">
                 <TextAreaField
-                  label="Store Description"
+                  label={t(
+                    "storeInformation.sections.basic.fields.description.label"
+                  )}
                   name="description"
-                  placeholder="Describe your store..."
+                  placeholder={t(
+                    "storeInformation.sections.basic.fields.description.placeholder"
+                  )}
                 />
               </div>
             </div>
@@ -335,51 +486,57 @@ const StoreInformation: React.FC<StoreInformationProps> = ({ onBack }) => {
           <div className="flex items-center">
             <MapPin className="w-5 h-5 text-gray-400 mr-2" />
             <h3 className="text-lg font-medium text-gray-900">
-              Business Address
+              {t("storeInformation.sections.address.title")}
             </h3>
           </div>
           <div className="bg-white rounded-lg border border-gray-200 p-6">
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
               <div className="sm:col-span-2">
                 <InputField
-                  label="Street Address"
+                  label={t(
+                    "storeInformation.sections.address.fields.streetAddress.label"
+                  )}
                   name="address"
                   required
-                  placeholder="Enter your street address"
+                  placeholder={t(
+                    "storeInformation.sections.address.fields.streetAddress.placeholder"
+                  )}
                 />
               </div>
               <InputField
-                label="City"
+                label={t("storeInformation.sections.address.fields.city.label")}
                 name="city"
                 required
-                placeholder="Enter city"
+                placeholder={t(
+                  "storeInformation.sections.address.fields.city.placeholder"
+                )}
               />
               <InputField
-                label="State / Province"
+                label={t(
+                  "storeInformation.sections.address.fields.state.label"
+                )}
                 name="state"
                 required
-                placeholder="Enter state"
+                placeholder={t(
+                  "storeInformation.sections.address.fields.state.placeholder"
+                )}
               />
               <InputField
-                label="ZIP / Postal Code"
+                label={t("storeInformation.sections.address.fields.zip.label")}
                 name="zip"
                 required
-                placeholder="Enter ZIP code"
+                placeholder={t(
+                  "storeInformation.sections.address.fields.zip.placeholder"
+                )}
               />
               <SelectField
-                label="Country"
+                label={t(
+                  "storeInformation.sections.address.fields.country.label"
+                )}
                 name="country"
                 value={formData.country}
                 onChange={handleInputChange}
-                options={[
-                  { value: "US", label: "United States" },
-                  { value: "CA", label: "Canada" },
-                  { value: "GB", label: "United Kingdom" },
-                  { value: "AU", label: "Australia" },
-                  { value: "DE", label: "Germany" },
-                  { value: "FR", label: "France" },
-                  { value: "JP", label: "Japan" },
-                ]}
+                options={countryOptions}
               />
             </div>
           </div>
@@ -390,42 +547,37 @@ const StoreInformation: React.FC<StoreInformationProps> = ({ onBack }) => {
           <div className="flex items-center">
             <DollarSign className="w-5 h-5 text-gray-400 mr-2" />
             <h3 className="text-lg font-medium text-gray-900">
-              Business Details
+              {t("storeInformation.sections.business.title")}
             </h3>
           </div>
           <div className="bg-white rounded-lg border border-gray-200 p-6">
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
               <InputField
-                label="Tax ID / VAT Number"
+                label={t(
+                  "storeInformation.sections.business.fields.taxId.label"
+                )}
                 name="taxId"
-                placeholder="Enter tax ID or VAT number"
+                placeholder={t(
+                  "storeInformation.sections.business.fields.taxId.placeholder"
+                )}
               />
               <SelectField
-                label="Business Type"
+                label={t(
+                  "storeInformation.sections.business.fields.businessType.label"
+                )}
                 name="businessType"
                 value={formData.businessType}
                 onChange={handleInputChange}
-                options={[
-                  { value: "retail", label: "Retail" },
-                  { value: "wholesale", label: "Wholesale" },
-                  { value: "manufacturing", label: "Manufacturing" },
-                  { value: "service", label: "Service" },
-                  { value: "digital", label: "Digital Products" },
-                ]}
+                options={businessTypeOptions}
               />
               <SelectField
-                label="Default Currency"
+                label={t(
+                  "storeInformation.sections.business.fields.currency.label"
+                )}
                 name="currency"
                 value={formData.currency}
                 onChange={handleInputChange}
-                options={[
-                  { value: "USD", label: "US Dollar (USD)" },
-                  { value: "EUR", label: "Euro (EUR)" },
-                  { value: "GBP", label: "British Pound (GBP)" },
-                  { value: "CAD", label: "Canadian Dollar (CAD)" },
-                  { value: "AUD", label: "Australian Dollar (AUD)" },
-                  { value: "JPY", label: "Japanese Yen (JPY)" },
-                ]}
+                options={currencyOptions}
               />
             </div>
           </div>

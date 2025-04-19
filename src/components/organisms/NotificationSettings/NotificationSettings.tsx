@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import BackButton from "../../atoms/BackButton/BackButton";
 import Switch from "../../atoms/Switch/Switch";
+import { useTranslation } from "react-i18next";
 
 interface NotificationSettingsProps {
   onBack: () => void;
@@ -54,6 +55,7 @@ interface NotificationSettings {
 const NotificationSettings: React.FC<NotificationSettingsProps> = ({
   onBack,
 }) => {
+  const { t } = useTranslation();
   const [isDirty, setIsDirty] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [settings, setSettings] = useState<NotificationSettings>({
@@ -154,7 +156,7 @@ const NotificationSettings: React.FC<NotificationSettingsProps> = ({
       {/* Header */}
       <div className="border-b border-gray-200 pb-5">
         <div className="flex items-center justify-between mb-6">
-          <BackButton onClick={onBack} label="Settings" />
+          <BackButton onClick={onBack} label={t("common.back")} />
           <button
             type="button"
             disabled={!isDirty || isSaving}
@@ -166,7 +168,9 @@ const NotificationSettings: React.FC<NotificationSettingsProps> = ({
             onClick={handleSubmit}
           >
             {isSaving && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
-            {isSaving ? "Saving..." : "Save Changes"}
+            {isSaving
+              ? t("notifications.saving")
+              : t("notifications.saveChanges")}
           </button>
         </div>
         <div className="flex items-center">
@@ -175,10 +179,10 @@ const NotificationSettings: React.FC<NotificationSettingsProps> = ({
           </div>
           <div className="ml-4">
             <h2 className="text-xl font-semibold text-gray-900">
-              Notification Settings
+              {t("notifications.title")}
             </h2>
             <p className="mt-1 text-sm text-gray-500">
-              Manage how you receive notifications and alerts
+              {t("notifications.description")}
             </p>
           </div>
         </div>
@@ -191,15 +195,15 @@ const NotificationSettings: React.FC<NotificationSettingsProps> = ({
           <div className="flex items-center">
             <Mail className="w-5 h-5 text-gray-400 mr-2" />
             <h3 className="text-lg font-medium text-gray-900">
-              Email Notifications
+              {t("notifications.sections.email.title")}
             </h3>
           </div>
           <div className="bg-white rounded-lg border border-gray-200 p-6 space-y-6">
             <Switch
               checked={settings.emailNotifications}
               onChange={() => handleToggle("emailNotifications")}
-              label="Enable Email Notifications"
-              description="Receive important updates and alerts via email"
+              label={t("notifications.sections.email.enable")}
+              description={t("notifications.sections.email.description")}
               name="emailNotifications"
               required
             />
@@ -207,40 +211,50 @@ const NotificationSettings: React.FC<NotificationSettingsProps> = ({
               <Switch
                 checked={settings.orderUpdates}
                 onChange={() => handleToggle("orderUpdates")}
-                label="Order Updates"
-                description="Get notified about order status changes and shipping updates"
+                label={t("notifications.sections.email.orderUpdates.label")}
+                description={t(
+                  "notifications.sections.email.orderUpdates.description"
+                )}
                 disabled={!settings.emailNotifications}
                 name="orderUpdates"
               />
               <Switch
                 checked={settings.promotionalEmails}
                 onChange={() => handleToggle("promotionalEmails")}
-                label="Promotional Emails"
-                description="Receive news about products, features, and special offers"
+                label={t("notifications.sections.email.promotional.label")}
+                description={t(
+                  "notifications.sections.email.promotional.description"
+                )}
                 disabled={!settings.emailNotifications}
                 name="promotionalEmails"
               />
               <Switch
                 checked={settings.newsletterEmails}
                 onChange={() => handleToggle("newsletterEmails")}
-                label="Newsletter"
-                description="Receive our weekly newsletter with industry insights"
+                label={t("notifications.sections.email.newsletter.label")}
+                description={t(
+                  "notifications.sections.email.newsletter.description"
+                )}
                 disabled={!settings.emailNotifications}
                 name="newsletterEmails"
               />
               <Switch
                 checked={settings.inventoryAlerts}
                 onChange={() => handleToggle("inventoryAlerts")}
-                label="Inventory Alerts"
-                description="Get notified when products are running low or out of stock"
+                label={t("notifications.sections.email.inventory.label")}
+                description={t(
+                  "notifications.sections.email.inventory.description"
+                )}
                 disabled={!settings.emailNotifications}
                 name="inventoryAlerts"
               />
               <Switch
                 checked={settings.customerReviews}
                 onChange={() => handleToggle("customerReviews")}
-                label="Customer Reviews"
-                description="Receive notifications when customers leave reviews"
+                label={t("notifications.sections.email.reviews.label")}
+                description={t(
+                  "notifications.sections.email.reviews.description"
+                )}
                 disabled={!settings.emailNotifications}
                 name="customerReviews"
               />
@@ -253,15 +267,15 @@ const NotificationSettings: React.FC<NotificationSettingsProps> = ({
           <div className="flex items-center">
             <Smartphone className="w-5 h-5 text-gray-400 mr-2" />
             <h3 className="text-lg font-medium text-gray-900">
-              Push Notifications
+              {t("notifications.sections.push.title")}
             </h3>
           </div>
           <div className="bg-white rounded-lg border border-gray-200 p-6 space-y-6">
             <Switch
               checked={settings.pushNotifications}
               onChange={() => handleToggle("pushNotifications")}
-              label="Enable Push Notifications"
-              description="Receive real-time notifications on your device"
+              label={t("notifications.sections.push.enable")}
+              description={t("notifications.sections.push.description")}
               name="pushNotifications"
               required
             />
@@ -269,40 +283,50 @@ const NotificationSettings: React.FC<NotificationSettingsProps> = ({
               <Switch
                 checked={settings.orderAlerts}
                 onChange={() => handleToggle("orderAlerts")}
-                label="Order Alerts"
-                description="Get instant notifications for new orders and updates"
+                label={t("notifications.sections.push.orderAlerts.label")}
+                description={t(
+                  "notifications.sections.push.orderAlerts.description"
+                )}
                 disabled={!settings.pushNotifications}
                 name="orderAlerts"
               />
               <Switch
                 checked={settings.stockAlerts}
                 onChange={() => handleToggle("stockAlerts")}
-                label="Stock Alerts"
-                description="Be notified when inventory levels are low"
+                label={t("notifications.sections.push.stockAlerts.label")}
+                description={t(
+                  "notifications.sections.push.stockAlerts.description"
+                )}
                 disabled={!settings.pushNotifications}
                 name="stockAlerts"
               />
               <Switch
                 checked={settings.securityAlerts}
                 onChange={() => handleToggle("securityAlerts")}
-                label="Security Alerts"
-                description="Get notified about important security events"
+                label={t("notifications.sections.push.securityAlerts.label")}
+                description={t(
+                  "notifications.sections.push.securityAlerts.description"
+                )}
                 disabled={!settings.pushNotifications}
                 name="securityAlerts"
               />
               <Switch
                 checked={settings.salesReports}
                 onChange={() => handleToggle("salesReports")}
-                label="Sales Reports"
-                description="Receive daily and weekly sales performance reports"
+                label={t("notifications.sections.push.salesReports.label")}
+                description={t(
+                  "notifications.sections.push.salesReports.description"
+                )}
                 disabled={!settings.pushNotifications}
                 name="salesReports"
               />
               <Switch
                 checked={settings.newCustomers}
                 onChange={() => handleToggle("newCustomers")}
-                label="New Customers"
-                description="Get notified when new customers register"
+                label={t("notifications.sections.push.newCustomers.label")}
+                description={t(
+                  "notifications.sections.push.newCustomers.description"
+                )}
                 disabled={!settings.pushNotifications}
                 name="newCustomers"
               />
@@ -315,15 +339,15 @@ const NotificationSettings: React.FC<NotificationSettingsProps> = ({
           <div className="flex items-center">
             <Globe className="w-5 h-5 text-gray-400 mr-2" />
             <h3 className="text-lg font-medium text-gray-900">
-              Browser Notifications
+              {t("notifications.sections.browser.title")}
             </h3>
           </div>
           <div className="bg-white rounded-lg border border-gray-200 p-6 space-y-6">
             <Switch
               checked={settings.browserNotifications}
               onChange={() => handleToggle("browserNotifications")}
-              label="Enable Browser Notifications"
-              description="Receive notifications in your web browser"
+              label={t("notifications.sections.browser.enable")}
+              description={t("notifications.sections.browser.description")}
               name="browserNotifications"
               required
             />
@@ -331,24 +355,30 @@ const NotificationSettings: React.FC<NotificationSettingsProps> = ({
               <Switch
                 checked={settings.newOrders}
                 onChange={() => handleToggle("newOrders")}
-                label="New Orders"
-                description="Get desktop notifications for new orders"
+                label={t("notifications.sections.browser.newOrders.label")}
+                description={t(
+                  "notifications.sections.browser.newOrders.description"
+                )}
                 disabled={!settings.browserNotifications}
                 name="newOrders"
               />
               <Switch
                 checked={settings.chatMessages}
                 onChange={() => handleToggle("chatMessages")}
-                label="Chat Messages"
-                description="Be notified when you receive new chat messages"
+                label={t("notifications.sections.browser.chatMessages.label")}
+                description={t(
+                  "notifications.sections.browser.chatMessages.description"
+                )}
                 disabled={!settings.browserNotifications}
                 name="chatMessages"
               />
               <Switch
                 checked={settings.systemUpdates}
                 onChange={() => handleToggle("systemUpdates")}
-                label="System Updates"
-                description="Get notified about system updates and maintenance"
+                label={t("notifications.sections.browser.systemUpdates.label")}
+                description={t(
+                  "notifications.sections.browser.systemUpdates.description"
+                )}
                 disabled={!settings.browserNotifications}
                 name="systemUpdates"
               />
@@ -361,39 +391,45 @@ const NotificationSettings: React.FC<NotificationSettingsProps> = ({
           <div className="flex items-center">
             <Calendar className="w-5 h-5 text-gray-400 mr-2" />
             <h3 className="text-lg font-medium text-gray-900">
-              Marketing Notifications
+              {t("notifications.sections.marketing.title")}
             </h3>
           </div>
           <div className="bg-white rounded-lg border border-gray-200 p-6 space-y-6">
             <Switch
               checked={settings.marketingNotifications}
               onChange={() => handleToggle("marketingNotifications")}
-              label="Enable Marketing Notifications"
-              description="Receive updates about marketing activities"
+              label={t("notifications.sections.marketing.enable")}
+              description={t("notifications.sections.marketing.description")}
               name="marketingNotifications"
             />
             <div className="pl-8 space-y-6">
               <Switch
                 checked={settings.promotions}
                 onChange={() => handleToggle("promotions")}
-                label="Promotions"
-                description="Get notified about new promotional campaigns"
+                label={t("notifications.sections.marketing.promotions.label")}
+                description={t(
+                  "notifications.sections.marketing.promotions.description"
+                )}
                 disabled={!settings.marketingNotifications}
                 name="promotions"
               />
               <Switch
                 checked={settings.campaigns}
                 onChange={() => handleToggle("campaigns")}
-                label="Campaign Updates"
-                description="Receive updates about ongoing marketing campaigns"
+                label={t("notifications.sections.marketing.campaigns.label")}
+                description={t(
+                  "notifications.sections.marketing.campaigns.description"
+                )}
                 disabled={!settings.marketingNotifications}
                 name="campaigns"
               />
               <Switch
                 checked={settings.analytics}
                 onChange={() => handleToggle("analytics")}
-                label="Analytics Reports"
-                description="Get periodic marketing analytics reports"
+                label={t("notifications.sections.marketing.analytics.label")}
+                description={t(
+                  "notifications.sections.marketing.analytics.description"
+                )}
                 disabled={!settings.marketingNotifications}
                 name="analytics"
               />
@@ -406,15 +442,15 @@ const NotificationSettings: React.FC<NotificationSettingsProps> = ({
           <div className="flex items-center">
             <AlertTriangle className="w-5 h-5 text-gray-400 mr-2" />
             <h3 className="text-lg font-medium text-gray-900">
-              System Notifications
+              {t("notifications.sections.system.title")}
             </h3>
           </div>
           <div className="bg-white rounded-lg border border-gray-200 p-6 space-y-6">
             <Switch
               checked={settings.systemNotifications}
               onChange={() => handleToggle("systemNotifications")}
-              label="Enable System Notifications"
-              description="Receive important system alerts and updates"
+              label={t("notifications.sections.system.enable")}
+              description={t("notifications.sections.system.description")}
               name="systemNotifications"
               required
             />
@@ -422,24 +458,30 @@ const NotificationSettings: React.FC<NotificationSettingsProps> = ({
               <Switch
                 checked={settings.maintenance}
                 onChange={() => handleToggle("maintenance")}
-                label="Maintenance Updates"
-                description="Get notified about scheduled maintenance"
+                label={t("notifications.sections.system.maintenance.label")}
+                description={t(
+                  "notifications.sections.system.maintenance.description"
+                )}
                 disabled={!settings.systemNotifications}
                 name="maintenance"
               />
               <Switch
                 checked={settings.performance}
                 onChange={() => handleToggle("performance")}
-                label="Performance Alerts"
-                description="Receive alerts about system performance issues"
+                label={t("notifications.sections.system.performance.label")}
+                description={t(
+                  "notifications.sections.system.performance.description"
+                )}
                 disabled={!settings.systemNotifications}
                 name="performance"
               />
               <Switch
                 checked={settings.errors}
                 onChange={() => handleToggle("errors")}
-                label="Error Notifications"
-                description="Get notified about critical system errors"
+                label={t("notifications.sections.system.errors.label")}
+                description={t(
+                  "notifications.sections.system.errors.description"
+                )}
                 disabled={!settings.systemNotifications}
                 name="errors"
               />

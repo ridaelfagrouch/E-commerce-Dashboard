@@ -1,0 +1,308 @@
+{
+  "settings": {
+    "title": "Settings",
+    "description": "Manage your store and account settings",
+
+    "sections": {
+      "store": {
+        "title": "Store Settings",
+        "cards": {
+          "storeInfo": {
+            "title": "Store Information",
+            "description": "Manage your store details and business information"
+          }
+        }
+      },
+      "account": {
+        "title": "Account Settings",
+        "cards": {
+          "profile": {
+            "title": "Profile Settings",
+            "description": "Manage your personal information and preferences"
+          },
+          "security": {
+            "title": "Security",
+            "description": "Manage password, 2FA, and security settings"
+          },
+          "notifications": {
+            "title": "Notifications",
+            "description": "Configure email and push notifications"
+          }
+        }
+      }
+    }
+  },
+
+  "storeInformation": {
+    "title": "Store Information",
+    "description": "Update your store details and business information",
+    "saveChanges": "Save Changes",
+    "sections": {
+      "basic": {
+        "title": "Basic Information",
+        "fields": {
+          "storeName": {
+            "label": "Store Name",
+            "placeholder": "Enter your store name"
+          },
+          "email": {
+            "label": "Business Email",
+            "placeholder": "contact@example.com"
+          },
+          "phone": {
+            "label": "Phone Number",
+            "placeholder": "+1 (555) 123-4567"
+          },
+          "timezone": {
+            "label": "Timezone",
+            "options": {
+              "et": "Eastern Time (ET)",
+              "ct": "Central Time (CT)",
+              "mt": "Mountain Time (MT)",
+              "pt": "Pacific Time (PT)",
+              "gmt": "London (GMT)",
+              "jst": "Tokyo (JST)",
+              "aest": "Sydney (AEST)"
+            }
+          },
+          "website": {
+            "label": "Website",
+            "placeholder": "https://example.com"
+          },
+          "description": {
+            "label": "Store Description",
+            "placeholder": "Describe your store..."
+          }
+        }
+      },
+      "address": {
+        "title": "Business Address",
+        "fields": {
+          "streetAddress": {
+            "label": "Street Address",
+            "placeholder": "Enter your street address"
+          },
+          "city": {
+            "label": "City",
+            "placeholder": "Enter city"
+          },
+          "state": {
+            "label": "State / Province",
+            "placeholder": "Enter state"
+          },
+          "zip": {
+            "label": "ZIP / Postal Code",
+            "placeholder": "Enter ZIP code"
+          },
+          "country": {
+            "label": "Country",
+            "options": {
+              "us": "United States",
+              "ca": "Canada",
+              "gb": "United Kingdom",
+              "au": "Australia",
+              "de": "Germany",
+              "fr": "France",
+              "jp": "Japan"
+            }
+          }
+        }
+      },
+      "business": {
+        "title": "Business Details",
+        "fields": {
+          "taxId": {
+            "label": "Tax ID / VAT Number",
+            "placeholder": "Enter tax ID or VAT number"
+          },
+          "businessType": {
+            "label": "Business Type",
+            "options": {
+              "retail": "Retail",
+              "wholesale": "Wholesale",
+              "manufacturing": "Manufacturing",
+              "service": "Service",
+              "digital": "Digital Products"
+            }
+          },
+          "currency": {
+            "label": "Default Currency",
+            "options": {
+              "usd": "US Dollar (USD)",
+              "eur": "Euro (EUR)",
+              "gbp": "British Pound (GBP)",
+              "cad": "Canadian Dollar (CAD)",
+              "aud": "Australian Dollar (AUD)",
+              "jpy": "Japanese Yen (JPY)"
+            }
+          }
+        }
+      }
+    },
+    "validation": {
+      "required": "is required",
+      "email": "Please enter a valid email address",
+      "storeName": "Store name is required",
+      "phone": "Phone number is required",
+      "address": "Address is required",
+      "city": "City is required",
+      "state": "State is required",
+      "zip": "ZIP code is required"
+    }
+  },
+
+  "security": {
+    "title": "Security Settings",
+    "description": "Manage your password and two-factor authentication settings",
+    "saveChanges": "Save Changes",
+    "sections": {
+      "password": {
+        "fields": {
+          "currentPassword": "Current Password",
+          "newPassword": "New Password",
+          "confirmPassword": "Confirm New Password"
+        },
+        "placeholders": {
+          "currentPassword": "Enter your current password",
+          "newPassword": "Enter your new password",
+          "confirmPassword": "Re-enter your new password"
+        }
+      },
+      "twoFactor": {
+        "title": "Two-Factor Authentication",
+        "description": "Enable two-factor authentication for added security",
+        "enable": "Enable 2FA"
+      },
+      "session": {
+        "title": "Active Sessions",
+        "description": "Manage your active sessions",
+        "timeout": "Session Timeout",
+        "timeoutOptions": {
+          "never": "Never",
+          "15min": "15 minutes",
+          "30min": "30 minutes",
+          "1hour": "1 hour",
+          "2hours": "2 hours",
+          "4hours": "4 hours"
+        }
+      }
+    }
+  },
+
+  "notifications": {
+    "title": "Notification Settings",
+    "description": "Manage your notification preferences",
+    "saveChanges": "Save Changes",
+    "sections": {
+      "email": {
+        "title": "Email Notifications",
+        "description": "Manage your email notification preferences",
+        "enable": "Enable Email Notifications",
+        "orderUpdates": {
+            "label": "Order Updates",
+            "description": "Receive email notifications for order updates"
+        },
+        "promotional": {
+            "label": "Promotional Emails",
+            "description": "Receive promotional emails and offers"
+        },
+        "newsletter": {
+            "label": "Newsletter",
+            "description": "Subscribe to our newsletter for updates"
+        },
+        "inventory": {
+            "label": "Inventory Alerts",
+            "description": "Receive alerts for low inventory levels"
+        },
+        "reviews": {
+            "label": "Product Reviews",
+            "description": "Get notified when a product review is posted"
+        }
+      },
+      "push": {
+        "title": "Push Notifications",
+        "description": "Manage your push notification preferences",
+        "enable": "Enable Push Notifications",
+        "orderAlerts": {
+            "label": "Order Alerts",
+            "description": "Receive push notifications for order alerts"
+        },
+        "stockAlerts": {
+            "label": "Stock Alerts",
+            "description": "Get notified when stock levels change"
+        },
+        "securityAlerts": {
+            "label": "Security Alerts",
+            "description": "Get notified about security-related events"
+        },
+        "salesReports": {
+            "label": "Sales Reports",
+            "description": "Receive push notifications for sales reports"
+        },
+        "newCustomers": {
+            "label": "New Customer Signups",
+            "description": "Get notified when a new customer signs up"
+        }
+      },
+      "browser": {
+        "title": "Browser Notifications",
+        "description": "Manage your browser notification preferences",
+        "enable": "Enable Browser Notifications",
+        "orderNotifications": {
+            "label": "Order Notifications",
+            "description": "Receive browser notifications for new orders"
+        },
+        "newOrders": {
+            "label": "New Orders",
+            "description": "Get notified when a new order is placed"
+        },
+        "chatMessages": {
+            "label": "Chat Messages",
+            "description": "Receive notifications for new chat messages"
+        },
+        "systemUpdates": {
+            "label": "System Updates",
+            "description": "Get notified about system updates and changes"
+        }
+      },
+      "marketing": {
+        "title": "Marketing Preferences",
+        "description": "Manage your marketing preferences",
+        "enable": "Enable Marketing Notifications",
+        "promotions": {
+            "label": "Promotional Offers",
+            "description": "Receive notifications for promotional offers"
+        },
+        "campaigns": {
+            "label": "Marketing Campaigns",
+            "description": "Get notified about marketing campaigns"
+        },
+        "analytics": {
+            "label": "Analytics Reports",
+            "description": "Receive notifications for analytics reports"
+        }
+      },
+      "system": {
+        "title": "System Notifications",
+        "description": "Manage your system notification preferences",
+        "enable": "Enable System Notifications",
+        "performance": {
+            "label": "Performance Alerts",
+            "description": "Get notified about system performance issues"
+        },
+        "maintenance": {
+            "label": "Maintenance Notifications",
+            "description": "Receive notifications for system maintenance"
+        },
+        "errors": {
+            "label": "Error Alerts",
+            "description": "Get notified about system errors"
+        }
+      }
+    }
+  },
+
+  "common": {
+    "back": "Back"
+  }
+}

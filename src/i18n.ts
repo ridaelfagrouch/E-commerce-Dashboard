@@ -10,7 +10,8 @@ import enDashboard from "./locales/en/dashboard.json";
 import enOrders from "./locales/en/orders.json";
 import enProducts from "./locales/en/products.json";
 import enCustomers from "./locales/en/customers.json";
-import enAnalytics from "./locales/en/analytics.json"
+import enAnalytics from "./locales/en/analytics.json";
+import enSettings from "./locales/en/settings.json";
 
 // Import French translation files
 import frCommon from "./locales/fr/common.json";
@@ -20,8 +21,8 @@ import frDashboard from "./locales/fr/dashboard.json";
 import frOrders from "./locales/fr/orders.json";
 import frProducts from "./locales/fr/products.json";
 import frCustomers from "./locales/fr/customers.json";
-import frAnalytics from "./locales/fr/analytics.json"
-
+import frAnalytics from "./locales/fr/analytics.json";
+import frSettings from "./locales/fr/settings.json";
 
 const resources = {
   en: {
@@ -33,7 +34,8 @@ const resources = {
       ...enOrders,
       ...enProducts,
       ...enCustomers,
-      ...enAnalytics
+      ...enAnalytics,
+      ...enSettings,
     },
   },
   fr: {
@@ -45,7 +47,8 @@ const resources = {
       ...frOrders,
       ...frProducts,
       ...frCustomers,
-      ...frAnalytics
+      ...frAnalytics,
+      ...frSettings,
     },
   },
 };

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { User, Camera, Globe, AlertCircle } from "lucide-react";
 import BackButton from "../../atoms/BackButton/BackButton";
+import { useTranslation } from "react-i18next";
 
 interface AccountSettingsProps {
   onBack: () => void;
@@ -11,6 +12,7 @@ interface FormErrors {
 }
 
 const AccountSettings: React.FC<AccountSettingsProps> = ({ onBack }) => {
+  const { t } = useTranslation();
   const [formData, setFormData] = useState({
     firstName: "John",
     lastName: "Doe",
@@ -214,7 +216,7 @@ const AccountSettings: React.FC<AccountSettingsProps> = ({ onBack }) => {
       {/* Header */}
       <div className="border-b border-gray-200 pb-5">
         <div className="flex items-center justify-between">
-          <BackButton onClick={onBack} />
+          <BackButton onClick={onBack} label={t("common.back")} />
           <button
             type="button"
             disabled={!isDirty}

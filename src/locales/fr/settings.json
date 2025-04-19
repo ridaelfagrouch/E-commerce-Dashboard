@@ -1,0 +1,308 @@
+{
+  "settings": {
+    "title": "Paramètres",
+    "description": "Gérez les paramètres de votre boutique et de votre compte",
+
+    "sections": {
+      "store": {
+        "title": "Paramètres de la Boutique",
+        "cards": {
+          "storeInfo": {
+            "title": "Informations de la Boutique",
+            "description": "Gérez les détails et informations commerciales de votre boutique"
+          }
+        }
+      },
+      "account": {
+        "title": "Paramètres du Compte",
+        "cards": {
+          "profile": {
+            "title": "Paramètres du Profil",
+            "description": "Gérez vos informations personnelles et préférences"
+          },
+          "security": {
+            "title": "Sécurité",
+            "description": "Gérez le mot de passe, l'authentification à deux facteurs et les paramètres de sécurité"
+          },
+          "notifications": {
+            "title": "Notifications",
+            "description": "Configurez les notifications par e-mail et push"
+          }
+        }
+      }
+    }
+  },
+
+  "storeInformation": {
+    "title": "Informations de la Boutique",
+    "description": "Mettez à jour les détails et informations commerciales de votre boutique",
+    "saveChanges": "Enregistrer les Modifications",
+    "sections": {
+      "basic": {
+        "title": "Informations de Base",
+        "fields": {
+          "storeName": {
+            "label": "Nom de la Boutique",
+            "placeholder": "Entrez le nom de votre boutique"
+          },
+          "email": {
+            "label": "Email Professionnel",
+            "placeholder": "contact@exemple.com"
+          },
+          "phone": {
+            "label": "Numéro de Téléphone",
+            "placeholder": "+33 6 12 34 56 78"
+          },
+          "timezone": {
+            "label": "Fuseau Horaire",
+            "options": {
+              "et": "Heure de l'Est (ET)",
+              "ct": "Heure Centrale (CT)",
+              "mt": "Heure des Montagnes (MT)",
+              "pt": "Heure du Pacifique (PT)",
+              "gmt": "Londres (GMT)",
+              "jst": "Tokyo (JST)",
+              "aest": "Sydney (AEST)"
+            }
+          },
+          "website": {
+            "label": "Site Web",
+            "placeholder": "https://exemple.com"
+          },
+          "description": {
+            "label": "Description de la Boutique",
+            "placeholder": "Décrivez votre boutique..."
+          }
+        }
+      },
+      "address": {
+        "title": "Adresse Professionnelle",
+        "fields": {
+          "streetAddress": {
+            "label": "Adresse",
+            "placeholder": "Entrez votre adresse"
+          },
+          "city": {
+            "label": "Ville",
+            "placeholder": "Entrez la ville"
+          },
+          "state": {
+            "label": "État / Province",
+            "placeholder": "Entrez l'état ou la province"
+          },
+          "zip": {
+            "label": "Code Postal",
+            "placeholder": "Entrez le code postal"
+          },
+          "country": {
+            "label": "Pays",
+            "options": {
+              "us": "États-Unis",
+              "ca": "Canada",
+              "gb": "Royaume-Uni",
+              "au": "Australie",
+              "de": "Allemagne",
+              "fr": "France",
+              "jp": "Japon"
+            }
+          }
+        }
+      },
+      "business": {
+        "title": "Détails Commerciaux",
+        "fields": {
+          "taxId": {
+            "label": "Numéro de TVA / SIRET",
+            "placeholder": "Entrez votre numéro de TVA ou SIRET"
+          },
+          "businessType": {
+            "label": "Type d'Entreprise",
+            "options": {
+              "retail": "Commerce de Détail",
+              "wholesale": "Commerce de Gros",
+              "manufacturing": "Fabrication",
+              "service": "Service",
+              "digital": "Produits Numériques"
+            }
+          },
+          "currency": {
+            "label": "Devise par Défaut",
+            "options": {
+              "usd": "Dollar Américain (USD)",
+              "eur": "Euro (EUR)",
+              "gbp": "Livre Sterling (GBP)",
+              "cad": "Dollar Canadien (CAD)",
+              "aud": "Dollar Australien (AUD)",
+              "jpy": "Yen Japonais (JPY)"
+            }
+          }
+        }
+      }
+    },
+    "validation": {
+      "required": "est requis",
+      "email": "Veuillez entrer une adresse e-mail valide",
+      "storeName": "Le nom de la boutique est requis",
+      "phone": "Le numéro de téléphone est requis",
+      "address": "L'adresse est requise",
+      "city": "La ville est requise",
+      "state": "L'état ou la province est requis(e)",
+      "zip": "Le code postal est requis"
+    }
+  },
+
+  "security": {
+    "title": "Paramètres de Sécurité",
+    "description": "Gérez votre mot de passe et les paramètres d'authentification à deux facteurs",
+    "saveChanges": "Enregistrer les Modifications",
+    "sections": {
+      "password": {
+        "fields": {
+          "currentPassword": "Mot de Passe Actuel",
+          "newPassword": "Nouveau Mot de Passe",
+          "confirmPassword": "Confirmer le Nouveau Mot de Passe"
+        },
+        "placeholders": {
+          "currentPassword": "Entrez votre mot de passe actuel",
+          "newPassword": "Entrez votre nouveau mot de passe",
+          "confirmPassword": "Ressaisissez votre nouveau mot de passe"
+        }
+      },
+      "twoFactor": {
+        "title": "Authentification à Deux Facteurs",
+        "description": "Activez l'authentification à deux facteurs pour une sécurité accrue",
+        "enable": "Activer 2FA"
+      },
+      "session": {
+        "title": "Sessions Actives",
+        "description": "Gérez vos sessions actives",
+        "timeout": "Délai d'Inactivité",
+        "timeoutOptions": {
+          "never": "Jamais",
+          "15min": "15 minutes",
+          "30min": "30 minutes",
+          "1hour": "1 heure",
+          "2hours": "2 heures",
+          "4hours": "4 heures"
+        }
+      }
+    }
+  },
+
+  "notifications": {
+    "title": "Paramètres de Notification",
+    "description": "Gérez vos préférences de notification",
+    "saveChanges": "Enregistrer les Modifications",
+    "sections": {
+      "email": {
+        "title": "Notifications par E-mail",
+        "description": "Gérez vos préférences de notification par e-mail",
+        "enable": "Activer les Notifications par E-mail",
+        "orderUpdates": {
+          "label": "Mises à Jour de Commande",
+          "description": "Recevez des notifications par e-mail pour les mises à jour de commande"
+        },
+        "promotional": {
+          "label": "E-mails Promotionnels",
+          "description": "Recevez des e-mails promotionnels et des offres"
+        },
+        "newsletter": {
+          "label": "Bulletin d'Information",
+          "description": "Abonnez-vous à notre bulletin d'information pour des mises à jour"
+        },
+        "inventory": {
+          "label": "Alertes d'Inventaire",
+          "description": "Recevez des alertes pour les niveaux d'inventaire bas"
+        },
+        "reviews": {
+          "label": "Avis sur les Produits",
+          "description": "Soyez informé lorsqu'un avis sur un produit est publié"
+        }
+      },
+      "push": {
+        "title": "Notifications Push",
+        "description": "Gérez vos préférences de notification push",
+        "enable": "Activer les Notifications Push",
+        "orderAlerts": {
+          "label": "Alertes de Commande",
+          "description": "Recevez des notifications push pour les alertes de commande"
+        },
+        "stockAlerts": {
+          "label": "Alertes de Stock",
+          "description": "Soyez informé lorsque les niveaux de stock changent"
+        },
+        "securityAlerts": {
+          "label": "Alertes de Sécurité",
+          "description": "Soyez informé des événements liés à la sécurité"
+        },
+        "salesReports": {
+          "label": "Rapports de Ventes",
+          "description": "Recevez des notifications push pour les rapports de ventes"
+        },
+        "newCustomers": {
+          "label": "Nouveaux Inscrits Clients",
+          "description": "Soyez informé lorsqu'un nouveau client s'inscrit"
+        }
+      },
+      "browser": {
+        "title": "Notifications du Navigateur",
+        "description": "Gérez vos préférences de notification du navigateur",
+        "enable": "Activer les Notifications du Navigateur",
+        "orderNotifications": {
+          "label": "Notifications de Commande",
+          "description": "Recevez des notifications du navigateur pour les nouvelles commandes"
+        },
+        "newOrders": {
+          "label": "Nouvelles Commandes",
+          "description": "Soyez informé lorsqu'une nouvelle commande est passée"
+        },
+        "chatMessages": {
+          "label": "Messages de Chat",
+          "description": "Recevez des notifications pour les nouveaux messages de chat"
+        },
+        "systemUpdates": {
+          "label": "Mises à Jour du Système",
+          "description": "Soyez informé des mises à jour et changements du système"
+        }
+      },
+      "marketing": {
+        "title": "Préférences Marketing",
+        "description": "Gérez vos préférences marketing",
+        "enable": "Activer les Notifications Marketing",
+        "promotions": {
+          "label": "Offres Promotionnelles",
+          "description": "Recevez des notifications pour les offres promotionnelles"
+        },
+        "campaigns": {
+          "label": "Campagnes Marketing",
+          "description": "Soyez informé des campagnes marketing"
+        },
+        "analytics": {
+          "label": "Rapports d'Analyse",
+          "description": "Recevez des notifications pour les rapports d'analyse"
+        }
+      },
+      "system": {
+        "title": "Notifications Système",
+        "description": "Gérez vos préférences de notification système",
+        "enable": "Activer les Notifications Système",
+        "performance": {
+          "label": "Alertes de Performance",
+          "description": "Soyez informé des problèmes de performance du système"
+        },
+        "maintenance": {
+          "label": "Notifications de Maintenance",
+          "description": "Recevez des notifications pour la maintenance du système"
+        },
+        "errors": {
+          "label": "Alertes d'Erreur",
+          "description": "Soyez informé des erreurs du système"
+        }
+      }
+    }
+  },
+
+  "common": {
+    "back": "Retour"
+  }
+}

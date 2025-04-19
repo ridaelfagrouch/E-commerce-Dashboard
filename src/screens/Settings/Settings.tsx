@@ -5,8 +5,10 @@ import StoreInformation from "../../components/organisms/StoreSettings/StoreInfo
 import SecuritySettings from "../../components/organisms/SecuritySettings/SecuritySettings";
 import NotificationSettings from "../../components/organisms/NotificationSettings/NotificationSettings";
 import AccountSettings from "../../components/organisms/AccountSettings/AccountSettings";
+import { useTranslation } from "react-i18next";
 
 const Settings: React.FC = () => {
+  const { t } = useTranslation();
   const [activeSection, setActiveSection] = useState<string | null>(null);
 
   const handleBack = () => {
@@ -29,12 +31,14 @@ const Settings: React.FC = () => {
             {/* Store Settings */}
             <div>
               <h2 className="text-lg font-semibold text-gray-900 mb-4">
-                Store Settings
+                {t("settings.sections.store.title")}
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 <SettingsCard
-                  title="Store Information"
-                  description="Manage your store details and business information"
+                  title={t("settings.sections.store.cards.storeInfo.title")}
+                  description={t(
+                    "settings.sections.store.cards.storeInfo.description"
+                  )}
                   icon={<Store className="w-5 h-5" />}
                   onClick={() => setActiveSection("store")}
                 />
@@ -44,24 +48,32 @@ const Settings: React.FC = () => {
             {/* Account Settings */}
             <div>
               <h2 className="text-lg font-semibold text-gray-900 mb-4">
-                Account Settings
+                {t("settings.sections.account.title")}
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 <SettingsCard
-                  title="Profile Settings"
-                  description="Manage your personal information and preferences"
+                  title={t("settings.sections.account.cards.profile.title")}
+                  description={t(
+                    "settings.sections.account.cards.profile.description"
+                  )}
                   icon={<User className="w-5 h-5" />}
                   onClick={() => setActiveSection("account")}
                 />
                 <SettingsCard
-                  title="Security"
-                  description="Manage password, 2FA, and security settings"
+                  title={t("settings.sections.account.cards.security.title")}
+                  description={t(
+                    "settings.sections.account.cards.security.description"
+                  )}
                   icon={<Shield className="w-5 h-5" />}
                   onClick={() => setActiveSection("security")}
                 />
                 <SettingsCard
-                  title="Notifications"
-                  description="Configure email and push notifications"
+                  title={t(
+                    "settings.sections.account.cards.notifications.title"
+                  )}
+                  description={t(
+                    "settings.sections.account.cards.notifications.description"
+                  )}
                   icon={<Bell className="w-5 h-5" />}
                   onClick={() => setActiveSection("notifications")}
                 />
@@ -77,9 +89,9 @@ const Settings: React.FC = () => {
       <div className="max-w-7xl mx-auto">
         {!activeSection && (
           <div className="mb-8">
-            <h1 className="text-2xl font-bold">Settings</h1>
+            <h1 className="text-2xl font-bold">{t("settings.title")}</h1>
             <p className="mt-1 text-sm text-gray-500">
-              Manage your store and account settings
+              {t("settings.description")}
             </p>
           </div>
         )}

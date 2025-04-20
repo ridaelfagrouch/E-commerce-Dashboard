@@ -186,6 +186,11 @@
           "4hours": "4 hours"
         }
       }
+    },
+    "validation": {
+      "currentPasswordRequired": "Current password is required",
+      "passwordLength": "Password must be at least 8 characters long",
+      "passwordsMatch": "New password and confirmation do not match"
     }
   },
 
@@ -199,24 +204,24 @@
         "description": "Manage your email notification preferences",
         "enable": "Enable Email Notifications",
         "orderUpdates": {
-            "label": "Order Updates",
-            "description": "Receive email notifications for order updates"
+          "label": "Order Updates",
+          "description": "Receive email notifications for order updates"
         },
         "promotional": {
-            "label": "Promotional Emails",
-            "description": "Receive promotional emails and offers"
+          "label": "Promotional Emails",
+          "description": "Receive promotional emails and offers"
         },
         "newsletter": {
-            "label": "Newsletter",
-            "description": "Subscribe to our newsletter for updates"
+          "label": "Newsletter",
+          "description": "Subscribe to our newsletter for updates"
         },
         "inventory": {
-            "label": "Inventory Alerts",
-            "description": "Receive alerts for low inventory levels"
+          "label": "Inventory Alerts",
+          "description": "Receive alerts for low inventory levels"
         },
         "reviews": {
-            "label": "Product Reviews",
-            "description": "Get notified when a product review is posted"
+          "label": "Product Reviews",
+          "description": "Get notified when a product review is posted"
         }
       },
       "push": {
@@ -224,24 +229,24 @@
         "description": "Manage your push notification preferences",
         "enable": "Enable Push Notifications",
         "orderAlerts": {
-            "label": "Order Alerts",
-            "description": "Receive push notifications for order alerts"
+          "label": "Order Alerts",
+          "description": "Receive push notifications for order alerts"
         },
         "stockAlerts": {
-            "label": "Stock Alerts",
-            "description": "Get notified when stock levels change"
+          "label": "Stock Alerts",
+          "description": "Get notified when stock levels change"
         },
         "securityAlerts": {
-            "label": "Security Alerts",
-            "description": "Get notified about security-related events"
+          "label": "Security Alerts",
+          "description": "Get notified about security-related events"
         },
         "salesReports": {
-            "label": "Sales Reports",
-            "description": "Receive push notifications for sales reports"
+          "label": "Sales Reports",
+          "description": "Receive push notifications for sales reports"
         },
         "newCustomers": {
-            "label": "New Customer Signups",
-            "description": "Get notified when a new customer signs up"
+          "label": "New Customer Signups",
+          "description": "Get notified when a new customer signs up"
         }
       },
       "browser": {
@@ -249,20 +254,20 @@
         "description": "Manage your browser notification preferences",
         "enable": "Enable Browser Notifications",
         "orderNotifications": {
-            "label": "Order Notifications",
-            "description": "Receive browser notifications for new orders"
+          "label": "Order Notifications",
+          "description": "Receive browser notifications for new orders"
         },
         "newOrders": {
-            "label": "New Orders",
-            "description": "Get notified when a new order is placed"
+          "label": "New Orders",
+          "description": "Get notified when a new order is placed"
         },
         "chatMessages": {
-            "label": "Chat Messages",
-            "description": "Receive notifications for new chat messages"
+          "label": "Chat Messages",
+          "description": "Receive notifications for new chat messages"
         },
         "systemUpdates": {
-            "label": "System Updates",
-            "description": "Get notified about system updates and changes"
+          "label": "System Updates",
+          "description": "Get notified about system updates and changes"
         }
       },
       "marketing": {
@@ -270,16 +275,16 @@
         "description": "Manage your marketing preferences",
         "enable": "Enable Marketing Notifications",
         "promotions": {
-            "label": "Promotional Offers",
-            "description": "Receive notifications for promotional offers"
+          "label": "Promotional Offers",
+          "description": "Receive notifications for promotional offers"
         },
         "campaigns": {
-            "label": "Marketing Campaigns",
-            "description": "Get notified about marketing campaigns"
+          "label": "Marketing Campaigns",
+          "description": "Get notified about marketing campaigns"
         },
         "analytics": {
-            "label": "Analytics Reports",
-            "description": "Receive notifications for analytics reports"
+          "label": "Analytics Reports",
+          "description": "Receive notifications for analytics reports"
         }
       },
       "system": {
@@ -287,22 +292,87 @@
         "description": "Manage your system notification preferences",
         "enable": "Enable System Notifications",
         "performance": {
-            "label": "Performance Alerts",
-            "description": "Get notified about system performance issues"
+          "label": "Performance Alerts",
+          "description": "Get notified about system performance issues"
         },
         "maintenance": {
-            "label": "Maintenance Notifications",
-            "description": "Receive notifications for system maintenance"
+          "label": "Maintenance Notifications",
+          "description": "Receive notifications for system maintenance"
         },
         "errors": {
-            "label": "Error Alerts",
-            "description": "Get notified about system errors"
+          "label": "Error Alerts",
+          "description": "Get notified about system errors"
         }
       }
     }
   },
 
-  "common": {
+  "accountSettings": {
+    "title": "Account Settings",
+    "description": "Manage your personal information and preferences",
+    "saveChanges": "Save Changes",
+    "backButton": "Back",
+    "isDirty": {
+      "disabled": "No changes to save"
+    },
+    "sections": {
+      "profilePicture": {
+        "title": "Profile Picture",
+        "changeText": "Change profile picture",
+        "fileTypes": "JPG, GIF or PNG. 1MB max."
+      },
+      "personalInformation": {
+        "title": "Personal Information",
+        "fields": {
+          "firstName": {
+            "label": "First Name",
+            "placeholder": "Enter your first name",
+            "error": "First name is required"
+          },
+          "lastName": {
+            "label": "Last Name",
+            "placeholder": "Enter your last name",
+            "error": "Last name is required"
+          },
+          "email": {
+            "label": "Email Address",
+            "placeholder": "Enter your email",
+            "error": "Please enter a valid email address"
+          },
+          "phone": {
+            "label": "Phone Number",
+            "placeholder": "+1 (555) 123-4567"
+          }
+        }
+      },
+      "preferences": {
+        "title": "Preferences",
+        "fields": {
+          "language": {
+            "label": "Language",
+            "options": {
+              "en": "English",
+              "es": "Spanish",
+              "fr": "French",
+              "de": "German"
+            }
+          },
+          "timezone": {
+            "label": "Time Zone",
+            "options": {
+              "america_new_york": "Eastern Time (ET)",
+              "america_chicago": "Central Time (CT)",
+              "america_denver": "Mountain Time (MT)",
+              "america_los_angeles": "Pacific Time (PT)",
+              "europe_london": "London (GMT)"
+            }
+          }
+        }
+      }
+    }
+  },
+
+  "settingCommon": {
     "back": "Back"
   }
 }

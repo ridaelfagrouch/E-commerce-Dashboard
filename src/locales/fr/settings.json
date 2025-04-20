@@ -186,6 +186,11 @@
           "4hours": "4 heures"
         }
       }
+    },
+    "validation": {
+      "currentPasswordRequired": "Le mot de passe actuel est requis",
+      "passwordLength": "Le mot de passe doit comporter au moins 8 caractères",
+      "passwordsMatch": "Le nouveau mot de passe et la confirmation ne correspondent pas"
     }
   },
 
@@ -302,7 +307,72 @@
     }
   },
 
-  "common": {
+  "accountSettings": {
+    "title": "Paramètres du Compte",
+    "description": "Gérez vos informations personnelles et préférences",
+    "saveChanges": "Enregistrer les Modifications",
+    "backButton": "Retour",
+    "isDirty": {
+      "disabled": "Aucune modification à enregistrer"
+    },
+    "sections": {
+      "profilePicture": {
+        "title": "Photo de Profil",
+        "changeText": "Changer la photo de profil",
+        "fileTypes": "JPG, GIF ou PNG. 1Mo max."
+      },
+      "personalInformation": {
+        "title": "Informations Personnelles",
+        "fields": {
+          "firstName": {
+            "label": "Prénom",
+            "placeholder": "Entrez votre prénom",
+            "error": "Le prénom est requis"
+          },
+          "lastName": {
+            "label": "Nom",
+            "placeholder": "Entrez votre nom",
+            "error": "Le nom est requis"
+          },
+          "email": {
+            "label": "Adresse Email",
+            "placeholder": "Entrez votre email",
+            "error": "Veuillez entrer une adresse email valide"
+          },
+          "phone": {
+            "label": "Numéro de Téléphone",
+            "placeholder": "+33 6 12 34 56 78"
+          }
+        }
+      },
+      "preferences": {
+        "title": "Préférences",
+        "fields": {
+          "language": {
+            "label": "Langue",
+            "options": {
+              "en": "Anglais",
+              "es": "Espagnol",
+              "fr": "Français",
+              "de": "Allemand"
+            }
+          },
+          "timezone": {
+            "label": "Fuseau Horaire",
+            "options": {
+              "america_new_york": "Heure de l'Est (ET)",
+              "america_chicago": "Heure Centrale (CT)",
+              "america_denver": "Heure des Montagnes (MT)",
+              "america_los_angeles": "Heure du Pacifique (PT)",
+              "europe_london": "Londres (GMT)"
+            }
+          }
+        }
+      }
+    }
+  },
+
+  "settingCommon": {
     "back": "Retour"
   }
 }

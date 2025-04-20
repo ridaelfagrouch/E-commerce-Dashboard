@@ -322,11 +322,27 @@ const Dashboard: React.FC = () => {
 
     const generateCategoryData = () => {
       const categories: SalesByCategory[] = [
-        { category: "Electronics", sales: 42, color: "#4f46e5" },
-        { category: "Clothing", sales: 28, color: "#06b6d4" },
-        { category: "Home & Kitchen", sales: 15, color: "#10b981" },
-        { category: "Health & Beauty", sales: 10, color: "#f59e0b" },
-        { category: "Other", sales: 5, color: "#6b7280" },
+        {
+          category: "dashboard.charts.electronics",
+          sales: 42,
+          color: "#4f46e5",
+        },
+        {
+          category: "dashboard.charts.clothing",
+          sales: 28,
+          color: "#06b6d4",
+        },
+        {
+          category: "dashboard.charts.home&kitchen",
+          sales: 15,
+          color: "#10b981",
+        },
+        {
+          category: "dashboard.charts.health&beauty",
+          sales: 10,
+          color: "#f59e0b",
+        },
+        { category: "dashboard.charts.other", sales: 5, color: "#6b7280" },
       ];
 
       setCategoriesChartData(categories);
@@ -458,14 +474,14 @@ const Dashboard: React.FC = () => {
       labels: salesChartData.map((item) => item.day),
       datasets: [
         {
-          label: "Revenue",
+          label: t("dashboard.charts.revenue"),
           data: salesChartData.map((item) => item.sales),
           backgroundColor: "rgba(79, 70, 229, 0.8)",
           borderColor: "rgba(79, 70, 229, 1)",
           borderWidth: 1,
         },
         {
-          label: "Orders",
+          label: t("dashboard.charts.orders"),
           data: salesChartData.map((item) => item.orders * 50), // Scale up for visibility
           backgroundColor: "rgba(16, 185, 129, 0.8)",
           borderColor: "rgba(16, 185, 129, 1)",
@@ -483,7 +499,7 @@ const Dashboard: React.FC = () => {
           beginAtZero: true,
           title: {
             display: true,
-            text: "Revenue ($)",
+            text: t("dashboard.charts.revenue") + " ($)",
           },
           ticks: {
             maxTicksLimit: isMobile ? 6 : 8,
@@ -494,7 +510,7 @@ const Dashboard: React.FC = () => {
           beginAtZero: true,
           title: {
             display: !isMobile,
-            text: "Orders",
+            text: t("dashboard.charts.orders"),
           },
           grid: {
             drawOnChartArea: false,
@@ -522,7 +538,7 @@ const Dashboard: React.FC = () => {
   const categoryChartConfig = {
     type: "doughnut",
     data: {
-      labels: categoriesChartData.map((item) => item.category),
+      labels: categoriesChartData.map((item) => t(item.category)),
       datasets: [
         {
           data: categoriesChartData.map((item) => item.sales),

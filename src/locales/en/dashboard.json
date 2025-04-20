@@ -21,7 +21,14 @@
       },
       "recent_orders": "Recent Orders",
       "top_products": "Top Products",
-      "view_all": "View all"
+      "view_all": "View all",
+      "revenue": "Revenue",
+      "orders": "Orders",
+      "electronics": "Electronics",
+      "clothing": "Clothing",
+      "home&kitchen": "Home & Kitchen",
+      "health&beauty": "Health & Beauty",
+      "other": "Other"
     },
     "product_status": {
       "in_stock": "In Stock",
@@ -31,6 +38,33 @@
     "actions": {
       "edit": "Edit",
       "view": "View"
+    },
+    "OrderActivity": {
+      "title": "Order Activity",
+      "daily": "Daily",
+      "weekly": "Weekly",
+      "monthly": "Monthly",
+      "orders": "Orders",
+      "today": "Today",
+      "this_week": "This Week",
+      "this_month": "This Month",
+      "total_orders": "Total Orders",
+      "total_revenue": "Total Revenue",
+      "order_status": "Order Status",
+      "order_status_breakdown": "Order Status Breakdown",
+      "completed": "Completed",
+      "processing": "Processing",
+      "pending": "Pending",
+      "of_total": "% of total",
+      "orders_for": "Orders for",
+      "orders_this_hour": "Orders This Hour",
+      "revenue_this_hour": "Revenue This Hour",
+      "activity_level": {
+        "high": "high activity",
+        "medium": "medium activity",
+        "low": "low activity"
+      },
+      "at": "at"
     }
   }
 }

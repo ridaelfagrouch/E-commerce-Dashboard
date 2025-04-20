@@ -316,11 +316,11 @@ export const Customers: React.FC = () => {
 
       <div className="bg-white rounded-lg shadow mb-8">
         <div className="p-4 border-b flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-          <h2 className="text-lg font-medium">Customer Filters</h2>
+          <h2 className="text-lg font-medium">{t("customers.filters.title")}</h2>
           <div className="flex flex-wrap gap-2 w-full sm:w-auto">
             <div className="w-full sm:w-64">
               <SearchInput
-                placeholder="Search customers..."
+                placeholder={t("customers.filters.search_placeholder")}
                 value={searchTerm}
                 onChange={handleSearch}
               />

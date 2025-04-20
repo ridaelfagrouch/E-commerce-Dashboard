@@ -20,6 +20,8 @@ import {
   endOfDay,
   eachHourOfInterval,
 } from "date-fns";
+import { enUS, fr } from "date-fns/locale";
+import { useTranslation } from "react-i18next";
 
 interface HourlyData {
   hour: Date;
@@ -105,7 +107,7 @@ const generateHourlyData = (date: Date, totalOrders: number): HourlyData[] => {
   // Distribute remaining orders to peak hours
   while (remainingOrders > 0) {
     const peakHours = hourlyOrders
-      .map((index) => ({
+      .map((_, index) => ({
         index,
         weight: hourlyWeights[index],
       }))
@@ -237,6 +239,7 @@ const generateMockData = (startDate: Date, endDate: Date): OrderData[] => {
 };
 
 const OrderActivity: React.FC = () => {
+  const { t, i18n } = useTranslation();
   const [currentDate, setCurrentDate] = useState<Date>(new Date());
   const [periodFilter, setPeriodFilter] = useState<
     "Today" | "This Week" | "This Month"
@@ -244,6 +247,9 @@ const OrderActivity: React.FC = () => {
   const [allOrderData, setAllOrderData] = useState<OrderData[]>([]);
   const [visibleOrderData, setVisibleOrderData] = useState<OrderData[]>([]);
   const [selectedHour, setSelectedHour] = useState<Date | null>(null);
+
+  // Get locale for date formatting
+  const currentLocale = i18n.language === "fr" ? fr : enUS;
 
   // Generate initial data for a longer period (6 months back and 6 months forward)
   useEffect(() => {
@@ -346,17 +352,16 @@ const OrderActivity: React.FC = () => {
   const getPeriodLabel = () => {
     switch (periodFilter) {
       case "Today":
-        return format(currentDate, "MMMM d, yyyy");
+        return format(currentDate, "MMMM d, yyyy", { locale: currentLocale });
       case "This Week": {
         const weekStart = startOfWeek(currentDate, { weekStartsOn: 0 });
         const weekEnd = endOfWeek(currentDate, { weekStartsOn: 0 });
-        return `${format(weekStart, "M/d/yyyy")} - ${format(
-          weekEnd,
-          "M/d/yyyy"
-        )}`;
+        return `${format(weekStart, "M/d/yyyy", {
+          locale: currentLocale,
+        })} - ${format(weekEnd, "M/d/yyyy", { locale: currentLocale })}`;
       }
       case "This Month":
-        return format(currentDate, "MMMM yyyy");
+        return format(currentDate, "MMMM yyyy", { locale: currentLocale });
       default:
         return "";
     }
@@ -402,13 +407,14 @@ const OrderActivity: React.FC = () => {
               >
                 <div className="text-center mb-2">
                   <div className="text-lg font-semibold text-gray-900">
-                    {format(hourData.hour, "h:00 a")}
+                    {format(hourData.hour, "h:00 a", { locale: currentLocale })}
                   </div>
                 </div>
 
                 <div className="text-center space-y-1">
                   <div className="font-medium text-gray-900">
-                    {hourData.orders} orders
+                    {hourData.orders}{" "}
+                    {t("dashboard.OrderActivity.orders").toLowerCase()}
                   </div>
                   <div className="text-sm text-gray-600">
                     ${hourData.revenue.toFixed(2)}
@@ -418,7 +424,7 @@ const OrderActivity: React.FC = () => {
                 <div
                   className={`text-center text-xs font-medium mt-2 py-1 rounded-full ${activityColors[activityLevel]}`}
                 >
-                  {activityLevel} activity
+                  {t(`dashboard.OrderActivity.activity_level.${activityLevel}`)}
                 </div>
               </div>
             );
@@ -429,16 +435,19 @@ const OrderActivity: React.FC = () => {
         {selectedHour && hourlyData && (
           <div className="bg-gray-50 rounded-lg p-4 md:p-6 mb-8">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">
-              {`Orders for ${
-                selectedHour instanceof Date
-                  ? format(selectedHour, "EEEE, MMMM d, yyyy 'at' h:00 a")
-                  : ""
-              }`}
+              {t("dashboard.OrderActivity.orders_for")}{" "}
+              {format(selectedHour, "EEEE, MMMM d, yyyy", {
+                locale: currentLocale,
+              })}{" "}
+              {t("dashboard.OrderActivity.at")}{" "}
+              {format(selectedHour, "h:00 a", { locale: currentLocale })}
             </h3>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
               <div className="bg-white rounded-lg p-4 shadow-sm border border-gray-100">
-                <div className="text-sm text-gray-500">Orders This Hour</div>
+                <div className="text-sm text-gray-500">
+                  {t("dashboard.OrderActivity.orders_this_hour")}
+                </div>
                 <div className="text-3xl font-bold text-gray-900 mt-1">
                   {hourlyData.find(
                     (h) => h.hour.getHours() === selectedHour.getHours()
@@ -447,7 +456,9 @@ const OrderActivity: React.FC = () => {
               </div>
 
               <div className="bg-white rounded-lg p-4 shadow-sm border border-gray-100">
-                <div className="text-sm text-gray-500">Revenue This Hour</div>
+                <div className="text-sm text-gray-500">
+                  {t("dashboard.OrderActivity.revenue_this_hour")}
+                </div>
                 <div className="text-3xl font-bold text-gray-900 mt-1">
                   $
                   {hourlyData
@@ -458,7 +469,7 @@ const OrderActivity: React.FC = () => {
             </div>
 
             <h4 className="text-md font-semibold text-gray-900 mb-4">
-              Order Status Breakdown
+              {t("dashboard.OrderActivity.order_status_breakdown")}
             </h4>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               {["completed", "processing", "pending"].map((status) => {
@@ -503,7 +514,7 @@ const OrderActivity: React.FC = () => {
                           className={`w-2 h-2 rounded-full ${colors.dot}`}
                         ></div>
                         <div className="text-sm font-medium capitalize">
-                          {status}
+                          {t(`dashboard.OrderActivity.${status}`)}
                         </div>
                       </div>
                       <div className={`text-2xl font-bold ${colors.text}`}>
@@ -513,7 +524,8 @@ const OrderActivity: React.FC = () => {
                     <div
                       className={`text-xs px-2 py-1 rounded-full ${colors.bg} ${colors.text} inline-block`}
                     >
-                      {percentage}% of total
+                      {percentage}
+                      {t("dashboard.OrderActivity.of_total")}
                     </div>
                   </div>
                 );
@@ -532,7 +544,7 @@ const OrderActivity: React.FC = () => {
         <div className="flex items-center">
           <CalendarIcon className="mr-2 h-5 w-5 text-gray-500" />
           <h2 className="text-lg font-semibold text-gray-900">
-            Order Activity
+            {t("dashboard.OrderActivity.title")}
           </h2>
         </div>
         <div className="flex space-x-2 w-full sm:w-auto">
@@ -546,7 +558,11 @@ const OrderActivity: React.FC = () => {
               }`}
               onClick={() => setPeriodFilter(period as typeof periodFilter)}
             >
-              {period}
+              {t(
+                `dashboard.OrderActivity.${period
+                  .toLowerCase()
+                  .replace(" ", "_")}`
+              )}
             </button>
           ))}
         </div>
@@ -569,15 +585,17 @@ const OrderActivity: React.FC = () => {
             <div className="text-center">
               <h3 className="text-lg font-semibold text-gray-900">
                 {periodFilter === "Today"
-                  ? "Daily"
+                  ? t("dashboard.OrderActivity.daily")
                   : periodFilter === "This Week"
-                  ? "Weekly"
-                  : "Monthly"}{" "}
-                Orders
+                  ? t("dashboard.OrderActivity.weekly")
+                  : t("dashboard.OrderActivity.monthly")}{" "}
+                {t("dashboard.OrderActivity.orders")}
               </h3>
               <p className="text-sm text-gray-500 mt-1">{getPeriodLabel()}</p>
               {isSameDay(currentDate, new Date()) && (
-                <p className="text-sm text-blue-600 mt-1">Today</p>
+                <p className="text-sm text-blue-600 mt-1">
+                  {t("dashboard.OrderActivity.today")}
+                </p>
               )}
             </div>
 
@@ -597,8 +615,8 @@ const OrderActivity: React.FC = () => {
               <div
                 className={`grid ${
                   periodFilter === "This Week"
-                    ? "grid-cols-2 sm:grid-cols-4 md:grid-cols-7"
-                    : "grid-cols-2 sm:grid-cols-4 md:grid-cols-7"
+                    ? "grid-cols-2 sm:grid-cols-3 md:grid-cols-4"
+                    : "grid-cols-2 sm:grid-cols-3 md:grid-cols-4"
                 } gap-3 mb-8`}
               >
                 {visibleOrderData.map((day, index) => {
@@ -619,16 +637,17 @@ const OrderActivity: React.FC = () => {
                     >
                       <div className="text-center mb-2">
                         <div className="text-sm font-medium text-gray-600">
-                          {format(day.date, "EEE")}
+                          {format(day.date, "EEE", { locale: currentLocale })}
                         </div>
                         <div className="text-lg font-semibold text-gray-900">
-                          {format(day.date, "d")}
+                          {format(day.date, "d", { locale: currentLocale })}
                         </div>
                       </div>
 
                       <div className="text-center space-y-1">
-                        <div className="font-medium text-gray-900">
-                          {day.orders} orders
+                        <div className="text-sm text-gray-600">
+                          {day.orders}{" "}
+                          {t("dashboard.OrderActivity.orders").toLowerCase()}
                         </div>
                         <div className="text-sm text-gray-600">
                           ${day.revenue.toFixed(2)}
@@ -644,7 +663,9 @@ const OrderActivity: React.FC = () => {
                             : "bg-green-100 text-green-700"
                         }`}
                       >
-                        {day.activityLevel} activity
+                        {t(
+                          `dashboard.OrderActivity.activity_level.${day.activityLevel}`
+                        )}
                       </div>
                     </div>
                   );
@@ -655,19 +676,25 @@ const OrderActivity: React.FC = () => {
               {selectedDayData && (
                 <div className="bg-gray-50 rounded-lg p-4 md:p-6">
                   <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                    {format(selectedDayData.date, "EEEE, MMMM d, yyyy")}
+                    {format(selectedDayData.date, "EEEE, MMMM d, yyyy", {
+                      locale: currentLocale,
+                    })}
                   </h3>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                     <div className="bg-white rounded-lg p-4 shadow-sm border border-gray-100">
-                      <div className="text-sm text-gray-500">Total Orders</div>
+                      <div className="text-sm text-gray-500">
+                        {t("dashboard.OrderActivity.total_orders")}
+                      </div>
                       <div className="text-3xl font-bold text-gray-900 mt-1">
                         {selectedDayData.orders}
                       </div>
                     </div>
 
                     <div className="bg-white rounded-lg p-4 shadow-sm border border-gray-100">
-                      <div className="text-sm text-gray-500">Total Revenue</div>
+                      <div className="text-sm text-gray-500">
+                        {t("dashboard.OrderActivity.total_revenue")}
+                      </div>
                       <div className="text-3xl font-bold text-gray-900 mt-1">
                         ${selectedDayData.revenue.toFixed(2)}
                       </div>
@@ -675,14 +702,16 @@ const OrderActivity: React.FC = () => {
                   </div>
 
                   <h4 className="text-md font-semibold text-gray-900 mb-4">
-                    Order Status Breakdown
+                    {t("dashboard.OrderActivity.order_status_breakdown")}
                   </h4>
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div className="bg-white rounded-lg p-4 shadow-sm border border-gray-100">
                       <div className="flex items-center justify-between mb-2">
                         <div className="flex items-center gap-2">
                           <div className="w-2 h-2 rounded-full bg-green-500"></div>
-                          <div className="text-sm font-medium">Completed</div>
+                          <div className="text-sm font-medium">
+                            {t("dashboard.OrderActivity.completed")}
+                          </div>
                         </div>
                         <div className="text-2xl font-bold text-green-600">
                           {selectedDayData.completed}
@@ -696,7 +725,7 @@ const OrderActivity: React.FC = () => {
                                 100
                             )
                           : 0}
-                        % of total
+                        {t("dashboard.OrderActivity.of_total")}
                       </div>
                     </div>
 
@@ -704,7 +733,9 @@ const OrderActivity: React.FC = () => {
                       <div className="flex items-center justify-between mb-2">
                         <div className="flex items-center gap-2">
                           <div className="w-2 h-2 rounded-full bg-blue-500"></div>
-                          <div className="text-sm font-medium">Processing</div>
+                          <div className="text-sm font-medium">
+                            {t("dashboard.OrderActivity.processing")}
+                          </div>
                         </div>
                         <div className="text-2xl font-bold text-blue-600">
                           {selectedDayData.processing}
@@ -718,7 +749,7 @@ const OrderActivity: React.FC = () => {
                                 100
                             )
                           : 0}
-                        % of total
+                        {t("dashboard.OrderActivity.of_total")}
                       </div>
                     </div>
 
@@ -726,7 +757,9 @@ const OrderActivity: React.FC = () => {
                       <div className="flex items-center justify-between mb-2">
                         <div className="flex items-center gap-2">
                           <div className="w-2 h-2 rounded-full bg-yellow-500"></div>
-                          <div className="text-sm font-medium">Pending</div>
+                          <div className="text-sm font-medium">
+                            {t("dashboard.OrderActivity.pending")}
+                          </div>
                         </div>
                         <div className="text-2xl font-bold text-yellow-600">
                           {selectedDayData.pending}
@@ -740,7 +773,7 @@ const OrderActivity: React.FC = () => {
                                 100
                             )
                           : 0}
-                        % of total
+                        {t("dashboard.OrderActivity.of_total")}
                       </div>
                     </div>
                   </div>
@@ -758,7 +791,7 @@ const OrderActivity: React.FC = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-4 mb-6">
               <div className="bg-white rounded-lg p-4 shadow-sm border border-gray-100">
                 <h3 className="text-sm font-medium text-gray-500 mb-1">
-                  Total Orders
+                  {t("dashboard.OrderActivity.total_orders")}
                 </h3>
                 <div className="text-3xl font-bold text-gray-900">
                   {periodTotal.orders}
@@ -767,7 +800,7 @@ const OrderActivity: React.FC = () => {
 
               <div className="bg-white rounded-lg p-4 shadow-sm border border-gray-100">
                 <h3 className="text-sm font-medium text-gray-500 mb-1">
-                  Total Revenue
+                  {t("dashboard.OrderActivity.total_revenue")}
                 </h3>
                 <div className="text-3xl font-bold text-gray-900">
                   ${periodTotal.revenue.toFixed(2)}
@@ -776,7 +809,7 @@ const OrderActivity: React.FC = () => {
             </div>
 
             <h3 className="text-sm font-medium text-gray-900 mb-4">
-              Order Status
+              {t("dashboard.OrderActivity.order_status")}
             </h3>
 
             <div className="space-y-4">
@@ -784,7 +817,9 @@ const OrderActivity: React.FC = () => {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <div className="w-2 h-2 rounded-full bg-green-500"></div>
-                    <span className="text-sm font-medium">Completed</span>
+                    <span className="text-sm font-medium">
+                      {t("dashboard.OrderActivity.completed")}
+                    </span>
                   </div>
                   <div className="flex items-center gap-2">
                     <span className="font-medium">{periodTotal.completed}</span>
@@ -804,7 +839,9 @@ const OrderActivity: React.FC = () => {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <div className="w-2 h-2 rounded-full bg-blue-500"></div>
-                    <span className="text-sm font-medium">Processing</span>
+                    <span className="text-sm font-medium">
+                      {t("dashboard.OrderActivity.processing")}
+                    </span>
                   </div>
                   <div className="flex items-center gap-2">
                     <span className="font-medium">
@@ -826,7 +863,9 @@ const OrderActivity: React.FC = () => {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <div className="w-2 h-2 rounded-full bg-yellow-500"></div>
-                    <span className="text-sm font-medium">Pending</span>
+                    <span className="text-sm font-medium">
+                      {t("dashboard.OrderActivity.pending")}
+                    </span>
                   </div>
                   <div className="flex items-center gap-2">
                     <span className="font-medium">{periodTotal.pending}</span>

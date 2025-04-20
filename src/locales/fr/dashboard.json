@@ -21,7 +21,14 @@
       },
       "recent_orders": "Commandes Récentes",
       "top_products": "Meilleurs Produits",
-      "view_all": "Voir tout"
+      "view_all": "Voir tout",
+      "revenue": "Revenu",
+      "orders": "Commandes",
+      "electronics": "Électronique",
+      "clothing": "Vêtements",
+      "home&kitchen": "Maison & Cuisine",
+      "health&beauty": "Santé & Beauté",
+      "other": "Autre"
     },
     "product_status": {
       "in_stock": "En Stock",
@@ -31,6 +38,33 @@
     "actions": {
       "edit": "Modifier",
       "view": "Voir"
+    },
+    "OrderActivity": {
+      "title": "Activité des Commandes",
+      "daily": "Quotidien",
+      "weekly": "Hebdomadaire",
+      "monthly": "Mensuel",
+      "orders": "Commandes",
+      "today": "Aujourd'hui",
+      "this_week": "Cette Semaine",
+      "this_month": "Ce Mois",
+      "total_orders": "Total des Commandes",
+      "total_revenue": "Revenu Total",
+      "order_status": "État des Commandes",
+      "order_status_breakdown": "Répartition par État",
+      "completed": "Terminées",
+      "processing": "En traitement",
+      "pending": "En attente",
+      "of_total": "% du total",
+      "orders_for": "Commandes pour",
+      "orders_this_hour": "Commandes Cette Heure",
+      "revenue_this_hour": "Revenu Cette Heure",
+      "activity_level": {
+        "high": "activité élevée",
+        "medium": "activité moyenne",
+        "low": "activité faible"
+      },
+      "at": "à"
     }
   }
 }

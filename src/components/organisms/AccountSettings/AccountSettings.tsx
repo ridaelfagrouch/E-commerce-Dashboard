@@ -29,15 +29,21 @@ const AccountSettings: React.FC<AccountSettingsProps> = ({ onBack }) => {
     const newErrors: FormErrors = {};
 
     if (!formData.firstName.trim()) {
-      newErrors.firstName = "First name is required";
+      newErrors.firstName = t(
+        "accountSettings.sections.personalInformation.fields.firstName.error"
+      );
     }
 
     if (!formData.lastName.trim()) {
-      newErrors.lastName = "Last name is required";
+      newErrors.lastName = t(
+        "accountSettings.sections.personalInformation.fields.lastName.error"
+      );
     }
 
     if (!formData.email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
-      newErrors.email = "Please enter a valid email address";
+      newErrors.email = t(
+        "accountSettings.sections.personalInformation.fields.email.error"
+      );
     }
 
     setErrors(newErrors);
@@ -216,7 +222,7 @@ const AccountSettings: React.FC<AccountSettingsProps> = ({ onBack }) => {
       {/* Header */}
       <div className="border-b border-gray-200 pb-5">
         <div className="flex items-center justify-between">
-          <BackButton onClick={onBack} label={t("common.back")} />
+          <BackButton onClick={onBack} label={t("settingCommon.back")} />
           <button
             type="button"
             disabled={!isDirty}
@@ -227,7 +233,7 @@ const AccountSettings: React.FC<AccountSettingsProps> = ({ onBack }) => {
             }`}
             onClick={handleSubmit}
           >
-            Save Changes
+            {t("accountSettings.saveChanges")}
           </button>
         </div>
         <div className="mt-4 flex items-center">
@@ -236,10 +242,10 @@ const AccountSettings: React.FC<AccountSettingsProps> = ({ onBack }) => {
           </div>
           <div className="ml-4">
             <h2 className="text-xl font-semibold text-gray-900">
-              Account Settings
+              {t("accountSettings.title")}
             </h2>
             <p className="mt-1 text-sm text-gray-500">
-              Manage your personal information and preferences
+              {t("accountSettings.description")}
             </p>
           </div>
         </div>
@@ -249,7 +255,9 @@ const AccountSettings: React.FC<AccountSettingsProps> = ({ onBack }) => {
       <form className="space-y-8" onSubmit={handleSubmit}>
         {/* Profile Picture */}
         <div className="space-y-4">
-          <h3 className="text-lg font-medium text-gray-900">Profile Picture</h3>
+          <h3 className="text-lg font-medium text-gray-900">
+            {t("accountSettings.sections.profilePicture.title")}
+          </h3>
           <div className="bg-white rounded-lg border border-gray-200 p-6">
             <div className="flex items-center space-x-4">
               <div className="relative">
@@ -265,10 +273,10 @@ const AccountSettings: React.FC<AccountSettingsProps> = ({ onBack }) => {
               </div>
               <div>
                 <p className="text-sm font-medium text-gray-900">
-                  Change profile picture
+                  {t("accountSettings.sections.profilePicture.changeText")}
                 </p>
                 <p className="text-sm text-gray-500">
-                  JPG, GIF or PNG. 1MB max.
+                  {t("accountSettings.sections.profilePicture.fileTypes")}
                 </p>
               </div>
             </div>
@@ -278,34 +286,50 @@ const AccountSettings: React.FC<AccountSettingsProps> = ({ onBack }) => {
         {/* Personal Information */}
         <div className="space-y-4">
           <h3 className="text-lg font-medium text-gray-900">
-            Personal Information
+            {t("accountSettings.sections.personalInformation.title")}
           </h3>
           <div className="bg-white rounded-lg border border-gray-200 p-6">
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
               <InputField
-                label="First Name"
+                label={t(
+                  "accountSettings.sections.personalInformation.fields.firstName.label"
+                )}
                 name="firstName"
                 required
-                placeholder="Enter your first name"
+                placeholder={t(
+                  "accountSettings.sections.personalInformation.fields.firstName.placeholder"
+                )}
               />
               <InputField
-                label="Last Name"
+                label={t(
+                  "accountSettings.sections.personalInformation.fields.lastName.label"
+                )}
                 name="lastName"
                 required
-                placeholder="Enter your last name"
+                placeholder={t(
+                  "accountSettings.sections.personalInformation.fields.lastName.placeholder"
+                )}
               />
               <InputField
-                label="Email Address"
+                label={t(
+                  "accountSettings.sections.personalInformation.fields.email.label"
+                )}
                 name="email"
                 type="email"
                 required
-                placeholder="Enter your email"
+                placeholder={t(
+                  "accountSettings.sections.personalInformation.fields.email.placeholder"
+                )}
               />
               <InputField
-                label="Phone Number"
+                label={t(
+                  "accountSettings.sections.personalInformation.fields.phone.label"
+                )}
                 name="phone"
                 type="tel"
-                placeholder="+1 (555) 123-4567"
+                placeholder={t(
+                  "accountSettings.sections.personalInformation.fields.phone.placeholder"
+                )}
                 pattern="[+]?[0-9\s-()]+"
               />
             </div>
@@ -316,22 +340,70 @@ const AccountSettings: React.FC<AccountSettingsProps> = ({ onBack }) => {
         <div className="space-y-4">
           <div className="flex items-center">
             <Globe className="w-5 h-5 text-gray-400 mr-2" />
-            <h3 className="text-lg font-medium text-gray-900">Preferences</h3>
+            <h3 className="text-lg font-medium text-gray-900">
+              {t("accountSettings.sections.preferences.title")}
+            </h3>
           </div>
           <div className="bg-white rounded-lg border border-gray-200 p-6">
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-              <SelectField label="Language" name="language">
-                <option value="en">English</option>
-                <option value="es">Spanish</option>
-                <option value="fr">French</option>
-                <option value="de">German</option>
+              <SelectField
+                label={t(
+                  "accountSettings.sections.preferences.fields.language.label"
+                )}
+                name="language"
+              >
+                <option value="en">
+                  {t(
+                    "accountSettings.sections.preferences.fields.language.options.en"
+                  )}
+                </option>
+                <option value="es">
+                  {t(
+                    "accountSettings.sections.preferences.fields.language.options.es"
+                  )}
+                </option>
+                <option value="fr">
+                  {t(
+                    "accountSettings.sections.preferences.fields.language.options.fr"
+                  )}
+                </option>
+                <option value="de">
+                  {t(
+                    "accountSettings.sections.preferences.fields.language.options.de"
+                  )}
+                </option>
               </SelectField>
-              <SelectField label="Time Zone" name="timezone">
-                <option value="America/New_York">Eastern Time (ET)</option>
-                <option value="America/Chicago">Central Time (CT)</option>
-                <option value="America/Denver">Mountain Time (MT)</option>
-                <option value="America/Los_Angeles">Pacific Time (PT)</option>
-                <option value="Europe/London">London (GMT)</option>
+              <SelectField
+                label={t(
+                  "accountSettings.sections.preferences.fields.timezone.label"
+                )}
+                name="timezone"
+              >
+                <option value="America/New_York">
+                  {t(
+                    "accountSettings.sections.preferences.fields.timezone.options.america_new_york"
+                  )}
+                </option>
+                <option value="America/Chicago">
+                  {t(
+                    "accountSettings.sections.preferences.fields.timezone.options.america_chicago"
+                  )}
+                </option>
+                <option value="America/Denver">
+                  {t(
+                    "accountSettings.sections.preferences.fields.timezone.options.america_denver"
+                  )}
+                </option>
+                <option value="America/Los_Angeles">
+                  {t(
+                    "accountSettings.sections.preferences.fields.timezone.options.america_los_angeles"
+                  )}
+                </option>
+                <option value="Europe/London">
+                  {t(
+                    "accountSettings.sections.preferences.fields.timezone.options.europe_london"
+                  )}
+                </option>
               </SelectField>
             </div>
           </div>

@@ -1,8 +1,10 @@
 import React, { useState } from "react";
-import { Shield, Key, Smartphone, AlertCircle } from "lucide-react";
+import { Shield, Key, Smartphone } from "lucide-react";
 import BackButton from "../../atoms/BackButton/BackButton";
 import Switch from "../../atoms/Switch/Switch";
 import { useTranslation } from "react-i18next";
+import InputField from "../../atoms/InputField/InputField";
+import SelectField from "../../atoms/SelectField/SelectField";
 
 interface SecuritySettingsProps {
   onBack: () => void;
@@ -66,151 +68,29 @@ const SecuritySettings: React.FC<SecuritySettingsProps> = ({ onBack }) => {
     }
   };
 
-  const InputField = ({
-    label,
-    name,
-    type = "text",
-    required = false,
-    placeholder = "",
-  }: {
-    label: string;
-    name: keyof typeof formData;
-    type?: string;
-    required?: boolean;
-    placeholder?: string;
-  }) => (
-    <div className="relative">
-      <label
-        htmlFor={name}
-        className="block text-sm font-medium mb-1.5 text-gray-900"
-      >
-        {label}
-        {required && <span className="text-red-500 ml-1">*</span>}
-      </label>
-      <div className="relative group">
-        <input
-          type={type}
-          name={name}
-          id={name}
-          value={formData[name]}
-          onChange={handleInputChange}
-          placeholder={placeholder}
-          className={`
-            peer
-            w-full
-            px-4
-            py-2.5
-            text-gray-900
-            bg-white
-            border
-            rounded-lg
-            transition-all
-            duration-200
-            ease-in-out
-            ${
-              errors[name]
-                ? "border-red-300 focus:border-red-500 focus:ring-red-200"
-                : "border-gray-200 hover:border-gray-300 focus:border-indigo-500 focus:ring-indigo-100"
-            }
-            focus:outline-none
-            focus:ring-4
-            placeholder-gray-400
-            text-sm
-          `}
-        />
-        {errors[name] && (
-          <div className="absolute inset-y-0 right-0 flex items-center pr-3">
-            <AlertCircle className="h-5 w-5 text-red-500" />
-          </div>
-        )}
-        <div
-          className={`
-            absolute
-            inset-0
-            rounded-lg
-            pointer-events-none
-            transition-all
-            duration-200
-            ${
-              errors[name]
-                ? "peer-focus:shadow-[0_0_0_4px_rgba(239,68,68,0.1)]"
-                : "peer-focus:shadow-[0_0_0_4px_rgba(99,102,241,0.1)]"
-            }
-          `}
-        />
-      </div>
-      {errors[name] && (
-        <p className="mt-2 text-sm text-red-600 flex items-center">
-          <AlertCircle className="h-4 w-4 mr-1" />
-          {errors[name]}
-        </p>
-      )}
-    </div>
-  );
-
-  const SelectField = ({
-    label,
-    name,
-    children,
-  }: {
-    label: string;
-    name: keyof typeof formData;
-    children: React.ReactNode;
-  }) => (
-    <div className="relative">
-      <label
-        htmlFor={name}
-        className="block text-sm font-medium mb-1.5 text-gray-900"
-      >
-        {label}
-      </label>
-      <div className="relative group">
-        <select
-          id={name}
-          name={name}
-          value={formData[name]}
-          onChange={handleInputChange}
-          className="
-            appearance-none
-            w-full
-            px-4
-            py-2.5
-            text-gray-900
-            bg-white
-            border
-            border-gray-200
-            rounded-lg
-            transition-all
-            duration-200
-            ease-in-out
-            hover:border-gray-300
-            focus:border-indigo-500
-            focus:ring-4
-            focus:ring-indigo-100
-            focus:outline-none
-            text-sm
-          "
-        >
-          {children}
-        </select>
-        <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-          <svg
-            className="h-5 w-5 text-gray-400"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 20 20"
-            fill="currentColor"
-          >
-            <path
-              fillRule="evenodd"
-              d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-              clipRule="evenodd"
-            />
-          </svg>
-        </div>
-        <div className="absolute inset-0 rounded-lg pointer-events-none transition-all duration-200 group-focus-within:shadow-[0_0_0_4px_rgba(99,102,241,0.1)]" />
-      </div>
-    </div>
-  );
+  // Create session timeout options
+  const timeoutOptions = [
+    {
+      value: "15",
+      label: t("security.sections.session.timeoutOptions.15min"),
+    },
+    {
+      value: "30",
+      label: t("security.sections.session.timeoutOptions.30min"),
+    },
+    {
+      value: "60",
+      label: t("security.sections.session.timeoutOptions.1hour"),
+    },
+    {
+      value: "120",
+      label: t("security.sections.session.timeoutOptions.2hours"),
+    },
+    {
+      value: "240",
+      label: t("security.sections.session.timeoutOptions.4hours"),
+    },
+  ];
 
   return (
     <div className="space-y-6 max-w-4xl mx-auto">
@@ -259,6 +139,9 @@ const SecuritySettings: React.FC<SecuritySettingsProps> = ({ onBack }) => {
                 label={t("security.sections.password.fields.currentPassword")}
                 name="currentPassword"
                 type="password"
+                value={formData.currentPassword}
+                onChange={handleInputChange}
+                error={errors.currentPassword}
                 required
                 placeholder={t(
                   "security.sections.password.placeholders.currentPassword"
@@ -268,6 +151,9 @@ const SecuritySettings: React.FC<SecuritySettingsProps> = ({ onBack }) => {
                 label={t("security.sections.password.fields.newPassword")}
                 name="newPassword"
                 type="password"
+                value={formData.newPassword}
+                onChange={handleInputChange}
+                error={errors.newPassword}
                 placeholder={t(
                   "security.sections.password.placeholders.newPassword"
                 )}
@@ -276,6 +162,9 @@ const SecuritySettings: React.FC<SecuritySettingsProps> = ({ onBack }) => {
                 label={t("security.sections.password.fields.confirmPassword")}
                 name="confirmPassword"
                 type="password"
+                value={formData.confirmPassword}
+                onChange={handleInputChange}
+                error={errors.confirmPassword}
                 placeholder={t(
                   "security.sections.password.placeholders.confirmPassword"
                 )}
@@ -321,23 +210,10 @@ const SecuritySettings: React.FC<SecuritySettingsProps> = ({ onBack }) => {
                   <SelectField
                     label={t("security.sections.session.timeout")}
                     name="sessionTimeout"
-                  >
-                    <option value="15">
-                      {t("security.sections.session.timeoutOptions.15min")}
-                    </option>
-                    <option value="30">
-                      {t("security.sections.session.timeoutOptions.30min")}
-                    </option>
-                    <option value="60">
-                      {t("security.sections.session.timeoutOptions.1hour")}
-                    </option>
-                    <option value="120">
-                      {t("security.sections.session.timeoutOptions.2hours")}
-                    </option>
-                    <option value="240">
-                      {t("security.sections.session.timeoutOptions.4hours")}
-                    </option>
-                  </SelectField>
+                    value={formData.sessionTimeout}
+                    onChange={handleInputChange}
+                    options={timeoutOptions}
+                  />
                   <p className="mt-2 text-sm text-gray-500">
                     {t("security.sections.session.description")}
                   </p>

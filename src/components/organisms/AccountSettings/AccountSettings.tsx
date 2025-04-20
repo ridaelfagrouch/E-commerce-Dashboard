@@ -1,7 +1,9 @@
 import React, { useState } from "react";
-import { User, Camera, Globe, AlertCircle } from "lucide-react";
+import { User, Camera, Globe } from "lucide-react";
 import BackButton from "../../atoms/BackButton/BackButton";
 import { useTranslation } from "react-i18next";
+import InputField from "../../atoms/InputField/InputField";
+import SelectField from "../../atoms/SelectField/SelectField";
 
 interface AccountSettingsProps {
   onBack: () => void;
@@ -50,6 +52,13 @@ const AccountSettings: React.FC<AccountSettingsProps> = ({ onBack }) => {
     return Object.keys(newErrors).length === 0;
   };
 
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (validateForm()) {
+      console.log("Form submitted:", formData);
+    }
+  };
+
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
@@ -60,162 +69,6 @@ const AccountSettings: React.FC<AccountSettingsProps> = ({ onBack }) => {
     }));
     setIsDirty(true);
   };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (validateForm()) {
-      console.log("Form submitted:", formData);
-    }
-  };
-
-  const InputField = ({
-    label,
-    name,
-    type = "text",
-    required = false,
-    placeholder = "",
-    pattern = "",
-  }: {
-    label: string;
-    name: keyof typeof formData;
-    type?: string;
-    required?: boolean;
-    placeholder?: string;
-    pattern?: string;
-  }) => (
-    <div className="relative">
-      <label
-        htmlFor={name}
-        className="block text-sm font-medium mb-1.5 text-gray-900"
-      >
-        {label}
-        {required && <span className="text-red-500 ml-1">*</span>}
-      </label>
-      <div className="relative group">
-        <input
-          type={type}
-          name={name}
-          id={name}
-          value={formData[name]}
-          onChange={handleInputChange}
-          pattern={pattern}
-          placeholder={placeholder}
-          className={`
-            peer
-            w-full
-            px-4
-            py-2.5
-            text-gray-900
-            bg-white
-            border
-            rounded-lg
-            transition-all
-            duration-200
-            ease-in-out
-            ${
-              errors[name]
-                ? "border-red-300 focus:border-red-500 focus:ring-red-200"
-                : "border-gray-200 hover:border-gray-300 focus:border-indigo-500 focus:ring-indigo-100"
-            }
-            focus:outline-none
-            focus:ring-4
-            placeholder-gray-400
-            text-sm
-          `}
-        />
-        {errors[name] && (
-          <div className="absolute inset-y-0 right-0 flex items-center pr-3">
-            <AlertCircle className="h-5 w-5 text-red-500" />
-          </div>
-        )}
-        <div
-          className={`
-            absolute
-            inset-0
-            rounded-lg
-            pointer-events-none
-            transition-all
-            duration-200
-            ${
-              errors[name]
-                ? "peer-focus:shadow-[0_0_0_4px_rgba(239,68,68,0.1)]"
-                : "peer-focus:shadow-[0_0_0_4px_rgba(99,102,241,0.1)]"
-            }
-          `}
-        />
-      </div>
-      {errors[name] && (
-        <p className="mt-2 text-sm text-red-600 flex items-center">
-          <AlertCircle className="h-4 w-4 mr-1" />
-          {errors[name]}
-        </p>
-      )}
-    </div>
-  );
-
-  const SelectField = ({
-    label,
-    name,
-    children,
-  }: {
-    label: string;
-    name: keyof typeof formData;
-    children: React.ReactNode;
-  }) => (
-    <div className="relative">
-      <label
-        htmlFor={name}
-        className="block text-sm font-medium mb-1.5 text-gray-900"
-      >
-        {label}
-      </label>
-      <div className="relative group">
-        <select
-          id={name}
-          name={name}
-          value={formData[name]}
-          onChange={handleInputChange}
-          className="
-            appearance-none
-            w-full
-            px-4
-            py-2.5
-            text-gray-900
-            bg-white
-            border
-            border-gray-200
-            rounded-lg
-            transition-all
-            duration-200
-            ease-in-out
-            hover:border-gray-300
-            focus:border-indigo-500
-            focus:ring-4
-            focus:ring-indigo-100
-            focus:outline-none
-            text-sm
-          "
-        >
-          {children}
-        </select>
-        <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-          <svg
-            className="h-5 w-5 text-gray-400"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 20 20"
-            fill="currentColor"
-          >
-            <path
-              fillRule="evenodd"
-              d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-              clipRule="evenodd"
-            />
-          </svg>
-        </div>
-        <div className="absolute inset-0 rounded-lg pointer-events-none transition-all duration-200 group-focus-within:shadow-[0_0_0_4px_rgba(99,102,241,0.1)]" />
-      </div>
-    </div>
-  );
 
   return (
     <div className="space-y-6 max-w-4xl mx-auto">
@@ -299,6 +152,9 @@ const AccountSettings: React.FC<AccountSettingsProps> = ({ onBack }) => {
                 placeholder={t(
                   "accountSettings.sections.personalInformation.fields.firstName.placeholder"
                 )}
+                value={formData.firstName}
+                onChange={handleInputChange}
+                error={errors.firstName}
               />
               <InputField
                 label={t(
@@ -309,6 +165,9 @@ const AccountSettings: React.FC<AccountSettingsProps> = ({ onBack }) => {
                 placeholder={t(
                   "accountSettings.sections.personalInformation.fields.lastName.placeholder"
                 )}
+                value={formData.lastName}
+                onChange={handleInputChange}
+                error={errors.lastName}
               />
               <InputField
                 label={t(
@@ -320,6 +179,9 @@ const AccountSettings: React.FC<AccountSettingsProps> = ({ onBack }) => {
                 placeholder={t(
                   "accountSettings.sections.personalInformation.fields.email.placeholder"
                 )}
+                value={formData.email}
+                onChange={handleInputChange}
+                error={errors.email}
               />
               <InputField
                 label={t(
@@ -330,7 +192,9 @@ const AccountSettings: React.FC<AccountSettingsProps> = ({ onBack }) => {
                 placeholder={t(
                   "accountSettings.sections.personalInformation.fields.phone.placeholder"
                 )}
-                pattern="[+]?[0-9\s-()]+"
+                value={formData.phone}
+                onChange={handleInputChange}
+                error={errors.phone}
               />
             </div>
           </div>
@@ -351,60 +215,77 @@ const AccountSettings: React.FC<AccountSettingsProps> = ({ onBack }) => {
                   "accountSettings.sections.preferences.fields.language.label"
                 )}
                 name="language"
-              >
-                <option value="en">
-                  {t(
-                    "accountSettings.sections.preferences.fields.language.options.en"
-                  )}
-                </option>
-                <option value="es">
-                  {t(
-                    "accountSettings.sections.preferences.fields.language.options.es"
-                  )}
-                </option>
-                <option value="fr">
-                  {t(
-                    "accountSettings.sections.preferences.fields.language.options.fr"
-                  )}
-                </option>
-                <option value="de">
-                  {t(
-                    "accountSettings.sections.preferences.fields.language.options.de"
-                  )}
-                </option>
-              </SelectField>
+                value={formData.language}
+                onChange={handleInputChange}
+                error={errors.language}
+                options={[
+                  {
+                    value: "en",
+                    label: t(
+                      "accountSettings.sections.preferences.fields.language.options.en"
+                    ),
+                  },
+                  {
+                    value: "es",
+                    label: t(
+                      "accountSettings.sections.preferences.fields.language.options.es"
+                    ),
+                  },
+                  {
+                    value: "fr",
+                    label: t(
+                      "accountSettings.sections.preferences.fields.language.options.fr"
+                    ),
+                  },
+                  {
+                    value: "de",
+                    label: t(
+                      "accountSettings.sections.preferences.fields.language.options.de"
+                    ),
+                  },
+                ]}
+              />
               <SelectField
                 label={t(
                   "accountSettings.sections.preferences.fields.timezone.label"
                 )}
                 name="timezone"
-              >
-                <option value="America/New_York">
-                  {t(
-                    "accountSettings.sections.preferences.fields.timezone.options.america_new_york"
-                  )}
-                </option>
-                <option value="America/Chicago">
-                  {t(
-                    "accountSettings.sections.preferences.fields.timezone.options.america_chicago"
-                  )}
-                </option>
-                <option value="America/Denver">
-                  {t(
-                    "accountSettings.sections.preferences.fields.timezone.options.america_denver"
-                  )}
-                </option>
-                <option value="America/Los_Angeles">
-                  {t(
-                    "accountSettings.sections.preferences.fields.timezone.options.america_los_angeles"
-                  )}
-                </option>
-                <option value="Europe/London">
-                  {t(
-                    "accountSettings.sections.preferences.fields.timezone.options.europe_london"
-                  )}
-                </option>
-              </SelectField>
+                value={formData.timezone}
+                onChange={handleInputChange}
+                error={errors.timezone}
+                options={[
+                  {
+                    value: "America/New_York",
+                    label: t(
+                      "accountSettings.sections.preferences.fields.timezone.options.america_new_york"
+                    ),
+                  },
+                  {
+                    value: "America/Chicago",
+                    label: t(
+                      "accountSettings.sections.preferences.fields.timezone.options.america_chicago"
+                    ),
+                  },
+                  {
+                    value: "America/Denver",
+                    label: t(
+                      "accountSettings.sections.preferences.fields.timezone.options.america_denver"
+                    ),
+                  },
+                  {
+                    value: "America/Los_Angeles",
+                    label: t(
+                      "accountSettings.sections.preferences.fields.timezone.options.america_los_angeles"
+                    ),
+                  },
+                  {
+                    value: "Europe/London",
+                    label: t(
+                      "accountSettings.sections.preferences.fields.timezone.options.europe_london"
+                    ),
+                  },
+                ]}
+              />
             </div>
           </div>
         </div>

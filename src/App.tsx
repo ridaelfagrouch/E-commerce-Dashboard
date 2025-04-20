@@ -3,7 +3,6 @@ import {
   BrowserRouter as Router,
   Routes,
   Route,
-  Navigate,
 } from "react-router-dom";
 import MainLayout from "./templates/MainLayout/MainLayout";
 import Dashboard from "./screens/Dashboard/Dashboard";
@@ -12,12 +11,13 @@ import Products from "./screens/Products/Products";
 import Customers from "./screens/Customers/Customers";
 import Analytics from "./screens/Analytics/Analytics";
 import Settings from "./screens/Settings/Settings";
+import Login from "./screens/Login/Login";
 
 const App: React.FC = () => {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Navigate to="/dashboard" replace />} />
+        <Route path="/" element={<Login />} />
         <Route
           path="/dashboard"
           element={

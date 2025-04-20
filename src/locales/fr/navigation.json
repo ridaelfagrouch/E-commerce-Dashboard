@@ -5,6 +5,7 @@
     "products": "Produits",
     "customers": "Clients",
     "analytics": "Analytiques",
-    "settings": "Paramètres"
+    "settings": "Paramètres",
+    "logout": "Déconnexion"
   }
 }

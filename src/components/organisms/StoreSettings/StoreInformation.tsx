@@ -1,14 +1,10 @@
 import React, { useState } from "react";
-import {
-  Store,
-  Building2,
-  MapPin,
-  DollarSign,
-  AlertCircle,
-} from "lucide-react";
+import { Store, Building2, MapPin, DollarSign } from "lucide-react";
 import BackButton from "../../atoms/BackButton/BackButton";
-import SelectField from "../../atoms/SelectField/SelectField";
 import { useTranslation } from "react-i18next";
+import SelectField from "../../atoms/SelectField/SelectField";
+import InputField from "../../atoms/InputField/InputField";
+import TextAreaField from "../../atoms/TextAreaField/TextAreaField";
 
 interface StoreInformationProps {
   onBack: () => void;
@@ -82,10 +78,12 @@ const StoreInformation: React.FC<StoreInformationProps> = ({ onBack }) => {
     >
   ) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
+
+    setFormData({
+      ...formData,
       [name]: value,
-    }));
+    });
+
     setIsDirty(true);
   };
 
@@ -96,143 +94,6 @@ const StoreInformation: React.FC<StoreInformationProps> = ({ onBack }) => {
       console.log("Form submitted:", formData);
     }
   };
-
-  const InputField = ({
-    label,
-    name,
-    type = "text",
-    required = false,
-    placeholder = "",
-    pattern = "",
-  }: {
-    label: string;
-    name: keyof typeof formData;
-    type?: string;
-    required?: boolean;
-    placeholder?: string;
-    pattern?: string;
-  }) => (
-    <div className="relative">
-      <label
-        htmlFor={name}
-        className="block text-sm font-medium mb-1.5 text-gray-900"
-      >
-        {label}
-        {required && <span className="text-red-500 ml-1">*</span>}
-      </label>
-      <div className="relative group">
-        <input
-          type={type}
-          name={name}
-          id={name}
-          value={formData[name]}
-          onChange={handleInputChange}
-          pattern={pattern}
-          placeholder={placeholder}
-          className={`
-            peer
-            w-full
-            px-4
-            py-2.5
-            text-gray-900
-            bg-white
-            border
-            rounded-lg
-            transition-all
-            duration-200
-            ease-in-out
-            ${
-              errors[name]
-                ? "border-red-300 focus:border-red-500 focus:ring-red-200"
-                : "border-gray-200 hover:border-gray-300 focus:border-indigo-500 focus:ring-indigo-100"
-            }
-            focus:outline-none
-            focus:ring-4
-            placeholder-gray-400
-            text-sm
-          `}
-        />
-        {errors[name] && (
-          <div className="absolute inset-y-0 right-0 flex items-center pr-3">
-            <AlertCircle className="h-5 w-5 text-red-500" />
-          </div>
-        )}
-        <div
-          className={`
-            absolute
-            inset-0
-            rounded-lg
-            pointer-events-none
-            transition-all
-            duration-200
-            ${
-              errors[name]
-                ? "peer-focus:shadow-[0_0_0_4px_rgba(239,68,68,0.1)]"
-                : "peer-focus:shadow-[0_0_0_4px_rgba(99,102,241,0.1)]"
-            }
-          `}
-        />
-      </div>
-      {errors[name] && (
-        <p className="mt-2 text-sm text-red-600 flex items-center">
-          <AlertCircle className="h-4 w-4 mr-1" />
-          {errors[name]}
-        </p>
-      )}
-    </div>
-  );
-
-  const TextAreaField = ({
-    label,
-    name,
-    rows = 3,
-    placeholder = "",
-  }: {
-    label: string;
-    name: keyof typeof formData;
-    rows?: number;
-    placeholder?: string;
-  }) => (
-    <div className="relative">
-      <label
-        htmlFor={name}
-        className="block text-sm font-medium mb-1.5 text-gray-900"
-      >
-        {label}
-      </label>
-      <div className="relative group">
-        <textarea
-          id={name}
-          name={name}
-          rows={rows}
-          value={formData[name]}
-          onChange={handleInputChange}
-          placeholder={placeholder}
-          className="
-            w-full
-            px-4
-            py-2.5
-            text-gray-900
-            bg-white
-            border
-            border-gray-200
-            rounded-lg
-            transition-all
-            duration-200
-            ease-in-out
-            hover:border-gray-300
-            focus:border-indigo-500
-            focus:ring-4
-            focus:ring-indigo-100
-            focus:outline-none
-            text-sm
-            resize-none
-          "
-        />
-        <div className="absolute inset-0 rounded-lg pointer-events-none transition-all duration-200 group-focus-within:shadow-[0_0_0_4px_rgba(99,102,241,0.1)]" />
-      </div>
-    </div>
-  );
 
   // Create translated timezone options
   const timezoneOptions = [
@@ -423,6 +284,9 @@ const StoreInformation: React.FC<StoreInformationProps> = ({ onBack }) => {
                   "storeInformation.sections.basic.fields.storeName.label"
                 )}
                 name="storeName"
+                value={formData.storeName}
+                onChange={handleInputChange}
+                error={errors.storeName}
                 required
                 placeholder={t(
                   "storeInformation.sections.basic.fields.storeName.placeholder"
@@ -432,6 +296,9 @@ const StoreInformation: React.FC<StoreInformationProps> = ({ onBack }) => {
                 label={t("storeInformation.sections.basic.fields.email.label")}
                 name="email"
                 type="email"
+                value={formData.email}
+                onChange={handleInputChange}
+                error={errors.email}
                 required
                 placeholder={t(
                   "storeInformation.sections.basic.fields.email.placeholder"
@@ -441,11 +308,13 @@ const StoreInformation: React.FC<StoreInformationProps> = ({ onBack }) => {
                 label={t("storeInformation.sections.basic.fields.phone.label")}
                 name="phone"
                 type="tel"
+                value={formData.phone}
+                onChange={handleInputChange}
+                error={errors.phone}
                 required
                 placeholder={t(
                   "storeInformation.sections.basic.fields.phone.placeholder"
                 )}
-                pattern="[+]?[0-9\s-()]+"
               />
               <SelectField
                 label={t(
@@ -462,6 +331,8 @@ const StoreInformation: React.FC<StoreInformationProps> = ({ onBack }) => {
                 )}
                 name="website"
                 type="url"
+                value={formData.website}
+                onChange={handleInputChange}
                 placeholder={t(
                   "storeInformation.sections.basic.fields.website.placeholder"
                 )}
@@ -472,6 +343,8 @@ const StoreInformation: React.FC<StoreInformationProps> = ({ onBack }) => {
                     "storeInformation.sections.basic.fields.description.label"
                   )}
                   name="description"
+                  value={formData.description}
+                  onChange={handleInputChange}
                   placeholder={t(
                     "storeInformation.sections.basic.fields.description.placeholder"
                   )}
@@ -497,6 +370,9 @@ const StoreInformation: React.FC<StoreInformationProps> = ({ onBack }) => {
                     "storeInformation.sections.address.fields.streetAddress.label"
                   )}
                   name="address"
+                  value={formData.address}
+                  onChange={handleInputChange}
+                  error={errors.address}
                   required
                   placeholder={t(
                     "storeInformation.sections.address.fields.streetAddress.placeholder"
@@ -506,6 +382,9 @@ const StoreInformation: React.FC<StoreInformationProps> = ({ onBack }) => {
               <InputField
                 label={t("storeInformation.sections.address.fields.city.label")}
                 name="city"
+                value={formData.city}
+                onChange={handleInputChange}
+                error={errors.city}
                 required
                 placeholder={t(
                   "storeInformation.sections.address.fields.city.placeholder"
@@ -516,6 +395,9 @@ const StoreInformation: React.FC<StoreInformationProps> = ({ onBack }) => {
                   "storeInformation.sections.address.fields.state.label"
                 )}
                 name="state"
+                value={formData.state}
+                onChange={handleInputChange}
+                error={errors.state}
                 required
                 placeholder={t(
                   "storeInformation.sections.address.fields.state.placeholder"
@@ -524,6 +406,9 @@ const StoreInformation: React.FC<StoreInformationProps> = ({ onBack }) => {
               <InputField
                 label={t("storeInformation.sections.address.fields.zip.label")}
                 name="zip"
+                value={formData.zip}
+                onChange={handleInputChange}
+                error={errors.zip}
                 required
                 placeholder={t(
                   "storeInformation.sections.address.fields.zip.placeholder"
@@ -557,6 +442,8 @@ const StoreInformation: React.FC<StoreInformationProps> = ({ onBack }) => {
                   "storeInformation.sections.business.fields.taxId.label"
                 )}
                 name="taxId"
+                value={formData.taxId}
+                onChange={handleInputChange}
                 placeholder={t(
                   "storeInformation.sections.business.fields.taxId.placeholder"
                 )}

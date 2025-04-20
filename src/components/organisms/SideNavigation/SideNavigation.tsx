@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
   LayoutDashboard,
@@ -12,6 +12,7 @@ import {
   X,
 } from "lucide-react";
 import Button from "../../atoms/Button/Button";
+import LogoutButton from "../../atoms/Logout/Logout";
 
 interface NavItem {
   path: string;
@@ -27,6 +28,9 @@ const SideNavigation: React.FC<SideNavigationProps> = ({ className = "" }) => {
   const { t } = useTranslation();
   const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
+  const username = "Jane Doe";
+  const email = "admin@shopdash.com";
+  const navigate = useNavigate();
 
   // Close sidebar on route change in mobile view
   useEffect(() => {
@@ -136,6 +140,18 @@ const SideNavigation: React.FC<SideNavigationProps> = ({ className = "" }) => {
             </Link>
           ))}
         </nav>
+        <div className="absolute bottom-0 left-0 w-full p-4 border-t border-indigo-700 flex justify-between">
+          <div className="flex-col gap-2 ">
+            <div className="text-sm text-white">{username}</div>
+            <div className="text-sm text-white">{email}</div>
+          </div>
+          <LogoutButton
+            onClick={() => navigate("/")}
+            size="md"
+            variant="ghost"
+            iconOnly={true}
+          />
+        </div>
       </aside>
     </>
   );
